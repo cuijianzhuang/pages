@@ -1,0 +1,84 @@
+/*
+ * Landing
+ *
+ * Author: metheno
+ * Website: https://www.metheno.net/
+ * Version: v0.2
+ *
+ * Copyright 2017 metheno
+ */
+
+body {
+  margin: 0;
+  padding: 10vh 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Pingfang SC', 'Microsoft Yahei', sans-serif;
+  color: #c1a86a;
+  background-color: #121212;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100vw;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+a {
+  color: inherit;
+}
+
+.title {
+  margin: 0;
+  padding-top: 20vh;
+  font-size: 6.5vmax;
+}
+
+.description {
+  padding-bottom: 5vh;
+}
+
+.prefix {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+.menu {
+  margin-top: 10vh;
+}
+
+.menu .link {
+  padding: 0.5em 0.8em;
+  color: inherit;
+  background: #0d0d0d;
+  text-decoration: none;
+  -webkit-transition: all 0.1s;
+  -o-transition: all 0.1s;
+  transition: all 0.1s;
+}
+
+.menu .link:hover {
+  padding: 0.5em 0.8em;
+  color: #0c0c0c;
+  background: #c1a86a;
+}
+
+.menu-icons {
+  margin: 3vh 0;
+}
+
+.footer {
+  bottom: 3%;
+  left: 50%;
+  width: 95%;
+  display: block;
+  position: absolute;
+  text-align: center;
+  font-size: 0.6625rem;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  -webkit-font-feature-settings: "ss06";
+          font-feature-settings: "ss06";
+}
