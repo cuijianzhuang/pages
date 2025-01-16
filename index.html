@@ -1,36 +1,38 @@
-<html class="">
+<html class="HomePage">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Void,s Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>CJZ,s Home</title>
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/font-awesome.min.css">
   </head>
   <body>
     <div id="app">
-      <h2 class="title">Voidm</h2>
+      <h2 class="title">崔健壮</h2>
       <p class="description">想让所有人认识我，却不知道我是谁</p>
+      <div class="datetime-weather">
+        <div id="datetime">
+          <span id="date"></span>
+          <span id="time"></span>
+        </div>
+        <div id="weather">
+          <span id="weather-info">获取天气中...</span>
+        </div>
+      </div>
       <div class="menu">
-        <!-- <a href="https://img.voidm.com" class="link delete-line" target="_blank"><s>Image</s></a> -->
-        <a href="https://img.voidm.com" title="私人图床-基于Telegraph" class="link" target="_blank">Image</a>
-        <!-- <a href="http://dynamodb.voidm.com/" title="在线 AWS Dynamodb 数据库客户端" class="link" target="_blank">Dynamodb</a> -->
-        <!-- <a href="http://aws-apigateway.voidm.com/" title="AWS ApiGateway 各种鉴权(集成Cognito)演示" class="link" target="_blank">AWS ApiGateway</a> -->
-        <a href="https://ai.voidm.com/" title="AI 大模型" class="link" target="_blank">Chat AI</a>
-        <a href="http://open.voidm.com:5244" title="alist 网盘" class="link" target="_blank">Alist Driver</a>
-        <!-- <a href="https://open.voidm.com:9090" title="Cockpit" class="link" target="_blank">Cockpit</a> -->
-        <a href="http://open.voidm.com:10000/" title="1panel" class="link" target="_blank">1Panel</a>
-        <!-- <a href="http://open.voidm.com" class="link" target="_blank" title="不解释..">Airport</a> -->
-        <a href="http://open.voidm.com:8080" class="link" target="_blank" title="it-tools">It-Tools</a>
-        <a href="https://marlkiller.github.io/web-mmd/" class="link" target="_blank" title="MMD??">MikuMikuDance</a>
+        <a href="https://pan.cuijianzhuang.com/" title="alist 网盘" class="link" target="_blank">Alist Driver</a>
+        <a href="https://panel.cuijianzhuang.com/" title="1panel" class="link" target="_blank">1Panel</a>
+        <a href="https://mail.cuijianzhuang.com/" title="1panel" class="link" target="_blank">邮箱</a>
+        <a href="https://state.cuijianzhuang.com/" title="1panel" class="link" target="_blank">探针</a>
+        <a href="https://status.cuijianzhuang.com/" title="服务" class="link" target="_blank">服务</a>
+
       </div>
       <div class="menu-icons">
-        <a href="https://github.com/marlkiller" target="_blank">
+        <a href="https://github.com/cuijianzhuang" target="_blank">
           <i aria-hidden="true" class="fa fa-2x fa-github"></i>
         </a>
       </div>
-      <p class="footer">Copyright © 2016-2024
-        <a href="/">voidm</a>.<br><a href="http://beian.miit.gov.cn">京ICP备18015050号-2</a>
-      </p>
+      <p class="footer">Copyright © 2024-<span id="currentYear"></span></p>
     </div>
   </body>
 
@@ -41,7 +43,7 @@
 <!-- require MetingJS -->
 <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 
-<meting-js
-    server="netease" type="playlist" id="10096935894" fixed="true" mini="true" autoplay="true" order="random">
-</meting-js>
+<script src="./js/main.js" defer></script>
+
+<meting-js server="netease" type="playlist" id="961896580" fixed="true" mini="true" autoplay="true" order="random"></meting-js>
 </html>
