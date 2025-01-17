@@ -46,7 +46,7 @@ async function getWeather() {
         const weatherData = await weatherResponse.json();
         
         if (weatherData.code === '200') {
-          weatherInfo.textContent = `${cityName} ${weatherData.now.temp}°C ${weatherData.now.text}`;
+          weatherInfo.textContent = `${cityName} ${weatherData.now.temp}°C  ${weatherData.now.text} ${weatherData.now.windDir}`;
         } else {
           weatherInfo.textContent = '天气获取失败';
         }
