@@ -37,6 +37,12 @@ a {
 
 .description {
   padding-bottom: 5vh;
+  font-family: 'Note-Script', serif;
+  font-size: 2em;
+  letter-spacing: 0.02em;
+  animation: goldenGlow 2s ease-in-out infinite;
+  animation-delay: 0.7s;
+  font-weight: 600;
 }
 
 .prefix {
@@ -129,4 +135,33 @@ a {
   animation: goldenGlow 2s ease-in-out infinite;
   animation-delay: 0.5s; /* 错开动画时间 */
   font-weight: 500;
+}
+
+/* 添加一言样式 */
+.hitokoto {
+  margin: 20px auto;
+  max-width: 80%;
+  padding: 0 20px;
+}
+
+#hitokoto-text {
+  font-size: 1.2em;
+  line-height: 1.6;
+  animation: goldenGlow 2s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+#hitokoto-from {
+  margin-top: 10px;
+  font-size: 0.9em;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* 添加字体声明 */
+@font-face {
+  font-family: 'Note-Script';
+  src: url('../fonts/Note-Script-SemiBold-2.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
 }

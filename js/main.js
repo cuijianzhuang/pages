@@ -62,6 +62,30 @@ async function getWeather() {
   }
 }
 
+// 在现有代码后添加一言功能
+async function getHitokoto() {
+  try {
+    const response = await fetch('https://v1.hitokoto.cn?c=i');
+    const data = await response.json();
+    
+    document.getElementById('hitokoto-text').textContent = data.hitokoto;
+    if (data.from_who) {
+      document.getElementById('hitokoto-from').textContent = `——${data.from_who}「${data.from}」`;
+    } else {
+      document.getElementById('hitokoto-from').textContent = `——「${data.from}」`;
+    }
+  } catch (error) {
+    document.getElementById('hitokoto-text').textContent = '生活明朗，万物可爱。';
+    document.getElementById('hitokoto-from').textContent = '';
+    console.error('获取一言失败:', error);
+  }
+}
+
+// 初始化一言
+getHitokoto();
+// 每5分钟更新一次一言
+setInterval(getHitokoto, 300000);
+
 // 初始化
 updateDateTime();
 setInterval(updateDateTime, 1000);
