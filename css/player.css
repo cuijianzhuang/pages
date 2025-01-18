@@ -1,0 +1,256 @@
+/* 迷你播放器样式 */
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+  background: #0d0d0d !important;
+}
+
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-list {
+  background: #0d0d0d !important;
+}
+
+/* 播放器主题色调整 */
+.aplayer {
+  background: #0d0d0d !important;
+}
+
+.aplayer .aplayer-info {
+  background: #0d0d0d !important;
+}
+
+.aplayer .aplayer-info .aplayer-music .aplayer-title,
+.aplayer .aplayer-info .aplayer-music .aplayer-author {
+  color: #c1a86a !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-time {
+  color: #c1a86a !important;
+}
+
+.aplayer .aplayer-list ol li {
+  border-top: 1px solid #2a2a2a !important;
+  background: #0d0d0d !important;
+}
+
+.aplayer .aplayer-list ol li:hover {
+  background: #1a1a1a !important;
+}
+
+.aplayer .aplayer-list ol li .aplayer-list-title {
+  color: #c1a86a !important;
+}
+
+.aplayer .aplayer-list ol li .aplayer-list-author {
+  color: #917c4f !important;
+}
+
+/* 进度条样式 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
+  background: #2a2a2a !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded {
+  background: #3a3a3a !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
+  background: #c1a86a !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
+  background: #c1a86a !important;
+}
+
+/* 音量条样式 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar {
+  background: #2a2a2a !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar .aplayer-volume {
+  background: #c1a86a !important;
+}
+
+/* 控制按钮颜色 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-play svg path,
+.aplayer.aplayer-fixed .aplayer-body .aplayer-info .aplayer-controller .aplayer-list-btn svg path,
+.aplayer.aplayer-fixed .aplayer-body .aplayer-info .aplayer-controller .aplayer-play svg path,
+.aplayer .aplayer-icon,
+.aplayer .aplayer-icon-back,
+.aplayer .aplayer-icon-forward,
+.aplayer .aplayer-icon-menu {
+  fill: #c1a86a !important;
+  color: #c1a86a !important;
+}
+
+/* 列表按钮 */
+.aplayer.aplayer-fixed .aplayer-body .aplayer-info .aplayer-controller .aplayer-list-btn {
+  color: #c1a86a !important;
+}
+
+/* 迷你播放器展开时的背景 */
+.aplayer.aplayer-fixed .aplayer-list {
+  background: #0d0d0d !important;
+}
+
+/* 当前播放歌曲高亮 */
+.aplayer .aplayer-list ol li.aplayer-list-light {
+  background: #1a1a1a !important;
+}
+
+/* 歌曲列表分割线 */
+.aplayer .aplayer-list ol li {
+  border-top: 1px solid #2a2a2a !important;
+}
+
+/* 滚动条样式 */
+.aplayer .aplayer-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.aplayer .aplayer-list::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+
+.aplayer .aplayer-list::-webkit-scrollbar-thumb {
+  background: #c1a86a;
+}
+
+/* 迷你播放器按钮 */
+.aplayer.aplayer-fixed .aplayer-icon-back,
+.aplayer.aplayer-fixed .aplayer-icon-forward,
+.aplayer.aplayer-fixed .aplayer-icon-menu,
+.aplayer.aplayer-fixed .aplayer-icon-play {
+  background-color: #0d0d0d !important;
+  color: #c1a86a !important;
+}
+
+/* 迷你播放器按钮悬停效果 */
+.aplayer.aplayer-fixed .aplayer-icon-back:hover,
+.aplayer.aplayer-fixed .aplayer-icon-forward:hover,
+.aplayer.aplayer-fixed .aplayer-icon-menu:hover,
+.aplayer.aplayer-fixed .aplayer-icon-play:hover {
+  background-color: #1a1a1a !important;
+}
+
+/* 确保所有SVG图标都是金色 */
+.aplayer svg path {
+  fill: #c1a86a !important;
+}
+
+/* 播放器按钮边框 */
+.aplayer .aplayer-icon {
+  border: 1px solid #2a2a2a !important;
+  background-color: #0d0d0d !important;
+}
+
+/* 播放器按钮悬停效果 */
+.aplayer .aplayer-icon:hover {
+  border-color: #c1a86a !important;
+  background-color: #1a1a1a !important;
+}
+
+/* 歌词样式 */
+.aplayer .aplayer-lrc {
+  background: #0d0d0d !important;
+  text-shadow: none !important;
+}
+
+.aplayer .aplayer-lrc p {
+  color: #917c4f !important;
+}
+
+.aplayer .aplayer-lrc p.aplayer-lrc-current {
+  color: #c1a86a !important;
+  font-weight: 600;
+}
+
+/* 歌词遮罩 */
+.aplayer .aplayer-lrc:before,
+.aplayer .aplayer-lrc:after {
+  background: linear-gradient(180deg, #0d0d0d 0%, rgba(13,13,13,0) 100%) !important;
+}
+
+.aplayer .aplayer-lrc:after {
+  background: linear-gradient(180deg, rgba(13,13,13,0) 0%, #0d0d0d 100%) !important;
+}
+
+/* 移除白边并统一边框样式 */
+.aplayer.aplayer-fixed {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.aplayer.aplayer-fixed .aplayer-body {
+  border: 1px solid #2a2a2a !important;
+  border-bottom: none !important;
+}
+
+.aplayer.aplayer-fixed .aplayer-list {
+  border: 1px solid #2a2a2a !important;
+  border-top: none !important;
+}
+
+/* 修复迷你播放器右侧边框 */
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+  border-right: 1px solid #2a2a2a !important;
+}
+
+/* 修复展开按钮边框 */
+.aplayer.aplayer-fixed .aplayer-miniswitcher {
+  border: 1px solid #2a2a2a !important;
+  border-left: none !important;
+  background: #0d0d0d !important;
+}
+
+/* 展开按钮悬停效果 */
+.aplayer.aplayer-fixed .aplayer-miniswitcher:hover {
+  background: #1a1a1a !important;
+}
+
+/* 修复底部白边 */
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body,
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-list {
+  border-bottom: 1px solid #2a2a2a !important;
+}
+
+/* 修复滚动条样式 - 全局 */
+::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0d0d !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1a86a !important;
+  border-radius: 2px !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: #0d0d0d !important;
+}
+
+/* 确保播放器内部滚动条样式一致 */
+.aplayer .aplayer-list::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.aplayer .aplayer-list::-webkit-scrollbar-track {
+  background: #0d0d0d !important;
+  border-radius: 0 !important;
+}
+
+.aplayer .aplayer-list::-webkit-scrollbar-thumb {
+  background: #c1a86a !important;
+  border-radius: 2px !important;
+}
+
+/* 修复可能的边框溢出 */
+.aplayer.aplayer-fixed {
+  overflow: hidden !important;
+
+.aplayer-list-cur{
+  background: #c1a86a !important;
+  border-radius: 2px !important;
+}
+} 
