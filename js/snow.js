@@ -1,19 +1,40 @@
 class SnowEffect {
     constructor() {
+        // 检查是否是冬季
+        const isWinterSeason = this.isWinter();
+        
+        // 获取本地存储的状态，如果是冬季且未设置过，默认为true
+        if (isWinterSeason && localStorage.getItem('snowEnabled') === null) {
+            localStorage.setItem('snowEnabled', 'true');
+        }
+        
+        // 设置初始状态
         this.isEnabled = localStorage.getItem('snowEnabled') === 'true';
+        
+        // 设置开关
         this.setupToggle();
         
-        if (this.isEnabled && this.isWinter()) {
+        // 如果启用且是冬季，初始化雪花
+        if (this.isEnabled && isWinterSeason) {
             this.initSnow();
+            requestAnimationFrame(() => this.animate());
         }
     }
 
     setupToggle() {
         this.toggle = document.querySelector('.snow-toggle');
         if (this.toggle) {
-            // 设置初始状态
+            // 根据当前状态设置开关样式
             if (this.isEnabled) {
                 this.toggle.classList.add('active');
+            } else {
+                this.toggle.classList.remove('active');
+            }
+            
+            // 只在冬季显示开关
+            if (!this.isWinter()) {
+                this.toggle.style.display = 'none';
+                return;
             }
             
             // 添加点击事件
@@ -21,19 +42,15 @@ class SnowEffect {
                 this.isEnabled = !this.isEnabled;
                 localStorage.setItem('snowEnabled', this.isEnabled);
                 
-                if (this.isEnabled && this.isWinter()) {
+                if (this.isEnabled) {
                     this.toggle.classList.add('active');
                     this.initSnow();
+                    requestAnimationFrame(() => this.animate());
                 } else {
                     this.toggle.classList.remove('active');
                     this.removeSnow();
                 }
             });
-
-            // 只在冬季显示开关
-            if (!this.isWinter()) {
-                this.toggle.style.display = 'none';
-            }
         }
     }
 
@@ -117,7 +134,7 @@ class SnowEffect {
     }
 
     animate() {
-        if (!this.container) return; // 如果不是冬季，直接返回
+        if (!this.container || !this.isEnabled) return;
         
         // 添加轻微摆动
         this.snowflakes.forEach(snowflake => {
