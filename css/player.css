@@ -248,9 +248,8 @@
 /* 修复可能的边框溢出 */
 .aplayer.aplayer-fixed {
   overflow: hidden !important;
-
+}
 .aplayer-list-cur{
   background: #c1a86a !important;
   border-radius: 2px !important;
 }
-} 
