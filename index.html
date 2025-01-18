@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/player.css">
+    <link rel="stylesheet" href="./css/stars.css">
+    <link rel="stylesheet" href="./css/snow.css">
   </head>
   <body>
     <div id="app">
@@ -38,6 +40,9 @@
         <a href="https://github.com/cuijianzhuang" target="_blank">
           <i aria-hidden="true" class="fa fa-2x fa-github"></i>
         </a>
+        <div class="snow-toggle">
+          <i aria-hidden="true" class="fa fa-2x fa-snowflake-o"></i>
+        </div>
       </div>
       <p class="footer">Copyright © 2024-<span id="currentYear"></span></p>
     </div>
@@ -67,4 +72,12 @@
            storage="metingjs"
 >
 </meting-js>
+<script src="./js/stars.js" defer></script>
+<script src="./js/snow.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    new StarEffect();
+    new SnowEffect();
+  });
+</script>
 </html>

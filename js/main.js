@@ -4,12 +4,17 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 // 更新时间日期
 function updateDateTime() {
   const now = new Date();
+  
+  // 修改日期格式化
   const dateStr = now.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
     weekday: 'long'
-  }).replace(/\//g, '年').replace(/\//g, '月') + '日';
+  })
+  .replace(/\//g, '年')  // 第一个斜杠替换为年
+  .replace(/\//g, '月')  // 第二个斜杠替换为月
+  .replace(/日星期/g, '日 星期'); // 在日和星期之间添加空格，避免重复
 
   const timeStr = now.toLocaleTimeString('zh-CN', {
     hour: '2-digit',
@@ -37,8 +42,7 @@ async function getWeather() {
       const geocodeData = await geocodeResponse.json();
 
       if (geocodeData.status === '1' && geocodeData.geocodes.length > 0) {
-        const location = geocodeData.geocodes[0].location; // 获取经纬度
-        // 和风天气API需要经度在前，纬度在后，保持逗号分隔
+        const location = geocodeData.geocodes[0].location;
         const [longitude, latitude] = location.split(',');
 
         // 使用和风天气API获取天气
@@ -46,18 +50,20 @@ async function getWeather() {
         const weatherData = await weatherResponse.json();
 
         if (weatherData.code === '200') {
-          weatherInfo.textContent = `${cityName} ${weatherData.now.temp}°C  ${weatherData.now.text} ${weatherData.now.windDir}`;
+          // 获取天气图标
+          const weatherIcon = getWeatherIcon(weatherData.now.text);
+          weatherInfo.innerHTML = `<i class="fa ${weatherIcon}" aria-hidden="true"></i> ${cityName} ${weatherData.now.temp}°C ${weatherData.now.text} ${weatherData.now.windDir}`;
         } else {
-          weatherInfo.textContent = '天气获取失败';
+          weatherInfo.innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 天气获取失败';
         }
       } else {
-        weatherInfo.textContent = '位置获取失败';
+        weatherInfo.innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 位置获取失败';
       }
     } else {
-      weatherInfo.textContent = '位置获取失败';
+      weatherInfo.innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 位置获取失败';
     }
   } catch (error) {
-    document.getElementById('weather-info').textContent = '天气信息更新失败';
+    document.getElementById('weather-info').innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 天气信息更新失败';
     console.error('Error:', error);
   }
 }
@@ -119,3 +125,56 @@ setInterval(updateDateTime, 1000);
 getWeather();
 // 每30分钟更新一次天气
 setInterval(getWeather, 1800000);
+
+// 更新天气信息
+function updateWeather() {
+    fetch('https://api.vvhan.com/api/weather')
+        .then(response => response.json())
+        .then(data => {
+            const weatherInfo = data.info;
+            const weatherText = `${weatherInfo.city} ${weatherInfo.type} ${weatherInfo.high}/${weatherInfo.low}`;
+            
+            // 根据天气类型选择对应的图标
+            const weatherIcon = getWeatherIcon(weatherInfo.type);
+            
+            document.getElementById('weather-info').innerHTML = 
+                `<i class="fa ${weatherIcon}" aria-hidden="true"></i> ${weatherText}`;
+        })
+        .catch(error => {
+            console.error('获取天气信息失败:', error);
+            document.getElementById('weather-info').textContent = '获取天气失败';
+        });
+}
+
+// 根据天气类型返回对应的 Font Awesome 图标类名
+function getWeatherIcon(weatherType) {
+    const weatherIcons = {
+        '晴': 'fa-sun-o',
+        '多云': 'fa-cloud',
+        '阴': 'fa-cloud',
+        '小雨': 'fa-umbrella',
+        '中雨': 'fa-umbrella',
+        '大雨': 'fa-umbrella',
+        '暴雨': 'fa-umbrella',
+        '雷阵雨': 'fa-bolt',
+        '小雪': 'fa-snowflake-o',
+        '中雪': 'fa-snowflake-o',
+        '大雪': 'fa-snowflake-o',
+        '暴雪': 'fa-snowflake-o',
+        '雾': 'fa-align-justify',
+        '霾': 'fa-align-justify',
+        '扬沙': 'fa-align-justify',
+        // 添加更多和风天气API可能返回的天气类型
+        '晴间多云': 'fa-cloud',
+        '阵雨': 'fa-umbrella',
+        '雷阵雨伴有冰雹': 'fa-bolt',
+        '雨夹雪': 'fa-snowflake-o',
+        '浮尘': 'fa-align-justify',
+        '轻度雾霾': 'fa-align-justify',
+        '中度雾霾': 'fa-align-justify',
+        '重度雾霾': 'fa-align-justify',
+        '强浮尘': 'fa-align-justify'
+    };
+
+    return weatherIcons[weatherType] || 'fa-question-circle-o';
+}

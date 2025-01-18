@@ -1,0 +1,76 @@
+.snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.snowflake {
+    position: fixed;
+    color: #fff;
+    opacity: 0;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        opacity: 0;
+        transform: translateY(-20vh) rotate(0deg);
+    }
+    20% {
+        opacity: 0.8;
+    }
+    80% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(360deg);
+    }
+}
+
+/* 雪花开关样式 */
+.snow-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 15px;
+    color: #c1a86a;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.snow-toggle:hover {
+    opacity: 0.8;
+}
+
+.snow-toggle.active {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(193, 168, 106, 0.5);
+}
+
+/* 添加动画效果 */
+.snow-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.snow-toggle:hover i {
+    transform: rotate(180deg);
+}
+
+.snow-toggle.active i {
+    animation: snow-icon-spin 3s linear infinite;
+}
+
+@keyframes snow-icon-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+} 

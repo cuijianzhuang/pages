@@ -91,18 +91,19 @@ a {
 }
 
 .footer {
-  bottom: 3%;
-  left: 50%;
-  width: 95%;
-  display: block;
-  position: absolute;
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  width: 100%;
   text-align: center;
-  font-size: 0.6625rem;
-  -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-          transform: translateX(-50%);
-  -webkit-font-feature-settings: "ss06";
-          font-feature-settings: "ss06";
+  font-size: 0.8rem;
+  color: #c1a86a;
+  padding: 10px 0;
+  z-index: 1000;
+  background-color: transparent;
+  -webkit-font-feature-settings: initial;
+  font-feature-settings: initial;
 }
 
 /* 添加关键帧动画 */
@@ -126,31 +127,142 @@ a {
 .datetime-weather {
   position: fixed;
   top: 20px;
-  right: 20px;
-  text-align: right;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 30px;
   z-index: 1000;
-  color: #e2c992; /* 稍微亮一点的金色 */
+  color: #c1a86a;
 }
 
 #datetime {
-  margin-bottom: 5px;
-  font-size: 1.4em;
+  text-align: left;
+  font-size: 1.6em;
   line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
 }
 
-#datetime span {
-  display: block;
-  margin: 2px 0;
+#date {
+  font-size: 1.1em;
   animation: goldenGlow 2s ease-in-out infinite;
   font-weight: 500;
+  opacity: 0.9;
+}
+
+#time {
+  font-size: 2em;
+  font-weight: bold;
+  animation: timeGlow 2s ease-in-out infinite;
+  animation-delay: 0.3s;
+  letter-spacing: 0.05em;
+  align-self: center;
+  margin-left: -1em;
+  background: linear-gradient(to bottom, #e2c992 0%, #c1a86a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 15px rgba(193, 168, 106, 0.3);
 }
 
 #weather {
-  font-size: 1.3em;
+  text-align: right;
+  font-size: 1.6em;
   opacity: 0.9;
   animation: goldenGlow 2s ease-in-out infinite;
-  animation-delay: 0.5s; /* 错开动画时间 */
+  animation-delay: 0.5s;
   font-weight: 500;
+}
+
+#weather-info i {
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+}
+
+/* 添加时间特殊动画效果 */
+@keyframes timeGlow {
+  0% {
+    text-shadow: 0 0 5px rgba(193, 168, 106, 0.3),
+                 0 0 10px rgba(193, 168, 106, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(193, 168, 106, 0.5),
+                 0 0 20px rgba(193, 168, 106, 0.3),
+                 0 0 30px rgba(193, 168, 106, 0.2);
+    transform: scale(1.02);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(193, 168, 106, 0.3),
+                 0 0 10px rgba(193, 168, 106, 0.2);
+    transform: scale(1);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .datetime-weather {
+    padding: 0 15px;
+  }
+
+  #datetime {
+    font-size: 1.3em;
+    gap: 0.3rem;
+  }
+  
+  #date {
+    font-size: 1em;
+  }
+  
+  #time {
+    font-size: 1.8em;
+    margin-left: -0.8em;
+  }
+  
+  #weather {
+    font-size: 1.3em;
+  }
+
+  #weather-info i {
+    font-size: 1.1em;
+  }
+
+  .footer {
+    bottom: 10px;
+    font-size: 0.7rem;
+  }
+}
+
+/* 超小屏幕适配 */
+@media (max-width: 480px) {
+  .datetime-weather {
+    padding: 0 10px;
+  }
+
+  #datetime {
+    font-size: 1.1em;
+    gap: 0.2rem;
+  }
+  
+  #date {
+    font-size: 0.9em;
+  }
+  
+  #time {
+    font-size: 1.6em;
+    margin-left: -0.6em;
+  }
+  
+  #weather {
+    font-size: 1.1em;
+  }
+
+  #weather-info i {
+    font-size: 1.1em;
+  }
 }
 
 /* 添加一言样式 */
