@@ -10,13 +10,13 @@ function updateDateTime() {
     day: 'numeric',
     weekday: 'long'
   }).replace(/\//g, '年').replace(/\//g, '月') + '日';
-  
+
   const timeStr = now.toLocaleTimeString('zh-CN', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'
   });
-  
+
   document.getElementById('date').textContent = dateStr;
   document.getElementById('time').textContent = timeStr;
 }
@@ -25,26 +25,26 @@ function updateDateTime() {
 async function getWeather() {
   try {
     const weatherInfo = document.getElementById('weather-info');
-    
+
     // 先获取IP定位
     const locationResponse = await fetch('https://restapi.amap.com/v3/ip?key=150e6476078b776d3536721bf74f0276');
     const locationData = await locationResponse.json();
-    
+
     if (locationData.status === '1') {
       // 使用高德地图API获取城市编码
       const cityName = locationData.city;
       const geocodeResponse = await fetch(`https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(cityName)}&key=150e6476078b776d3536721bf74f0276`);
       const geocodeData = await geocodeResponse.json();
-      
+
       if (geocodeData.status === '1' && geocodeData.geocodes.length > 0) {
         const location = geocodeData.geocodes[0].location; // 获取经纬度
         // 和风天气API需要经度在前，纬度在后，保持逗号分隔
         const [longitude, latitude] = location.split(',');
-        
+
         // 使用和风天气API获取天气
         const weatherResponse = await fetch(`https://devapi.qweather.com/v7/weather/now?location=${longitude},${latitude}&key=a4b90c17754a42e89c6347dc57a940ec`);
         const weatherData = await weatherResponse.json();
-        
+
         if (weatherData.code === '200') {
           weatherInfo.textContent = `${cityName} ${weatherData.now.temp}°C  ${weatherData.now.text} ${weatherData.now.windDir}`;
         } else {
@@ -67,7 +67,7 @@ async function getHitokoto() {
   try {
     const response = await fetch('https://v1.hitokoto.cn?c=i');
     const data = await response.json();
-    
+
     document.getElementById('hitokoto-text').textContent = data.hitokoto;
     if (data.from_who) {
       document.getElementById('hitokoto-from').textContent = `——${data.from_who}「${data.from}」`;
@@ -80,6 +80,33 @@ async function getHitokoto() {
     console.error('获取一言失败:', error);
   }
 }
+
+  // 禁用右键菜单
+  document.oncontextmenu = function() {
+  return false;
+};
+
+  // 禁用F12和其他开发者工具快捷键
+  document.onkeydown = function(e) {
+  if (e.keyCode === 123 || // F12
+  (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+  (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+  (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+  return false;
+}
+};
+
+  // 禁用开发者工具
+  (function() {
+  let devtools = function() {};
+  devtools.toString = function() {
+  if (window.console && window.console.clear) {
+  window.console.clear();
+}
+  return '';
+}
+  window.devtools = devtools;
+})();
 
 // 初始化一言
 getHitokoto();
