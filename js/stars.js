@@ -17,11 +17,15 @@ class StarEffect {
     init() {
         document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         document.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-        // 添加点击效果
         document.addEventListener('click', (e) => this.handleClick(e));
     }
 
     handleClick(e) {
+        // 检查是否在播放器区域内
+        if (e.target.closest('.aplayer')) {
+            return; // 如果在播放器内，不处理星星效果
+        }
+        
         // 点击时创建多个星星
         for (let i = 0; i < 8; i++) {
             setTimeout(() => {
@@ -44,6 +48,11 @@ class StarEffect {
     }
 
     handleTouchMove(e) {
+        // 检查是否在播放器区域内
+        if (e.target.closest('.aplayer')) {
+            return; // 如果在播放器内，不处理星星效果
+        }
+        
         e.preventDefault();
         const touch = e.touches[0];
         const distance = Math.hypot(touch.clientX - this.lastX, touch.clientY - this.lastY);

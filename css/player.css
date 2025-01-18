@@ -10,6 +10,10 @@
 /* 播放器主题色调整 */
 .aplayer {
   background: #0d0d0d !important;
+  user-select: text !important;
+  cursor: auto !important;
+  pointer-events: auto !important;
+  z-index: 9999 !important;
 }
 
 .aplayer .aplayer-info {
@@ -252,4 +256,12 @@
 .aplayer-list-cur{
   background: #c1a86a !important;
   border-radius: 2px !important;
+}
+
+/* 确保播放器控件可点击 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap,
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap,
+.aplayer .aplayer-list {
+    pointer-events: auto !important;
+    user-select: none !important;
 }
