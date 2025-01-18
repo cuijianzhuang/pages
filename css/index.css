@@ -8,6 +8,14 @@
  * Copyright 2017 metheno
  */
 
+/* 添加字体声明 */
+@font-face {
+  font-family: 'Note-Script';
+  src: url('../fonts/Note-Script-SemiBold-2.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   padding: 10vh 0;
@@ -158,10 +166,3 @@ a {
   font-style: italic;
 }
 
-/* 添加字体声明 */
-@font-face {
-  font-family: 'Note-Script';
-  src: url('../fonts/Note-Script-SemiBold-2.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}

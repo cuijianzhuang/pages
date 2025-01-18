@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>CJZ,s Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>CJZ's Home</title>
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/font-awesome.min.css">
   </head>
@@ -11,6 +11,7 @@
       <h2 class="title">崔健壮</h2>
 <!--  <p class="description">想让所有人认识我，却不知道我是谁</p>-->
       <p class="description">Carpe diem, Quam minimum credula postero.</p>
+<!--   添加一言api-->
       <div class="hitokoto">
         <span id="hitokoto-text">获取中...</span>
         <div id="hitokoto-from"></div>
@@ -47,8 +48,11 @@
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <!-- require MetingJS -->
 <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
+<!--本地js引入-->
 <script src="./js/main.js" defer></script>
-
+<!--引入第三方-->
+<script>
+   var meting_api='https://v.iarc.top/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
+</script>
 <meting-js server="netease" type="playlist" id="961896580" fixed="true" mini="true" autoplay="true" order="random"></meting-js>
 </html>
