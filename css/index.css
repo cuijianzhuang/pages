@@ -16,6 +16,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: '迷你繁方篆';
+  src: url('../fonts/迷你繁方篆.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   padding: 10vh 0;
@@ -39,6 +46,7 @@ a {
 
 .title {
   margin: 0;
+  font-family: '迷你繁方篆', serif;
   padding-top: 20vh;
   font-size: 6.5vmax;
 }
