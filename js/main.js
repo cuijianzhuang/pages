@@ -196,13 +196,50 @@ function initThemeToggle() {
     updateThemeIcon(savedTheme === 'light-theme');
   }
 
-  // 获取当前时间并自动设置主题
-  function autoSetTheme() {
-    const hour = new Date().getHours();
-    const isDay = hour >= 6 && hour < 18;
-    
-    if (!localStorage.getItem('theme')) {  // 只在用户未手动设置主题时自动切换
-      setTheme(isDay ? 'light-theme' : 'dark-theme');
+  // 获取日出日落时间并自动设置主题
+  async function autoSetTheme() {
+    try {
+      // 只在用户未手动设置主题时自动切换
+      if (!localStorage.getItem('theme')) {
+        const locationResponse = await fetch('https://restapi.amap.com/v3/ip?key=150e6476078b776d3536721bf74f0276');
+        const locationData = await locationResponse.json();
+        
+        if (locationData.status === '1') {
+          const cityName = locationData.city;
+          const geocodeResponse = await fetch(`https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(cityName)}&key=150e6476078b776d3536721bf74f0276`);
+          const geocodeData = await geocodeResponse.json();
+          
+          if (geocodeData.status === '1' && geocodeData.geocodes.length > 0) {
+            const location = geocodeData.geocodes[0].location;
+            const [longitude, latitude] = location.split(',');
+            
+            // 获取日出日落时间
+            const sunResponse = await fetch(`https://devapi.qweather.com/v7/astronomy/sun?location=${longitude},${latitude}&key=a4b90c17754a42e89c6347dc57a940ec`);
+            const sunData = await sunResponse.json();
+            
+            if (sunData.code === '200') {
+              const now = new Date();
+              const sunrise = new Date(sunData.sunrise);
+              const sunset = new Date(sunData.sunset);
+              
+              // 如果在日出和日落之间，使用日间主题
+              if (now >= sunrise && now <= sunset) {
+                setTheme('light-theme');
+              } else {
+                setTheme('dark-theme');
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('获取日出日落时间失败:', error);
+      // 如果API调用失败，使用默认的时间判断
+      const hour = new Date().getHours();
+      const isDay = hour >= 6 && hour < 18;
+      if (!localStorage.getItem('theme')) {
+        setTheme(isDay ? 'light-theme' : 'dark-theme');
+      }
     }
   }
 
