@@ -178,3 +178,66 @@ function getWeatherIcon(weatherType) {
 
     return weatherIcons[weatherType] || 'fa-question-circle-o';
 }
+
+// 主题切换功能
+function initThemeToggle() {
+  const body = document.body;
+  const themeToggle = document.querySelector('.theme-toggle');
+  const themeIcon = themeToggle.querySelector('i');
+  const aplayer = document.querySelector('.aplayer');
+  
+  // 检查本地存储中的主题设置
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    body.classList.add(savedTheme);
+    if (aplayer) {
+      aplayer.classList.add(savedTheme);
+    }
+    updateThemeIcon(savedTheme === 'light-theme');
+  }
+
+  // 获取当前时间并自动设置主题
+  function autoSetTheme() {
+    const hour = new Date().getHours();
+    const isDay = hour >= 6 && hour < 18;
+    
+    if (!localStorage.getItem('theme')) {  // 只在用户未手动设置主题时自动切换
+      setTheme(isDay ? 'light-theme' : 'dark-theme');
+    }
+  }
+
+  // 设置主题
+  function setTheme(theme) {
+    body.classList.remove('light-theme', 'dark-theme');
+    body.classList.add(theme);
+    if (aplayer) {
+      aplayer.classList.remove('light-theme', 'dark-theme');
+      aplayer.classList.add(theme);
+    }
+    localStorage.setItem('theme', theme);
+    updateThemeIcon(theme === 'light-theme');
+  }
+
+  // 更新主题图标
+  function updateThemeIcon(isLight) {
+    themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+    themeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
+  }
+
+  // 手动切换主题
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = body.classList.contains('light-theme') ? 'dark-theme' : 'light-theme';
+    setTheme(currentTheme);
+  });
+
+  // 初始化自动主题
+  autoSetTheme();
+  // 每小时检查一次是否需要切换主题
+  setInterval(autoSetTheme, 3600000);
+}
+
+// 在初始化代码中添加主题切换初始化
+document.addEventListener('DOMContentLoaded', () => {
+  // ... existing code ...
+  initThemeToggle();
+});

@@ -153,27 +153,36 @@
 
 /* 歌词样式 */
 .aplayer .aplayer-lrc {
-  background: #0d0d0d !important;
-  text-shadow: none !important;
+  background: transparent !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5) !important;
 }
 
+.aplayer .aplayer-lrc::before {
+  background: linear-gradient(180deg, var(--player-bg) 0%, transparent 100%) !important;
+}
+
+.aplayer .aplayer-lrc::after {
+  background: linear-gradient(180deg, transparent 0%, var(--player-bg) 100%) !important;
+}
+
+/* 当前播放歌词 */
 .aplayer .aplayer-lrc p {
-  color: #917c4f !important;
+  color: var(--player-secondary) !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5) !important;
 }
 
 .aplayer .aplayer-lrc p.aplayer-lrc-current {
-  color: #c1a86a !important;
-  font-weight: 600;
+  color: var(--player-primary) !important;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* 歌词遮罩 */
-.aplayer .aplayer-lrc:before,
-.aplayer .aplayer-lrc:after {
-  background: linear-gradient(180deg, #0d0d0d 0%, rgba(13,13,13,0) 100%) !important;
+/* 日间主题歌词阴影调整 */
+.light-theme .aplayer .aplayer-lrc p {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.2) !important;
 }
 
-.aplayer .aplayer-lrc:after {
-  background: linear-gradient(180deg, rgba(13,13,13,0) 0%, #0d0d0d 100%) !important;
+.light-theme .aplayer .aplayer-lrc p.aplayer-lrc-current {
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.2) !important;
 }
 
 /* 移除白边并统一边框样式 */
@@ -357,4 +366,145 @@
 /* 列表容器高度 */
 .aplayer.aplayer-withlist .aplayer-list {
     max-height: 320px !important;
+}
+
+/* 播放器基础样式（深色主题） */
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body,
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-list,
+.aplayer {
+  background: var(--player-bg, #0d0d0d) !important;
+}
+
+.aplayer .aplayer-info,
+.aplayer .aplayer-list ol li {
+  background: var(--player-bg, #0d0d0d) !important;
+}
+
+.aplayer .aplayer-info .aplayer-music .aplayer-title,
+.aplayer .aplayer-info .aplayer-music .aplayer-author,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time,
+.aplayer .aplayer-list ol li .aplayer-list-title {
+  color: var(--player-text, #c1a86a) !important;
+}
+
+.aplayer .aplayer-list ol li .aplayer-list-author {
+  color: var(--player-secondary, #917c4f) !important;
+}
+
+/* 进度条样式 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
+  background: var(--player-bar-bg, #2a2a2a) !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded {
+  background: var(--player-loaded-bg, #3a3a3a) !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played,
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
+  background: var(--player-primary, #c1a86a) !important;
+}
+
+/* 音量条样式 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar {
+  background: var(--player-bar-bg, #2a2a2a) !important;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar .aplayer-volume {
+  background: var(--player-primary, #c1a86a) !important;
+}
+
+/* 控制按钮颜色 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-play svg path,
+.aplayer.aplayer-fixed .aplayer-body .aplayer-info .aplayer-controller .aplayer-list-btn svg path,
+.aplayer.aplayer-fixed .aplayer-body .aplayer-info .aplayer-controller .aplayer-play svg path,
+.aplayer .aplayer-icon,
+.aplayer .aplayer-icon-back,
+.aplayer .aplayer-icon-forward,
+.aplayer .aplayer-icon-menu {
+  fill: var(--player-primary, #c1a86a) !important;
+  color: var(--player-primary, #c1a86a) !important;
+}
+
+/* 列表样式 */
+.aplayer .aplayer-list ol li {
+  border-top: 1px solid var(--player-border, #2a2a2a) !important;
+}
+
+.aplayer .aplayer-list ol li:hover,
+.aplayer .aplayer-list ol li.aplayer-list-light {
+  background: var(--player-hover-bg, #1a1a1a) !important;
+}
+
+/* 滚动条样式 */
+.aplayer .aplayer-list::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.aplayer .aplayer-list::-webkit-scrollbar-track {
+  background: var(--player-bg, #0d0d0d) !important;
+}
+
+.aplayer .aplayer-list::-webkit-scrollbar-thumb {
+  background: var(--player-primary, #c1a86a) !important;
+}
+
+/* 播放器边框样式 */
+.aplayer.aplayer-fixed {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.aplayer.aplayer-fixed .aplayer-body {
+  border: 1px solid var(--player-border, #2a2a2a) !important;
+  border-bottom: none !important;
+}
+
+.aplayer.aplayer-fixed .aplayer-list {
+  border: 1px solid var(--player-border, #2a2a2a) !important;
+  border-top: none !important;
+}
+
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+  border-right: 1px solid var(--player-border, #2a2a2a) !important;
+}
+
+/* 展开按钮样式 */
+.aplayer.aplayer-fixed .aplayer-miniswitcher {
+  border: 1px solid var(--player-border, #2a2a2a) !important;
+  border-left: none !important;
+  background: var(--player-bg, #0d0d0d) !important;
+}
+
+.aplayer.aplayer-fixed .aplayer-miniswitcher:hover {
+  background: var(--player-hover-bg, #1a1a1a) !important;
+}
+
+/* 日间主题变量 */
+.light-theme {
+  --player-bg: rgba(245, 245, 245, 0.9);
+  --player-text: #8b7355;
+  --player-secondary: #a08b6c;
+  --player-primary: #8b7355;
+  --player-border: #e0e0e0;
+  --player-bar-bg: #e0e0e0;
+  --player-loaded-bg: #d0d0d0;
+  --player-hover-bg: rgba(232, 232, 232, 0.9);
+}
+
+/* 深色主题变量（默认） */
+:root {
+  --player-bg: #0d0d0d;
+  --player-text: #c1a86a;
+  --player-secondary: #917c4f;
+  --player-primary: #c1a86a;
+  --player-border: #2a2a2a;
+  --player-bar-bg: #2a2a2a;
+  --player-loaded-bg: #3a3a3a;
+  --player-hover-bg: #1a1a1a;
+}
+
+/* 当前播放歌曲指示器 */
+.aplayer-list-cur {
+  background: var(--player-primary) !important;
 }
