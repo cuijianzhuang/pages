@@ -64,12 +64,23 @@
 }
 
 /* 音量条样式 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap {
+  background: transparent !important;
+  border: none !important;
+}
+
 .aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar {
-  background: #2a2a2a !important;
+  background: var(--player-bar-bg, #2a2a2a) !important;
+  opacity: 0.8 !important;
 }
 
 .aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar .aplayer-volume {
-  background: #c1a86a !important;
+  background: var(--player-primary, #c1a86a) !important;
+}
+
+/* 音量控制悬停效果 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap:hover .aplayer-volume-bar-wrap .aplayer-volume-bar {
+  opacity: 1 !important;
 }
 
 /* 控制按钮颜色 */
@@ -496,6 +507,7 @@
   --player-shadow: rgba(0, 0, 0, 0.5);
   --player-gradient-start: rgba(13, 13, 13, 1);
   --player-gradient-end: rgba(13, 13, 13, 0);
+  --transition-speed: 0.3s;
 }
 
 /* 当前播放歌曲指示器 */
@@ -658,4 +670,100 @@
 /* 优化列表项过渡效果 */
 .aplayer .aplayer-list ol li {
     transition: all 0.3s ease !important;
+}
+
+/* 控制按钮样式重置 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon {
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* 确保图标颜色正确 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon svg path,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon-menu svg path,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon-loop svg path,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon-lrc svg path {
+  fill: var(--player-primary, #c1a86a) !important;
+}
+
+/* 悬停效果 - 只改变透明度而不是背景 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon:hover {
+  opacity: 0.8 !important;
+}
+
+/* 移除按钮之间的边距 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon {
+  margin: 0 3px !important;
+}
+
+/* 控制按钮基础样式 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon {
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  margin: 0 3px !important;
+  transform: scale(1) !important;
+  transition: all 0.2s ease-out !important;
+}
+
+/* 图标颜色和基础状态 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon svg path,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon-menu svg path,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon-loop svg path,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon-lrc svg path {
+  fill: var(--player-primary, #c1a86a) !important;
+  transition: fill 0.2s ease-out !important;
+}
+
+/* 悬停效果 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon:hover {
+  transform: scale(1.15) !important;
+  opacity: 0.9 !important;
+}
+
+/* 点击效果 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon:active {
+  transform: scale(0.95) !important;
+  opacity: 0.7 !important;
+  transition: all 0.1s ease-out !important;
+}
+
+/* 选中状态 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-mode,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-loop,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-lrc {
+  opacity: 0.6 !important;
+}
+
+/* 选中状态的悬停效果 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-mode:hover,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-loop:hover,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-lrc:hover {
+  opacity: 1 !important;
+  transform: scale(1.15) !important;
+}
+
+/* 选中状态激活时 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-mode.aplayer-icon-mode-loop,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-loop.aplayer-icon-loop-all,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-lrc.aplayer-icon-lrc-show {
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+/* 修正下一曲按钮箭头方向 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-forward {
+  transform: rotate(180deg) scale(1) !important;
+  transition: all 0.2s ease-out !important;
+}
+
+/* 保持悬停效果时的旋转 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-forward:hover {
+  transform: rotate(180deg) scale(1.15) !important;
+}
+
+/* 保持点击效果时的旋转 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-forward:active {
+  transform: rotate(180deg) scale(0.95) !important;
 }
