@@ -3,9 +3,10 @@ class SnowEffect {
         // 检查是否是冬季
         const isWinterSeason = this.isWinter();
         
-        // 获取本地存储的状态，如果是冬季且未设置过，默认为true
-        if (isWinterSeason && localStorage.getItem('snowEnabled') === null) {
-            localStorage.setItem('snowEnabled', 'true');
+        // 获取本地存储的状态
+        // 冬季时默认开启，非冬季时默认关闭
+        if (localStorage.getItem('snowEnabled') === null) {
+            localStorage.setItem('snowEnabled', isWinterSeason ? 'true' : 'false');
         }
         
         // 设置初始状态
@@ -14,8 +15,8 @@ class SnowEffect {
         // 设置开关
         this.setupToggle();
         
-        // 如果启用且是冬季，初始化雪花
-        if (this.isEnabled && isWinterSeason) {
+        // 如果启用，初始化雪花
+        if (this.isEnabled) {
             this.initSnow();
             requestAnimationFrame(() => this.animate());
         }
@@ -29,12 +30,6 @@ class SnowEffect {
                 this.toggle.classList.add('active');
             } else {
                 this.toggle.classList.remove('active');
-            }
-            
-            // 只在冬季显示开关
-            if (!this.isWinter()) {
-                this.toggle.style.display = 'none';
-                return;
             }
             
             // 添加点击事件
