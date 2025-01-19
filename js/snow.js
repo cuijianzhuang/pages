@@ -1,5 +1,11 @@
 class SnowEffect {
     constructor() {
+        // 初始化颜色数组
+        this.colors = {
+            dark: ['#ffffff', '#f0f0f0', '#e0e0e0'],
+            light: ['#8b7355', '#a08b6c', '#b39c7d']
+        };
+        
         // 检查是否是冬季
         const isWinterSeason = this.isWinter();
         
@@ -20,12 +26,6 @@ class SnowEffect {
             this.initSnow();
             requestAnimationFrame(() => this.animate());
         }
-        
-        // 修改颜色数组，添加日间模式颜色
-        this.colors = {
-            dark: ['#ffffff', '#f0f0f0', '#e0e0e0'],
-            light: ['#8b7355', '#a08b6c', '#b39c7d']
-        };
     }
 
     setupToggle() {
