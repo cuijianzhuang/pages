@@ -32,13 +32,14 @@ async function getWeather() {
     const weatherInfo = document.getElementById('weather-info');
 
     // 先获取IP定位
-    const locationResponse = await fetch('https://restapi.amap.com/v3/ip?key=150e6476078b776d3536721bf74f0276');
+    const locationResponse = await fetch(`${CONFIG.AMAP.ENDPOINTS.IP_LOCATION}?key=${CONFIG.AMAP.KEY}`);
     const locationData = await locationResponse.json();
 
     if (locationData.status === '1') {
-      // 使用高德地图API获取城市编码
       const cityName = locationData.city;
-      const geocodeResponse = await fetch(`https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(cityName)}&key=150e6476078b776d3536721bf74f0276`);
+      const geocodeResponse = await fetch(
+        `${CONFIG.AMAP.ENDPOINTS.GEOCODE}?address=${encodeURIComponent(cityName)}&key=${CONFIG.AMAP.KEY}`
+      );
       const geocodeData = await geocodeResponse.json();
 
       if (geocodeData.status === '1' && geocodeData.geocodes.length > 0) {
@@ -46,7 +47,9 @@ async function getWeather() {
         const [longitude, latitude] = location.split(',');
 
         // 使用和风天气API获取天气
-        const weatherResponse = await fetch(`https://devapi.qweather.com/v7/weather/now?location=${longitude},${latitude}&key=a4b90c17754a42e89c6347dc57a940ec`);
+        const weatherResponse = await fetch(
+          `${CONFIG.QWEATHER.ENDPOINTS.WEATHER}?location=${longitude},${latitude}&key=${CONFIG.QWEATHER.KEY}`
+        );
         const weatherData = await weatherResponse.json();
 
         if (weatherData.code === '200') {
@@ -71,7 +74,9 @@ async function getWeather() {
 // 在现有代码后添加一言功能
 async function getHitokoto() {
   try {
-    const response = await fetch('https://v1.hitokoto.cn?c=i');
+    const response = await fetch(
+      `${CONFIG.HITOKOTO.ENDPOINT}?c=${CONFIG.HITOKOTO.DEFAULT_PARAMS.c}`
+    );
     const data = await response.json();
 
     document.getElementById('hitokoto-text').textContent = data.hitokoto;
@@ -117,14 +122,14 @@ async function getHitokoto() {
 // 初始化一言
 getHitokoto();
 // 每5分钟更新一次一言
-setInterval(getHitokoto, 300000);
+setInterval(getHitokoto, CONFIG.HITOKOTO_UPDATE_INTERVAL);
 
 // 初始化
 updateDateTime();
 setInterval(updateDateTime, 1000);
 getWeather();
 // 每30分钟更新一次天气
-setInterval(getWeather, 1800000);
+setInterval(getWeather, CONFIG.WEATHER_UPDATE_INTERVAL);
 
 // 更新天气信息
 function updateWeather() {
@@ -199,22 +204,26 @@ function initThemeToggle() {
   // 获取日出日落时间并自动设置主题
   async function autoSetTheme() {
     try {
-      // 只在用户未手动设置主题时自动切换
       if (!localStorage.getItem('theme')) {
-        const locationResponse = await fetch('https://restapi.amap.com/v3/ip?key=150e6476078b776d3536721bf74f0276');
+        const locationResponse = await fetch(
+          `${CONFIG.AMAP.ENDPOINTS.IP_LOCATION}?key=${CONFIG.AMAP.KEY}`
+        );
         const locationData = await locationResponse.json();
         
         if (locationData.status === '1') {
           const cityName = locationData.city;
-          const geocodeResponse = await fetch(`https://restapi.amap.com/v3/geocode/geo?address=${encodeURIComponent(cityName)}&key=150e6476078b776d3536721bf74f0276`);
+          const geocodeResponse = await fetch(
+            `${CONFIG.AMAP.ENDPOINTS.GEOCODE}?address=${encodeURIComponent(cityName)}&key=${CONFIG.AMAP.KEY}`
+          );
           const geocodeData = await geocodeResponse.json();
           
           if (geocodeData.status === '1' && geocodeData.geocodes.length > 0) {
             const location = geocodeData.geocodes[0].location;
             const [longitude, latitude] = location.split(',');
             
-            // 获取日出日落时间
-            const sunResponse = await fetch(`https://devapi.qweather.com/v7/astronomy/sun?location=${longitude},${latitude}&key=a4b90c17754a42e89c6347dc57a940ec`);
+            const sunResponse = await fetch(
+              `${CONFIG.QWEATHER.ENDPOINTS.SUN}?location=${longitude},${latitude}&key=${CONFIG.QWEATHER.KEY}`
+            );
             const sunData = await sunResponse.json();
             
             if (sunData.code === '200') {
@@ -270,7 +279,7 @@ function initThemeToggle() {
   // 初始化自动主题
   autoSetTheme();
   // 每小时检查一次是否需要切换主题
-  setInterval(autoSetTheme, 3600000);
+  setInterval(autoSetTheme, CONFIG.THEME_UPDATE_INTERVAL);
 }
 
 // 在初始化代码中添加主题切换初始化
