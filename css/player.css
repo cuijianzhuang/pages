@@ -508,3 +508,132 @@
 .aplayer-list-cur {
   background: var(--player-primary) !important;
 }
+
+/* 播放器按钮基础样式 */
+.aplayer .aplayer-icon {
+  border: 1px solid var(--player-border) !important;
+  background-color: var(--player-bg) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 播放器按钮悬停效果 */
+.aplayer .aplayer-icon:hover {
+  border-color: var(--player-primary) !important;
+  background-color: var(--player-hover-bg) !important;
+}
+
+/* 迷你播放器按钮样式 */
+.aplayer.aplayer-fixed .aplayer-icon-back,
+.aplayer.aplayer-fixed .aplayer-icon-forward,
+.aplayer.aplayer-fixed .aplayer-icon-menu,
+.aplayer.aplayer-fixed .aplayer-icon-play {
+  background-color: var(--player-bg) !important;
+  color: var(--player-primary) !important;
+  border: 1px solid var(--player-border) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 迷你播放器按钮悬停效果 */
+.aplayer.aplayer-fixed .aplayer-icon-back:hover,
+.aplayer.aplayer-fixed .aplayer-icon-forward:hover,
+.aplayer.aplayer-fixed .aplayer-icon-menu:hover,
+.aplayer.aplayer-fixed .aplayer-icon-play:hover {
+  background-color: var(--player-hover-bg) !important;
+  border-color: var(--player-primary) !important;
+}
+
+/* 确保所有SVG图标颜色正确 */
+.aplayer svg path,
+.aplayer .aplayer-icon svg path,
+.aplayer.aplayer-fixed .aplayer-icon svg path {
+  fill: var(--player-primary) !important;
+  transition: fill 0.3s ease !important;
+}
+
+/* 播放列表切换按钮 */
+.aplayer .aplayer-list-hide {
+  background-color: var(--player-bg) !important;
+  border: 1px solid var(--player-border) !important;
+  transition: all 0.3s ease !important;
+}
+
+.aplayer .aplayer-list-hide:hover {
+  background-color: var(--player-hover-bg) !important;
+  border-color: var(--player-primary) !important;
+}
+
+/* 音量控制按钮 */
+.aplayer .aplayer-volume-wrap .aplayer-volume-bar-wrap {
+  background-color: var(--player-bg) !important;
+  border: 1px solid var(--player-border) !important;
+}
+
+/* 播放模式按钮 */
+.aplayer .aplayer-icon.aplayer-icon-mode {
+  background-color: var(--player-bg) !important;
+  border: 1px solid var(--player-border) !important;
+}
+
+.aplayer .aplayer-icon.aplayer-icon-mode:hover {
+  background-color: var(--player-hover-bg) !important;
+  border-color: var(--player-primary) !important;
+}
+
+/* 迷你播放器展开按钮 */
+.aplayer.aplayer-fixed .aplayer-miniswitcher {
+  background-color: var(--player-bg) !important;
+  border: 1px solid var(--player-border) !important;
+  border-left: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.aplayer.aplayer-fixed .aplayer-miniswitcher:hover {
+  background-color: var(--player-hover-bg) !important;
+}
+
+/* 播放列表当前播放项指示器 */
+.aplayer-list-cur {
+  background-color: var(--player-primary) !important;
+  transition: background-color 0.3s ease !important;
+}
+
+/* 确保所有按钮在日间主题下有正确的阴影 */
+.light-theme .aplayer .aplayer-icon,
+.light-theme .aplayer.aplayer-fixed .aplayer-icon-back,
+.light-theme .aplayer.aplayer-fixed .aplayer-icon-forward,
+.light-theme .aplayer.aplayer-fixed .aplayer-icon-menu,
+.light-theme .aplayer.aplayer-fixed .aplayer-icon-play {
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 日间主题下的按钮悬停效果增强 */
+.light-theme .aplayer .aplayer-icon:hover,
+.light-theme .aplayer.aplayer-fixed .aplayer-icon:hover {
+  box-shadow: 0 0 5px rgba(139, 115, 85, 0.3) !important;
+}
+
+/* 确保日间主题下的图标颜色正确 */
+.light-theme .aplayer svg path,
+.light-theme .aplayer .aplayer-icon svg path,
+.light-theme .aplayer.aplayer-fixed .aplayer-icon svg path {
+  fill: var(--player-primary) !important;
+}
+
+/* 音量滑块样式 */
+.aplayer .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar {
+  background: var(--player-bar-bg) !important;
+}
+
+.aplayer .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar .aplayer-volume {
+  background: var(--player-primary) !important;
+}
+
+/* 确保所有交互元素有过渡动画 */
+.aplayer .aplayer-icon,
+.aplayer .aplayer-icon svg path,
+.aplayer .aplayer-volume-wrap .aplayer-volume-bar-wrap,
+.aplayer .aplayer-volume-wrap .aplayer-volume-bar,
+.aplayer .aplayer-list-cur,
+.aplayer.aplayer-fixed .aplayer-miniswitcher {
+  transition: all 0.3s ease !important;
+}
