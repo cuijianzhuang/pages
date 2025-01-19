@@ -244,9 +244,9 @@
 }
 
 /* 确保播放器内部滚动条样式一致 */
-.aplayer .aplayer-list::-webkit-scrollbar {
-  width: 5px !important;
-}
+/*.aplayer .aplayer-list::-webkit-scrollbar {*/
+/*  width: 5px !important;*/
+/*}*/
 
 .aplayer .aplayer-list::-webkit-scrollbar-track {
   background: #0d0d0d !important;
@@ -267,7 +267,7 @@
   border-radius: 2px !important;
 }
 
-/* 确保播放器控件可点击 */
+/*!* 确保播放器控件可点击 *!*/
 .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap,
 .aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap,
 .aplayer .aplayer-list {
@@ -278,18 +278,6 @@
 /* 歌单布局样式调整 */
 .aplayer .aplayer-list {
     padding: 0 !important;
-}
-
-.aplayer .aplayer-list ol {
-    padding: 0 !important;
-}
-
-.aplayer .aplayer-list ol li {
-    position: relative !important;
-    padding: 8px 15px !important;
-    border-top: 1px solid #2a2a2a !important;
-    height: 32px !important;
-    line-height: 32px !important;
 }
 
 /* 序号样式 */
@@ -482,26 +470,32 @@
 
 /* 日间主题变量 */
 .light-theme {
-  --player-bg: rgba(245, 245, 245, 0.9);
+  --player-bg: rgba(245, 245, 245, 0.95);
   --player-text: #8b7355;
   --player-secondary: #a08b6c;
   --player-primary: #8b7355;
   --player-border: #e0e0e0;
   --player-bar-bg: #e0e0e0;
   --player-loaded-bg: #d0d0d0;
-  --player-hover-bg: rgba(232, 232, 232, 0.9);
+  --player-hover-bg: rgba(232, 232, 232, 0.95);
+  --player-shadow: rgba(0, 0, 0, 0.2);
+  --player-gradient-start: rgba(245, 245, 245, 1);
+  --player-gradient-end: rgba(245, 245, 245, 0);
 }
 
 /* 深色主题变量（默认） */
 :root {
-  --player-bg: #0d0d0d;
+  --player-bg: rgba(13, 13, 13, 0.95);
   --player-text: #c1a86a;
   --player-secondary: #917c4f;
   --player-primary: #c1a86a;
   --player-border: #2a2a2a;
   --player-bar-bg: #2a2a2a;
   --player-loaded-bg: #3a3a3a;
-  --player-hover-bg: #1a1a1a;
+  --player-hover-bg: rgba(26, 26, 26, 0.95);
+  --player-shadow: rgba(0, 0, 0, 0.5);
+  --player-gradient-start: rgba(13, 13, 13, 1);
+  --player-gradient-end: rgba(13, 13, 13, 0);
 }
 
 /* 当前播放歌曲指示器 */
@@ -636,4 +630,32 @@
 .aplayer .aplayer-list-cur,
 .aplayer.aplayer-fixed .aplayer-miniswitcher {
   transition: all 0.3s ease !important;
+}
+
+/* 修改歌单列表样式，确保当前播放歌曲显示在首行 */
+.aplayer .aplayer-list ol li.aplayer-list-light {
+    order: -1 !important; /* 将当前播放的歌曲置于最前 */
+}
+
+ /*优化列表滚动行为 */
+.aplayer .aplayer-list {
+    scroll-behavior: smooth !important;
+}
+
+/* 确保当前播放歌曲可见 */
+.aplayer .aplayer-list ol li.aplayer-list-light {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    background: var(--player-bg, #0d0d0d) !important;
+}
+
+/* 添加一个微小的阴影效果，使当前播放歌曲更突出 */
+.aplayer .aplayer-list ol li.aplayer-list-light {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 优化列表项过渡效果 */
+.aplayer .aplayer-list ol li {
+    transition: all 0.3s ease !important;
 }
