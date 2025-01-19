@@ -20,6 +20,12 @@ class SnowEffect {
             this.initSnow();
             requestAnimationFrame(() => this.animate());
         }
+        
+        // 修改颜色数组，添加日间模式颜色
+        this.colors = {
+            dark: ['#ffffff', '#f0f0f0', '#e0e0e0'],
+            light: ['#8b7355', '#a08b6c', '#b39c7d']
+        };
     }
 
     setupToggle() {
@@ -56,7 +62,6 @@ class SnowEffect {
         
         this.snowflakes = [];
         this.snowflakeCount = 50;
-        this.colors = ['#ffffff', '#f0f0f0', '#e0e0e0'];
         this.icons = ['fa-snowflake-o', 'fa-asterisk'];
         
         this.init();
@@ -87,17 +92,21 @@ class SnowEffect {
     }
 
     createSnowflake() {
-        if (!this.container) return; // 如果不是冬季，直接返回
+        if (!this.container) return;
         
         const snowflake = document.createElement('i');
         snowflake.className = `fa ${this.icons[Math.floor(Math.random() * this.icons.length)]} snowflake`;
         
+        // 根据主题选择颜色
+        const isLightTheme = document.body.classList.contains('light-theme');
+        const colorArray = isLightTheme ? this.colors.light : this.colors.dark;
+        const color = colorArray[Math.floor(Math.random() * colorArray.length)];
+        
         // 随机属性
         const size = Math.random() * 15 + 8;
         const startX = Math.random() * window.innerWidth;
-        const duration = Math.random() * 5 + 5; // 5-10秒
-        const delay = Math.random() * 5; // 0-5秒延迟
-        const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+        const duration = Math.random() * 5 + 5;
+        const delay = Math.random() * 5;
         
         // 应用样式
         Object.assign(snowflake.style, {
@@ -106,7 +115,11 @@ class SnowEffect {
             fontSize: `${size}px`,
             color: color,
             animationDuration: `${duration}s`,
-            animationDelay: `${delay}s`
+            animationDelay: `${delay}s`,
+            // 添加阴影效果
+            textShadow: isLightTheme 
+                ? `0 0 8px rgba(139, 115, 85, 0.6), 0 0 15px rgba(139, 115, 85, 0.4)`
+                : `0 0 5px rgba(255, 255, 255, 0.5)`
         });
 
         this.container.appendChild(snowflake);

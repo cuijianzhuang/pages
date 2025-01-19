@@ -13,6 +13,7 @@
     color: #fff;
     opacity: 0;
     animation: fall linear infinite;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 @keyframes fall {
@@ -21,10 +22,10 @@
         transform: translateY(-20vh) rotate(0deg);
     }
     20% {
-        opacity: 0.8;
+        opacity: 0.9;
     }
     80% {
-        opacity: 0.8;
+        opacity: 0.9;
     }
     100% {
         opacity: 0;
@@ -73,4 +74,26 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+/* 添加日间主题雪花样式 */
+body.light-theme .snowflake {
+    color: #8b7355 !important; /* 使用主题的深金色 */
+    text-shadow: 0 0 8px rgba(139, 115, 85, 0.6),
+                 0 0 15px rgba(139, 115, 85, 0.4);
+}
+
+/* 修改雪花开关在日间主题下的样式 */
+body.light-theme .snow-toggle {
+    color: #8b7355;
+    opacity: 0.7;
+}
+
+body.light-theme .snow-toggle:hover {
+    opacity: 1;
+}
+
+body.light-theme .snow-toggle.active {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(139, 115, 85, 0.5);
 } 
