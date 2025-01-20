@@ -508,6 +508,9 @@
   --player-gradient-start: rgba(13, 13, 13, 1);
   --player-gradient-end: rgba(13, 13, 13, 0);
   --transition-speed: 0.3s;
+  --scrollbar-thumb: #c1a86a;
+  --scrollbar-track: #2a2a2a;
+  --scrollbar-hover: #917c4f;
 }
 
 /* 当前播放歌曲指示器 */
@@ -766,4 +769,37 @@
 /* 保持点击效果时的旋转 */
 .aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon.aplayer-icon-forward:active {
   transform: rotate(180deg) scale(0.95) !important;
+}
+
+/* 浅色主题变量 */
+body.light-theme {
+    --scrollbar-thumb: #8b7355;
+    --scrollbar-track: #e8e8e8;
+    --scrollbar-hover: #6b583f;
+}
+
+/* 播放器滚动条样式 */
+.aplayer-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.aplayer-list::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track);
+    border-radius: 2px;
+}
+
+.aplayer-list::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.aplayer-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-hover);
+}
+
+/* Firefox滚动条样式 */
+.aplayer-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
