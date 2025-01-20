@@ -206,9 +206,35 @@ a:hover {
   font-weight: 500;
 }
 
+#weather-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
 #weather-info i {
-  margin-right: 0.5rem;
-  font-size: 1.2em;
+  font-size: 20px;
+}
+
+.weather-location {
+  color: var(--text-color-secondary);
+  font-size: 16px;
+}
+
+.weather-temp {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.weather-text {
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+.weather-extra {
+  color: var(--text-color-secondary);
+  font-size: 14px;
 }
 
 /* 添加时间特殊动画效果 */
@@ -255,8 +281,20 @@ a:hover {
     font-size: 1.3em;
   }
 
+  #weather-info {
+    font-size: 14px;
+  }
+  
   #weather-info i {
-    font-size: 1.1em;
+    font-size: 18px;
+  }
+  
+  .weather-temp {
+    font-size: 16px;
+  }
+  
+  .weather-extra {
+    font-size: 12px;
   }
 
   .footer {
@@ -289,8 +327,20 @@ a:hover {
     font-size: 1.1em;
   }
 
+  #weather-info {
+    font-size: 13px;
+  }
+  
   #weather-info i {
-    font-size: 1.1em;
+    font-size: 16px;
+  }
+  
+  .weather-temp {
+    font-size: 15px;
+  }
+  
+  .weather-extra {
+    font-size: 11px;
   }
 }
 
@@ -381,5 +431,19 @@ a:hover {
 
 .aplayer.light-theme .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
   background: #8b7355 !important;
+}
+
+/* 加载动画样式 */
+.fa-spin {
+  animation: fa-spin 2s infinite linear;
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 

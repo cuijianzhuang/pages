@@ -30,6 +30,7 @@ function updateDateTime() {
 async function getWeather() {
   try {
     const weatherInfo = document.getElementById('weather-info');
+    weatherInfo.innerHTML = '<i class="fa fa-refresh fa-spin"></i> 获取天气中...';
 
     // 先获取IP定位
     const locationResponse = await fetch(`${CONFIG.AMAP.ENDPOINTS.IP_LOCATION}?key=${CONFIG.AMAP.KEY}`);
@@ -53,22 +54,96 @@ async function getWeather() {
         const weatherData = await weatherResponse.json();
 
         if (weatherData.code === '200') {
-          // 获取天气图标
-          const weatherIcon = getWeatherIcon(weatherData.now.text);
-          weatherInfo.innerHTML = `<i class="fa ${weatherIcon}" aria-hidden="true"></i> ${cityName} ${weatherData.now.temp}°C ${weatherData.now.text} ${weatherData.now.windDir}`;
+          const weather = weatherData.now;
+          // 获取天气图标和额外的天气信息
+          const weatherIcon = getWeatherIcon(weather.text);
+          const extraInfo = getExtraWeatherInfo(weather);
+          
+          // 组装天气信息HTML
+          weatherInfo.innerHTML = `
+            <i class="fa ${weatherIcon}" aria-hidden="true"></i>
+            <span class="weather-location">${cityName}</span>
+            <span class="weather-temp">${weather.temp}°C</span>
+            <span class="weather-text">${weather.text}</span>
+            ${extraInfo}
+          `;
         } else {
-          weatherInfo.innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 天气获取失败';
+          weatherInfo.innerHTML = '<i class="fa fa-exclamation-circle"></i> 天气数据获取失败';
         }
       } else {
-        weatherInfo.innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 位置获取失败';
+        weatherInfo.innerHTML = '<i class="fa fa-exclamation-circle"></i> 位置解析失败';
       }
     } else {
-      weatherInfo.innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 位置获取失败';
+      weatherInfo.innerHTML = '<i class="fa fa-exclamation-circle"></i> 定位失败';
     }
   } catch (error) {
-    document.getElementById('weather-info').innerHTML = '<i class="fa fa-question-circle-o" aria-hidden="true"></i> 天气信息更新失败';
-    console.error('Error:', error);
+    console.error('Weather Error:', error);
+    document.getElementById('weather-info').innerHTML = 
+      '<i class="fa fa-exclamation-circle"></i> 天气信息更新失败';
   }
+}
+
+// 根据天气状况返回额外的天气信息
+function getExtraWeatherInfo(weather) {
+  const extraInfo = [];
+  
+  // 添加体感温度（如果与实际温度差异较大）
+  if (Math.abs(weather.feelsLike - weather.temp) >= 2) {
+    extraInfo.push(`体感 ${weather.feelsLike}°C`);
+  }
+  
+  // 添加风向和风速信息
+  if (weather.windDir && weather.windScale) {
+    extraInfo.push(`${weather.windDir} ${weather.windScale}级`);
+  }
+  
+  // 添加相对湿度（如果湿度较高或较低）
+  if (weather.humidity < 30 || weather.humidity > 70) {
+    extraInfo.push(`湿度 ${weather.humidity}%`);
+  }
+  
+  return extraInfo.length ? 
+    `<span class="weather-extra">${extraInfo.join(' / ')}</span>` : '';
+}
+
+// 优化天气图标映射
+function getWeatherIcon(weatherText) {
+  const iconMap = {
+    // 晴天相关
+    '晴': 'fa-sun-o',
+    '晴间多云': 'fa-cloud',
+    
+    // 多云相关
+    '多云': 'fa-cloud',
+    '阴': 'fa-cloud',
+    
+    // 雨相关
+    '小雨': 'fa-umbrella',
+    '中雨': 'fa-umbrella',
+    '大雨': 'fa-umbrella',
+    '暴雨': 'fa-umbrella',
+    '雷阵雨': 'fa-bolt',
+    '阵雨': 'fa-umbrella',
+    
+    // 雪相关
+    '小雪': 'fa-snowflake-o',
+    '中雪': 'fa-snowflake-o',
+    '大雪': 'fa-snowflake-o',
+    '暴雪': 'fa-snowflake-o',
+    '雨夹雪': 'fa-snowflake-o',
+    
+    // 特殊天气
+    '雾': 'fa-align-justify',
+    '霾': 'fa-align-justify',
+    '扬沙': 'fa-align-justify',
+    '浮尘': 'fa-align-justify',
+    '轻度雾霾': 'fa-align-justify',
+    '中度雾霾': 'fa-align-justify',
+    '重度雾霾': 'fa-align-justify',
+    '强浮尘': 'fa-align-justify'
+  };
+
+  return iconMap[weatherText] || 'fa-question-circle-o';
 }
 
 // 在现有代码后添加一言功能
@@ -130,59 +205,6 @@ setInterval(updateDateTime, 1000);
 getWeather();
 // 每30分钟更新一次天气
 setInterval(getWeather, CONFIG.WEATHER_UPDATE_INTERVAL);
-
-// 更新天气信息
-function updateWeather() {
-    fetch('https://api.vvhan.com/api/weather')
-        .then(response => response.json())
-        .then(data => {
-            const weatherInfo = data.info;
-            const weatherText = `${weatherInfo.city} ${weatherInfo.type} ${weatherInfo.high}/${weatherInfo.low}`;
-            
-            // 根据天气类型选择对应的图标
-            const weatherIcon = getWeatherIcon(weatherInfo.type);
-            
-            document.getElementById('weather-info').innerHTML = 
-                `<i class="fa ${weatherIcon}" aria-hidden="true"></i> ${weatherText}`;
-        })
-        .catch(error => {
-            console.error('获取天气信息失败:', error);
-            document.getElementById('weather-info').textContent = '获取天气失败';
-        });
-}
-
-// 根据天气类型返回对应的 Font Awesome 图标类名
-function getWeatherIcon(weatherType) {
-    const weatherIcons = {
-        '晴': 'fa-sun-o',
-        '多云': 'fa-cloud',
-        '阴': 'fa-cloud',
-        '小雨': 'fa-umbrella',
-        '中雨': 'fa-umbrella',
-        '大雨': 'fa-umbrella',
-        '暴雨': 'fa-umbrella',
-        '雷阵雨': 'fa-bolt',
-        '小雪': 'fa-snowflake-o',
-        '中雪': 'fa-snowflake-o',
-        '大雪': 'fa-snowflake-o',
-        '暴雪': 'fa-snowflake-o',
-        '雾': 'fa-align-justify',
-        '霾': 'fa-align-justify',
-        '扬沙': 'fa-align-justify',
-        // 添加更多和风天气API可能返回的天气类型
-        '晴间多云': 'fa-cloud',
-        '阵雨': 'fa-umbrella',
-        '雷阵雨伴有冰雹': 'fa-bolt',
-        '雨夹雪': 'fa-snowflake-o',
-        '浮尘': 'fa-align-justify',
-        '轻度雾霾': 'fa-align-justify',
-        '中度雾霾': 'fa-align-justify',
-        '重度雾霾': 'fa-align-justify',
-        '强浮尘': 'fa-align-justify'
-    };
-
-    return weatherIcons[weatherType] || 'fa-question-circle-o';
-}
 
 // 主题切换功能
 function initThemeToggle() {
