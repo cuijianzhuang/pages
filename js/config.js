@@ -31,4 +31,51 @@ const CONFIG = {
     
     // 主题自动更新间隔 (毫秒)
     THEME_UPDATE_INTERVAL: 3600000     // 1小时
+};
+
+// 鼠标点击特效配置
+CONFIG.EFFECTS = {
+    // 点击特效开关
+    CLICK_EFFECTS: {
+        // 是否启用粒子特效
+        PARTICLES: false,
+        // 是否启用星星爆炸效果
+        STARS: true
+    },
+    // 粒子特效配置
+    PARTICLES: {
+        COUNT: 15,          // 每次点击产生的粒子数量
+        MIN_SIZE: 2,        // 最小粒子尺寸
+        MAX_SIZE: 5,        // 最大粒子尺寸
+        MIN_SPEED: -3,      // 最小速度
+        MAX_SPEED: 3,       // 最大速度
+        LIFE_DECREASE: 0.02 // 生命值递减速度
+    },
+    // 星星爆炸效果配置
+    STARS: {
+        COUNT: {
+            MIN: 6,           // 最少产生的星星数量
+            MAX: 12           // 最多产生的星星数量
+        },
+        DISTANCE: {
+            MIN: 20,          // 最小扩散距离
+            MAX: 50           // 最大扩散距离
+        },
+        DELAY: {
+            MIN: 30,          // 最小延迟时间(ms)
+            MAX: 70           // 最大延迟时间(ms)
+        },
+        LIFE: {
+            MIN: 600,         // 最短生命周期(ms)
+            MAX: 1000         // 最长生命周期(ms)
+        },
+        ROTATION: {
+            MIN: -180,        // 最小旋转角度
+            MAX: 180          // 最大旋转角度
+        },
+        SIZE: {
+            MIN: 10,          // 最小尺寸
+            MAX: 20           // 最大尺寸
+        }
+    }
 }; 

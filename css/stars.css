@@ -64,4 +64,154 @@
         transform: scale(1.2) rotate(180deg);
         filter: drop-shadow(0 0 6px rgba(193, 168, 106, 0.8));
     }
+}
+
+@keyframes star-explosion-scale {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(var(--scale));
+        opacity: 0;
+    }
+}
+
+@keyframes star-explosion-rotate {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1) rotate(calc(var(--rotation) * 0.5));
+    }
+    100% {
+        transform: scale(var(--scale)) rotate(var(--rotation));
+        opacity: 0;
+    }
+}
+
+@keyframes star-explosion-fade {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+        filter: brightness(1.5);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1);
+        filter: brightness(1.2);
+    }
+    100% {
+        transform: scale(var(--scale));
+        opacity: 0;
+        filter: brightness(0.8);
+    }
+}
+
+@keyframes star-explosion-spiral {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1) rotate(calc(var(--rotation) * 2));
+    }
+    100% {
+        transform: scale(var(--scale)) rotate(calc(var(--rotation) * 4));
+        opacity: 0;
+    }
+}
+
+@keyframes star-glow {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes star-trail {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0.1) rotate(var(--rotation));
+        opacity: 0;
+    }
+}
+
+.star-explosion {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+.star-explosion-scale { animation: star-explosion-scale var(--life) ease-out forwards; }
+.star-explosion-rotate { animation: star-explosion-rotate var(--life) ease-out forwards; }
+.star-explosion-fade { animation: star-explosion-fade var(--life) ease-out forwards; }
+.star-explosion-spiral { animation: star-explosion-spiral var(--life) ease-out forwards; }
+
+.star-explosion i {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100%;
+    filter: drop-shadow(0 0 3px var(--color));
+}
+
+.star-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, var(--color) 0%, transparent 70%);
+    opacity: 0.5;
+    animation: star-glow var(--life) ease-out forwards;
+}
+
+.star-trail {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg at 50% 50%, var(--color) 0%, transparent 50%);
+    animation: star-trail var(--life) ease-out forwards;
+}
+
+.star-particle-trail {
+    position: fixed;
+    pointer-events: none;
+    width: 2px;
+    height: 2px;
+    background-color: var(--color);
+    filter: blur(1px);
+    opacity: 0.6;
+    animation: star-trail var(--life) ease-out forwards;
+}
+
+.removing {
+    transition: all 0.3s ease;
+    opacity: 0 !important;
+    transform: scale(0) !important;
 } 

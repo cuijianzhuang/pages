@@ -214,7 +214,7 @@ function initThemeToggle() {
   const aplayer = document.querySelector('.aplayer');
   
   // 检查本地存储中的主题设置
-  const savedTheme = sessionStorage.getItem('theme');
+  const savedTheme = localStorage.getItem('theme');
   if (savedTheme) {
     body.classList.add(savedTheme);
     if (aplayer) {
@@ -226,7 +226,7 @@ function initThemeToggle() {
   // 获取日出日落时间并自动设置主题
   async function autoSetTheme() {
     try {
-      if (!sessionStorage.getItem('theme')) {
+      if (!localStorage.getItem('theme')) {
         const locationResponse = await fetch(
           `${CONFIG.AMAP.ENDPOINTS.IP_LOCATION}?key=${CONFIG.AMAP.KEY}`
         );
@@ -276,7 +276,7 @@ function initThemeToggle() {
       // 如果API调用失败，使用默认的时间判断
       const hour = new Date().getHours();
       const isDay = hour >= 6 && hour < 18;
-      if (!sessionStorage.getItem('theme')) {
+      if (!localStorage.getItem('theme')) {
         setTheme(isDay ? 'light-theme' : 'dark-theme');
       }
     }
@@ -290,7 +290,7 @@ function initThemeToggle() {
       aplayer.classList.remove('light-theme', 'dark-theme');
       aplayer.classList.add(theme);
     }
-    sessionStorage.setItem('theme', theme);
+    localStorage.setItem('theme', theme);
     updateThemeIcon(theme === 'light-theme');
   }
 
@@ -316,4 +316,86 @@ function initThemeToggle() {
 document.addEventListener('DOMContentLoaded', () => {
   // ... existing code ...
   initThemeToggle();
+});
+
+// 粒子特效
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        const config = CONFIG.EFFECTS.PARTICLES;
+        this.size = Math.random() * config.MAX_SIZE + config.MIN_SIZE;
+        this.speedX = Math.random() * (config.MAX_SPEED - config.MIN_SPEED) + config.MIN_SPEED;
+        this.speedY = Math.random() * (config.MAX_SPEED - config.MIN_SPEED) + config.MIN_SPEED;
+        this.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
+        this.life = 1;
+    }
+
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.life -= CONFIG.EFFECTS.PARTICLES.LIFE_DECREASE;
+        if (this.size > 0.3) this.size -= 0.1;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.life;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// 初始化画布
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// 设置画布样式
+canvas.style.position = 'fixed';
+canvas.style.top = '0';
+canvas.style.left = '0';
+canvas.style.pointerEvents = 'none';
+canvas.style.zIndex = '9999';
+
+let particles = [];
+
+// 处理点击事件
+document.addEventListener('click', (e) => {
+    // 检查是否在播放器区域内
+    if (e.target.closest('.aplayer')) {
+        return; // 如果在播放器内，不处理特效
+    }
+
+    if (CONFIG.EFFECTS.CLICK_EFFECTS.PARTICLES) {
+        for (let i = 0; i < CONFIG.EFFECTS.PARTICLES.COUNT; i++) {
+            particles.push(new Particle(e.clientX, e.clientY));
+        }
+    }
+});
+
+// 动画循环
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw(ctx);
+        
+        if (particles[i].life <= 0) {
+            particles.splice(i, 1);
+        }
+    }
+    
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+// 处理窗口大小变化
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 });
