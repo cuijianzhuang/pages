@@ -214,7 +214,7 @@ function initThemeToggle() {
   const aplayer = document.querySelector('.aplayer');
   
   // 检查本地存储中的主题设置
-  const savedTheme = localStorage.getItem('theme');
+  const savedTheme = sessionStorage.getItem('theme');
   if (savedTheme) {
     body.classList.add(savedTheme);
     if (aplayer) {
@@ -226,7 +226,7 @@ function initThemeToggle() {
   // 获取日出日落时间并自动设置主题
   async function autoSetTheme() {
     try {
-      if (!localStorage.getItem('theme')) {
+      if (!sessionStorage.getItem('theme')) {
         const locationResponse = await fetch(
           `${CONFIG.AMAP.ENDPOINTS.IP_LOCATION}?key=${CONFIG.AMAP.KEY}`
         );
@@ -276,7 +276,7 @@ function initThemeToggle() {
       // 如果API调用失败，使用默认的时间判断
       const hour = new Date().getHours();
       const isDay = hour >= 6 && hour < 18;
-      if (!localStorage.getItem('theme')) {
+      if (!sessionStorage.getItem('theme')) {
         setTheme(isDay ? 'light-theme' : 'dark-theme');
       }
     }
@@ -290,7 +290,7 @@ function initThemeToggle() {
       aplayer.classList.remove('light-theme', 'dark-theme');
       aplayer.classList.add(theme);
     }
-    localStorage.setItem('theme', theme);
+    sessionStorage.setItem('theme', theme);
     updateThemeIcon(theme === 'light-theme');
   }
 
