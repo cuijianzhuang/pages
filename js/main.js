@@ -92,32 +92,32 @@ async function getHitokoto() {
   }
 }
 
-  // 禁用右键菜单
-  document.oncontextmenu = function() {
-  return false;
-};
-
-  // 禁用F12和其他开发者工具快捷键
-  document.onkeydown = function(e) {
-  if (e.keyCode === 123 || // F12
-  (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-  (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-  (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
-  return false;
-}
-};
-
-  // 禁用开发者工具
-  (function() {
-  let devtools = function() {};
-  devtools.toString = function() {
-  if (window.console && window.console.clear) {
-  window.console.clear();
-}
-  return '';
-}
-  window.devtools = devtools;
-})();
+//   // 禁用右键菜单
+//   document.oncontextmenu = function() {
+//   return false;
+// };
+//
+//   // 禁用F12和其他开发者工具快捷键
+//   document.onkeydown = function(e) {
+//   if (e.keyCode === 123 || // F12
+//   (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+//   (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+//   (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+//   return false;
+// }
+// };
+//
+//   // 禁用开发者工具
+//   (function() {
+//   let devtools = function() {};
+//   devtools.toString = function() {
+//   if (window.console && window.console.clear) {
+//   window.console.clear();
+// }
+//   return '';
+// }
+//   window.devtools = devtools;
+// })();
 
 // 初始化一言
 getHitokoto();
@@ -221,8 +221,11 @@ function initThemeToggle() {
             const location = geocodeData.geocodes[0].location;
             const [longitude, latitude] = location.split(',');
             
+            const date = new Date();
+            const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '');
+            
             const sunResponse = await fetch(
-              `${CONFIG.QWEATHER.ENDPOINTS.SUN}?location=${longitude},${latitude}&key=${CONFIG.QWEATHER.KEY}`
+              `${CONFIG.QWEATHER.ENDPOINTS.SUN}?location=${longitude},${latitude}&date=${formattedDate}&key=${CONFIG.QWEATHER.KEY}`
             );
             const sunData = await sunResponse.json();
             
@@ -231,12 +234,17 @@ function initThemeToggle() {
               const sunrise = new Date(sunData.sunrise);
               const sunset = new Date(sunData.sunset);
               
-              // 如果在日出和日落之间，使用日间主题
+              // 直接比较 Date 对象
               if (now >= sunrise && now <= sunset) {
                 setTheme('light-theme');
               } else {
                 setTheme('dark-theme');
               }
+            } else {
+              // 如果API调用失败，使用默认的时间判断
+              const hour = new Date().getHours();
+              const isDay = hour >= 6 && hour < 18;
+              setTheme(isDay ? 'light-theme' : 'dark-theme');
             }
           }
         }
