@@ -302,8 +302,17 @@ function initThemeToggle() {
 
   // 手动切换主题
   themeToggle.addEventListener('click', () => {
+    // 添加旋转动画
+    themeToggle.classList.add('rotating');
+    
+    // 切换主题
     const currentTheme = body.classList.contains('light-theme') ? 'dark-theme' : 'light-theme';
     setTheme(currentTheme);
+    
+    // 动画结束后移除类
+    setTimeout(() => {
+      themeToggle.classList.remove('rotating');
+    }, 600);
   });
 
   // 初始化自动主题
@@ -399,3 +408,27 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+function toggleTheme() {
+  const themeSwitch = document.querySelector('.theme-switch');
+  
+  // 移除之前的过渡效果（如果有）
+  themeSwitch.style.transition = 'none';
+  themeSwitch.style.transform = 'rotate(0deg)';
+  
+  // 触发重排
+  void themeSwitch.offsetWidth;
+  
+  // 重新添加过渡效果并旋转
+  themeSwitch.style.transition = 'transform 0.6s ease-in-out';
+  themeSwitch.style.transform = 'rotate(360deg)';
+  
+  // 切换主题的原有逻辑
+  if (document.body.classList.contains('dark-theme')) {
+    document.body.classList.remove('dark-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    document.body.classList.add('dark-theme');
+    localStorage.setItem('theme', 'dark');
+  }
+}

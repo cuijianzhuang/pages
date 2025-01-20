@@ -38,9 +38,9 @@ CONFIG.EFFECTS = {
     // 点击特效开关
     CLICK_EFFECTS: {
         // 是否启用粒子特效
-        PARTICLES: false,
+        PARTICLES: true,
         // 是否启用星星爆炸效果
-        STARS: true
+        STARS: false
     },
     // 粒子特效配置
     PARTICLES: {
