@@ -257,15 +257,20 @@ a:hover {
   }
 }
 
-/* 响应式设计 */
+/* 响应式设计优化 */
 @media (max-width: 768px) {
   .datetime-weather {
     padding: 0 15px;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
   }
 
   #datetime {
     font-size: 1.3em;
     gap: 0.3rem;
+    text-align: center;
+    align-items: center;
   }
   
   #date {
@@ -274,15 +279,18 @@ a:hover {
   
   #time {
     font-size: 1.8em;
-    margin-left: -0.8em;
+    margin-left: 0;
   }
   
   #weather {
     font-size: 1.3em;
+    text-align: center;
   }
 
   #weather-info {
     font-size: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   
   #weather-info i {
@@ -295,18 +303,18 @@ a:hover {
   
   .weather-extra {
     font-size: 12px;
-  }
-
-  .footer {
-    bottom: 10px;
-    font-size: 0.7rem;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
   }
 }
 
-/* 超小屏幕适配 */
+/* 超小屏幕适配优化 */
 @media (max-width: 480px) {
   .datetime-weather {
     padding: 0 10px;
+    top: 10px;
+    gap: 10px;
   }
 
   #datetime {
@@ -320,7 +328,6 @@ a:hover {
   
   #time {
     font-size: 1.6em;
-    margin-left: -0.6em;
   }
   
   #weather {
@@ -329,6 +336,7 @@ a:hover {
 
   #weather-info {
     font-size: 13px;
+    gap: 8px;
   }
   
   #weather-info i {
