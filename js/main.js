@@ -92,32 +92,32 @@ async function getHitokoto() {
   }
 }
 
-//   // 禁用右键菜单
-//   document.oncontextmenu = function() {
-//   return false;
-// };
-//
-//   // 禁用F12和其他开发者工具快捷键
-//   document.onkeydown = function(e) {
-//   if (e.keyCode === 123 || // F12
-//   (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-//   (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-//   (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
-//   return false;
-// }
-// };
-//
-//   // 禁用开发者工具
-//   (function() {
-//   let devtools = function() {};
-//   devtools.toString = function() {
-//   if (window.console && window.console.clear) {
-//   window.console.clear();
-// }
-//   return '';
-// }
-//   window.devtools = devtools;
-// })();
+  // 禁用右键菜单
+  document.oncontextmenu = function() {
+  return false;
+};
+
+  // 禁用F12和其他开发者工具快捷键
+  document.onkeydown = function(e) {
+  if (e.keyCode === 123 || // F12
+  (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+  (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+  (e.ctrlKey && e.keyCode === 85)) { // Ctrl+U
+  return false;
+}
+};
+
+  // 禁用开发者工具
+  (function() {
+  let devtools = function() {};
+  devtools.toString = function() {
+  if (window.console && window.console.clear) {
+  window.console.clear();
+}
+  return '';
+}
+  window.devtools = devtools;
+})();
 
 // 初始化一言
 getHitokoto();
