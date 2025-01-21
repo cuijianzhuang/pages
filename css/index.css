@@ -60,6 +60,17 @@ body {
       -ms-user-select: none;
           user-select: none;
   transition: background-color 0.5s ease, color 0.5s ease;
+  overflow: hidden;  /* 隐藏所有方向的滚动条 */
+}
+
+/* 如果需要滚动但不显示滚动条，可以添加以下样式 */
+body::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari 和 Opera */
+}
+
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 a {
