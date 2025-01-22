@@ -55,12 +55,9 @@ body {
   font-weight: 500;
   width: 100vw;
   cursor: default;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  transition: background-color 0.5s ease, color 0.5s ease;
-  overflow: hidden;  /* 隐藏所有方向的滚动条 */
+  user-select: none;
+  transition: all 0.5s ease;
+  overflow: hidden;
 }
 
 /* 如果需要滚动但不显示滚动条，可以添加以下样式 */
@@ -113,17 +110,12 @@ a:hover {
   color: var(--text-color);
   background: var(--link-bg);
   text-decoration: none;
-  -webkit-transition: all 0.1s;
-  -o-transition: all 0.1s;
   transition: all 0.1s;
-  border: none;
 }
 
 .menu .link:hover {
-  padding: 0.5em 0.8em;
   color: var(--link-hover-text);
   background: var(--link-hover-bg);
-  text-decoration: none;
 }
 
 .menu-icons {
@@ -142,9 +134,7 @@ a:hover {
   padding: 10px 0;
   z-index: 1000;
   background-color: transparent;
-  -webkit-font-feature-settings: initial;
   font-feature-settings: initial;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
 }
 
 /* 修改动画颜色 */
@@ -176,7 +166,7 @@ a:hover {
   padding: 0 30px;
   z-index: 1000;
   color: var(--text-color);
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 #datetime {
@@ -187,7 +177,7 @@ a:hover {
   flex-direction: column;
   gap: 0.5rem;
   align-items: flex-start;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 #date {
@@ -195,7 +185,7 @@ a:hover {
   animation: goldenGlow 2s ease-in-out infinite;
   font-weight: 500;
   opacity: 0.9;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 #time {
@@ -210,7 +200,7 @@ a:hover {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 15px rgba(193, 168, 106, 0.3);
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 #weather {
@@ -220,7 +210,7 @@ a:hover {
   animation: goldenGlow 2s ease-in-out infinite;
   animation-delay: 0.5s;
   font-weight: 500;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 #weather-info {
@@ -228,36 +218,36 @@ a:hover {
   align-items: center;
   gap: 10px;
   font-size: 16px;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 #weather-info i {
   font-size: 20px;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 .weather-location {
   color: var(--text-color-secondary);
   font-size: 16px;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 .weather-temp {
   font-weight: 600;
   font-size: 18px;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 .weather-text {
   color: var(--text-color);
   font-size: 16px;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 .weather-extra {
   color: var(--text-color-secondary);
   font-size: 14px;
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: inherit;
 }
 
 /* 添加时间特殊动画效果 */
@@ -484,11 +474,11 @@ a:hover {
 
 /* 优化主题切换的过渡效果 */
 body {
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 .dark-theme {
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 /* 优化其他元素的主题切换过渡 */
@@ -496,6 +486,6 @@ body {
 .content,
 .header,
 .footer {
-  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  transition: all 0.5s ease;
 }
 

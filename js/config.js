@@ -78,4 +78,7 @@ CONFIG.EFFECTS = {
             MAX: 20           // 最大尺寸
         }
     }
-}; 
+};
+
+// MetingApi配置（用于解析网易云音乐黑胶歌曲）
+var meting_api='https://v.iarc.top/api?server=:server&type=:type&id=:id&auth=:auth&r=:r'; 
