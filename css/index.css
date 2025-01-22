@@ -137,6 +137,23 @@ a:hover {
   font-feature-settings: initial;
 }
 
+.about-link {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.about-link:hover {
+  opacity: 1;
+  text-shadow: 0 0 8px var(--shadow-color);
+}
+
+.footer-divider {
+  margin: 0 8px;
+  opacity: 0.6;
+}
+
 /* 修改动画颜色 */
 @keyframes goldenGlow {
   0% {

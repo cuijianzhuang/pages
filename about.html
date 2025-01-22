@@ -1,0 +1,104 @@
+<html class="AboutPage">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>About Me - CJZ's Home</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/stars.css">
+    <link rel="stylesheet" href="./css/snow.css">
+    <link rel="stylesheet" href="./css/about.css">
+  </head>
+  <body>
+    <canvas id="particles"></canvas>
+    <div id="app">
+      <div class="back-button">
+        <a href="index.html" title="返回首页">
+          <i class="fa fa-arrow-left"></i>
+        </a>
+      </div>
+      
+      <h2 class="title">关于我</h2>
+      
+      <div class="about-content">
+        <div class="profile-section">
+          <div class="avatar">
+            <img src="./images/avatar.jpg" alt="头像" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=CJZ'">
+          </div>
+          <h3 class="name">崔健壮</h3>
+          <p class="subtitle">Full Stack Developer</p>
+        </div>
+
+        <div class="info-section">
+          <div class="info-card">
+            <i class="fa fa-code"></i>
+            <h4>技术栈</h4>
+            <p>Java / Python / JavaScript </p>
+          </div>
+          
+          <div class="info-card">
+            <i class="fa fa-heart"></i>
+            <h4>兴趣爱好</h4>
+            <p>编程 / 音乐 / 影视 / 摄影 / 旅行</p>
+          </div>
+          
+          <div class="info-card">
+            <i class="fa fa-quote-left"></i>
+            <h4>座右铭</h4>
+            <p class="description">Carpe diem, Quam minimum credula postero.</p>
+          </div>
+        </div>
+
+        <div class="contact-section">
+          <a href="https://github.com/cuijianzhuang" target="_blank" class="contact-link">
+            <i class="fa fa-github"></i>
+          </a>
+          <a href="mailto:contact@cuijianzhuang.com" class="contact-link">
+            <i class="fa fa-envelope"></i>
+          </a>
+          <a href="https://blog.cuijianzhuang.com" target="_blank" class="contact-link">
+            <i class="fa fa-book"></i>
+          </a>
+        </div>
+      </div>
+      <p class="footer">Copyright © 2024-<span id="currentYear"></span></p>
+    </div>
+
+    <script src="./js/config.js"></script>
+    <script src="./js/main.js" defer></script>
+    <script src="./js/stars.js" defer></script>
+    <script src="./js/snow.js" defer></script>
+    <script>
+        // 从cookie中读取主题设置并同步
+        function syncTheme() {
+            const cookies = document.cookie.split(';');
+            const theme = cookies.find(cookie => cookie.trim().startsWith('theme='));
+            
+            if (theme) {
+                const themeValue = theme.split('=')[1].trim();
+                document.body.classList.remove('light-mode', 'dark-mode');
+                document.body.classList.add(themeValue);
+            } else {
+                // 默认使用亮色主题
+                document.body.classList.add('light-mode');
+            }
+        }
+
+        // 页面加载时同步主题
+        window.addEventListener('load', syncTheme);
+
+        // 更新年份
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+
+    // 初始化特效
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new StarEffect();
+            new SnowEffect();
+        });
+    </script>
+  </body>
+
+</html> 

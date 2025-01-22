@@ -418,26 +418,3 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
 });
 
-function toggleTheme() {
-  const themeSwitch = document.querySelector('.theme-switch');
-  
-  // 移除之前的过渡效果（如果有）
-  themeSwitch.style.transition = 'none';
-  themeSwitch.style.transform = 'rotate(0deg)';
-  
-  // 触发重排
-  void themeSwitch.offsetWidth;
-  
-  // 重新添加过渡效果并旋转
-  themeSwitch.style.transition = 'transform 0.6s ease-in-out';
-  themeSwitch.style.transform = 'rotate(360deg)';
-  
-  // 切换主题的原有逻辑
-  // if (document.body.classList.contains('dark-theme')) {
-  //   document.body.classList.remove('dark-theme');
-  //   sessionStorage.setItem('theme', 'light');
-  // } else {
-  //   document.body.classList.add('dark-theme');
-  //   sessionStorage.setItem('theme', 'dark');
-  // }
-}
