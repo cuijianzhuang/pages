@@ -213,8 +213,8 @@ function initThemeToggle() {
   const themeIcon = themeToggle.querySelector('i');
   const aplayer = document.querySelector('.aplayer');
   
-  // 检查本地存储中的主题设置（localStorage改为sessionStorage）
-  const savedTheme = sessionStorage.getItem('theme');
+  // 从 Cookie 中获取主题设置
+  const savedTheme = getCookie('theme');
   if (savedTheme) {
     body.classList.add(savedTheme);
     if (aplayer) {
@@ -223,10 +223,31 @@ function initThemeToggle() {
     updateThemeIcon(savedTheme === 'light-theme');
   }
 
-  // 获取日出日落时间并自动设置主题
+  // 设置主题
+  function setTheme(theme) {
+    body.classList.remove('light-theme', 'dark-theme');
+    body.classList.add(theme);
+    if (aplayer) {
+      aplayer.classList.remove('light-theme', 'dark-theme');
+      aplayer.classList.add(theme);
+    }
+    // 设置会话级别的 Cookie
+    document.cookie = `theme=${theme};path=/`;
+    updateThemeIcon(theme === 'light-theme');
+  }
+
+  // 获取 Cookie 值的辅助函数
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  }
+
+  // 自动设置主题的函数保持不变，但使用 Cookie 替代 sessionStorage
   async function autoSetTheme() {
     try {
-      if (!sessionStorage.getItem('theme')) {
+      if (!getCookie('theme')) {
         const locationResponse = await fetch(
           `${CONFIG.AMAP.ENDPOINTS.IP_LOCATION}?key=${CONFIG.AMAP.KEY}`
         );
@@ -276,22 +297,10 @@ function initThemeToggle() {
       // 如果API调用失败，使用默认的时间判断
       const hour = new Date().getHours();
       const isDay = hour >= 6 && hour < 18;
-      if (!sessionStorage.getItem('theme')) {
+      if (!getCookie('theme')) {
         setTheme(isDay ? 'light-theme' : 'dark-theme');
       }
     }
-  }
-
-  // 设置主题
-  function setTheme(theme) {
-    body.classList.remove('light-theme', 'dark-theme');
-    body.classList.add(theme);
-    if (aplayer) {
-      aplayer.classList.remove('light-theme', 'dark-theme');
-      aplayer.classList.add(theme);
-    }
-    sessionStorage.setItem('theme', theme);
-    updateThemeIcon(theme === 'light-theme');
   }
 
   // 更新主题图标
