@@ -78,7 +78,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: flex-start;
     min-height: 0;
 }
 
@@ -247,66 +247,73 @@ body {
         padding: 0 15px;
     }
     
+    .profile-section {
+        margin: 20px 0;
+    }
+    
     .avatar {
         width: 100px;
         height: 100px;
+        margin: 0 auto 15px;
     }
     
     .info-section {
         gap: 15px;
-    }
-    
-    .info-card {
-        padding: 15px;
-    }
-    
-    .info-card i {
-        font-size: 1.5em;
-    }
-    
-    .info-card h4 {
-        font-size: 1.1em;
+        margin: 20px 0;
     }
     
     .contact-section {
         gap: 25px;
+        margin: 20px 0;
+    }
+
+    .footer {
+        margin-top: 20px;
     }
 }
 
 @media (max-width: 480px) {
-    .about-content {
-        padding: 0 10px;
+    .title {
+        font-size: 2em;
+        margin: 5px 0 15px !important;
+        padding-top: 15px !important;
+    }
+
+    .profile-section {
+        margin: 15px 0;
     }
     
     .avatar {
         width: 90px;
         height: 90px;
+        margin: 0 auto 10px;
+    }
+
+    .name {
+        font-size: 1.8em;
+        margin: 8px 0;
+    }
+
+    .subtitle {
+        font-size: 1.1em;
+        margin: 8px 0;
     }
     
     .info-section {
         gap: 10px;
-    }
-    
-    .info-card {
-        padding: 12px 8px;
-    }
-    
-    .info-card i {
-        font-size: 1.3em;
-    }
-    
-    .info-card h4 {
-        font-size: 1em;
+        margin: 15px 0;
     }
     
     .contact-section {
         gap: 20px;
+        margin: 15px 0;
     }
-    
-    .contact-link {
-        font-size: 1.5em;
+
+    .footer {
+        margin-top: 15px;
+        padding: 8px 0;
     }
-    
+
     .AboutPage .back-button {
         left: 10px;
         top: 15px;
