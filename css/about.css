@@ -27,10 +27,10 @@ body.dark-mode {
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    overflow: hidden !important; /* 禁用滚动 */
     height: 100vh;
     padding: 0 !important;
     transition: all 0.5s ease;
+    overflow: hidden !important;
 }
 
 #app {
@@ -78,25 +78,27 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    min-height: 0;
+    align-items: center;
+    justify-content: center;
 }
 
 .title {
-    font-size: 2.5em;
-    margin: 10px 0 20px !important;
-    padding-top: 20px !important;
+    font-size: 2em;
+    margin: 5px 0 10px !important;
+    padding-top: 10px !important;
+    text-align: center;
 }
 
 .profile-section {
-    margin: 30px 0;
+    margin: 10px 0;
     animation: fadeInDown 1s ease;
+    text-align: center;
 }
 
 .avatar {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 20px;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid var(--text-color);
@@ -111,31 +113,32 @@ body {
 
 .name {
     font-family: '迷你繁方篆', serif;
-    font-size: 2.2em;
-    margin: 10px 0;
+    font-size: 1.8em;
+    margin: 5px 0;
     color: var(--text-color);
     animation: goldenGlow 2s ease-in-out infinite;
 }
 
 .subtitle {
     font-family: 'Note-Script', serif;
-    font-size: 1.3em;
+    font-size: 1.1em;
+    margin: 5px 0;
     color: var(--text-color);
     opacity: 0.8;
-    margin: 10px 0;
 }
 
 .info-section {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin: 30px 0;
-    animation: fadeInUp 1s ease;
+    gap: 15px;
+    margin: 15px 0;
+    width: 100%;
+    max-width: 600px;
 }
 
 .info-card {
     background: var(--link-bg);
-    padding: 25px 20px;
+    padding: 15px;
     border-radius: 8px;
     text-align: center;
     transition: all 0.3s ease;
@@ -148,41 +151,29 @@ body {
 }
 
 .info-card i {
-    font-size: 1.8em;
-    margin-bottom: 12px;
-    color: var(--text-color);
+    font-size: 1.5em;
+    margin-bottom: 8px;
 }
 
 .info-card h4 {
-    font-size: 1.2em;
-    margin: 12px 0;
-    color: var(--text-color);
+    font-size: 1.1em;
+    margin: 8px 0;
 }
 
 .info-card p {
-    color: var(--text-color);
-    opacity: 0.8;
-    line-height: 1.6;
-    font-size: 1em;
+    font-size: 0.9em;
+    line-height: 1.4;
 }
 
 .contact-section {
     display: flex;
     justify-content: center;
-    gap: 35px;
-    margin: 30px 0;
-    animation: fadeInUp 1s ease 0.3s;
+    gap: 25px;
+    margin: 15px 0;
 }
 
 .contact-link {
-    font-size: 1.8em;
-    color: var(--text-color);
-    transition: all 0.3s ease;
-}
-
-.contact-link:hover {
-    transform: translateY(-3px);
-    text-shadow: 0 0 8px var(--shadow-color);
+    font-size: 1.5em;
 }
 
 /* 菜单图标样式 */
@@ -245,121 +236,116 @@ body {
 @media (max-width: 768px) {
     .about-content {
         padding: 0 15px;
-    }
-    
-    .profile-section {
-        margin: 20px 0;
-    }
-    
-    .avatar {
-        width: 100px;
-        height: 100px;
-        margin: 0 auto 15px;
+        margin-top: 40px;
+        justify-content: flex-start;
     }
     
     .info-section {
-        grid-template-columns: 1fr;  /* 改为单列布局 */
-        gap: 15px;
-        margin: 20px 0;
-    }
-    
-    .info-card {
-        padding: 15px;  /* 减小内边距 */
-    }
-    
-    /* 减小卡片内容的尺寸 */
-    .info-card i {
-        font-size: 1.5em;
-        margin-bottom: 8px;
-    }
-    
-    .info-card h4 {
-        font-size: 1.1em;
-        margin: 8px 0;
-    }
-    
-    .info-card p {
-        font-size: 0.9em;
-        margin: 5px 0;
-    }
-    
-    .contact-section {
-        gap: 25px;
-        margin: 20px 0;
-    }
-
-    .footer {
-        margin-top: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .title {
-        font-size: 2em;
-        margin: 5px 0 15px !important;
-        padding-top: 15px !important;
-    }
-
-    .profile-section {
-        margin: 15px 0;
-    }
-    
-    .avatar {
-        width: 90px;
-        height: 90px;
-        margin: 0 auto 10px;
-    }
-
-    .name {
-        font-size: 1.8em;
-        margin: 8px 0;
-    }
-
-    .subtitle {
-        font-size: 1.1em;
-        margin: 8px 0;
-    }
-    
-    .info-section {
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
-        margin: 15px 0;
+        margin: 10px 0;
     }
     
     .info-card {
-        padding: 12px 8px;
+        padding: 10px;
     }
     
     .info-card i {
         font-size: 1.3em;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
     }
     
     .info-card h4 {
         font-size: 1em;
-        margin: 6px 0;
+        margin: 5px 0;
     }
     
     .info-card p {
-        font-size: 0.85em;
-        line-height: 1.4;
+        font-size: 0.8em;
+        line-height: 1.3;
     }
-
+    
     .contact-section {
         gap: 20px;
-        margin: 15px 0;
+        margin: 10px 0;
     }
-
+    
     .footer {
-        margin-top: 15px;
-        padding: 8px 0;
+        padding: 5px 0;
     }
+}
 
+@media (max-width: 480px) {
+    .about-content {
+        margin-top: 35px;
+    }
+    
+    .title {
+        font-size: 1.6em;
+        margin: 0 0 5px !important;
+        padding-top: 5px !important;
+    }
+    
+    .avatar {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 8px;
+    }
+    
+    .name {
+        font-size: 1.4em;
+        margin: 3px 0;
+    }
+    
+    .subtitle {
+        font-size: 0.9em;
+        margin: 3px 0;
+    }
+    
+    .info-section {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    
+    .info-card {
+        padding: 8px;
+    }
+    
+    .info-card i {
+        font-size: 1.2em;
+        margin-bottom: 4px;
+    }
+    
+    .info-card h4 {
+        font-size: 0.9em;
+        margin: 4px 0;
+    }
+    
+    .info-card p {
+        font-size: 0.75em;
+        line-height: 1.2;
+    }
+    
+    .contact-section {
+        gap: 15px;
+        margin: 8px 0;
+    }
+    
+    .contact-link {
+        font-size: 1.3em;
+    }
+    
     .AboutPage .back-button {
+        top: 10px;
         left: 10px;
-        top: 15px;
     }
     
     .AboutPage .back-button a {
-        font-size: 1.4em;
+        font-size: 1.2em;
+    }
+    
+    .footer {
+        font-size: 0.7em;
+        padding: 3px 0;
     }
 }
