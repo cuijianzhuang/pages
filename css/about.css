@@ -258,8 +258,29 @@ body {
     }
     
     .info-section {
+        grid-template-columns: 1fr;  /* 改为单列布局 */
         gap: 15px;
         margin: 20px 0;
+    }
+    
+    .info-card {
+        padding: 15px;  /* 减小内边距 */
+    }
+    
+    /* 减小卡片内容的尺寸 */
+    .info-card i {
+        font-size: 1.5em;
+        margin-bottom: 8px;
+    }
+    
+    .info-card h4 {
+        font-size: 1.1em;
+        margin: 8px 0;
+    }
+    
+    .info-card p {
+        font-size: 0.9em;
+        margin: 5px 0;
     }
     
     .contact-section {
@@ -304,6 +325,25 @@ body {
         margin: 15px 0;
     }
     
+    .info-card {
+        padding: 12px 8px;
+    }
+    
+    .info-card i {
+        font-size: 1.3em;
+        margin-bottom: 6px;
+    }
+    
+    .info-card h4 {
+        font-size: 1em;
+        margin: 6px 0;
+    }
+    
+    .info-card p {
+        font-size: 0.85em;
+        line-height: 1.4;
+    }
+
     .contact-section {
         gap: 20px;
         margin: 15px 0;
