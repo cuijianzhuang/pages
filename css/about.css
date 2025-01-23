@@ -83,8 +83,8 @@ body {
 }
 
 .title {
-    font-size: 2em;
-    margin: 5px 0 10px !important;
+    font-size: 2.2em;
+    margin: 10px 0 20px !important;
     padding-top: 10px !important;
     text-align: center;
 }
@@ -96,19 +96,45 @@ body {
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 10px;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid var(--text-color);
-    box-shadow: 0 0 15px var(--shadow-color);
+    border: 3px solid transparent;
+    background: linear-gradient(45deg, var(--primary-color), var(--link-hover-color)) border-box;
+    box-shadow: 0 0 20px var(--shadow-color);
+    animation: avatarPulse 2s ease-in-out infinite;
+    position: relative;
+}
+
+.avatar::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-color), var(--link-hover-color));
+    z-index: -1;
+    border-radius: 50%;
+    animation: borderRotate 4s linear infinite;
+}
+
+.avatar:hover {
+    transform: scale(1.05) rotate(5deg);
 }
 
 .avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+}
+
+.avatar:hover img {
+    transform: scale(1.1);
 }
 
 .name {
@@ -347,5 +373,39 @@ body {
     .footer {
         font-size: 0.7em;
         padding: 3px 0;
+    }
+}
+
+/* 添加新的动画关键帧 */
+@keyframes avatarPulse {
+    0% {
+        box-shadow: 0 0 20px var(--shadow-color);
+    }
+    50% {
+        box-shadow: 0 0 30px var(--shadow-color);
+    }
+    100% {
+        box-shadow: 0 0 20px var(--shadow-color);
+    }
+}
+
+@keyframes borderRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
     }
 }
