@@ -13,7 +13,7 @@ class StarEffect {
             '#00FF7F', // 春绿色
             '#FF4500'  // 橙红色
         ];
-        this.characters = ["✦", "✧", "⋆", "✫", "✬", "✭", "✯", "✰"];
+        this.characters = ["✦", "✧", "⋆", "✫", "✬", "✭", "✯", "✰", "★", "☆", "✮", "✴"];
         // 从 cookie 读取状态
         const mouseTrailEnabled = document.cookie.split(';')
             .find(c => c.trim().startsWith('mouseTrail='));
@@ -21,6 +21,8 @@ class StarEffect {
             ? mouseTrailEnabled.split('=')[1] === 'true'
             : CONFIG.EFFECTS.MOUSE_STARS.ENABLED;
         this.gravity = 0.15;
+        this.particlePool = [];
+        this.maxPoolSize = 50;
         this.init();
     }
 
@@ -72,39 +74,48 @@ class StarEffect {
     }
 
     createStar(x, y) {
-        const star = document.createElement('span');
-        star.className = 'mouse-star';
-        
-        // Random properties
+        // 尝试从对象池中获取星星
+        let star = this.particlePool.pop();
+        if (!star) {
+            star = document.createElement('span');
+            star.className = 'mouse-star';
+            
+            // 创建发光效果的容器
+            const glowContainer = document.createElement('div');
+            glowContainer.className = 'star-glow-container';
+            
+            // 添加内部发光星星
+            const innerStar = document.createElement('span');
+            innerStar.className = 'inner-star';
+            
+            glowContainer.appendChild(innerStar);
+            star.appendChild(glowContainer);
+        }
+
         const character = this.characters[Math.floor(Math.random() * this.characters.length)];
         const color = this.colors[Math.floor(Math.random() * this.colors.length)];
         const size = Math.random() * 15 + 10;
         const angle = Math.random() * Math.PI * 2;
         
-        // 创建发光效果的容器
-        const glowContainer = document.createElement('div');
-        glowContainer.className = 'star-glow-container';
+        // 更新内部星星的文本
+        star.querySelector('.inner-star').textContent = character;
         
-        // 添加内部发光星星
-        const innerStar = document.createElement('span');
-        innerStar.textContent = character;
-        innerStar.className = 'inner-star';
+        // 随机动画参数
+        const rotationSpeed = (Math.random() - 0.5) * 0.1;
+        const pulseSpeed = Math.random() * 0.2 + 0.1;
+        const fadeOutSpeed = Math.random() * 0.5 + 0.5;
         
-        // 将内部星星添加到发光容器中
-        glowContainer.appendChild(innerStar);
-        star.appendChild(glowContainer);
-        
-        // 初始速度和位置
+        // 初始速度和位置，增加更多随机性
         const velocity = {
-            x: (Math.random() - 0.5) * 4,
-            y: -Math.random() * 3 - 2
+            x: (Math.random() - 0.5) * 6,
+            y: -Math.random() * 4 - 3
         };
         const position = {
-            x: x,
-            y: y
+            x: x + (Math.random() - 0.5) * 10,
+            y: y + (Math.random() - 0.5) * 10
         };
 
-        // Apply styles
+        // Apply styles with enhanced effects
         Object.assign(star.style, {
             position: 'fixed',
             left: `${position.x}px`,
@@ -113,16 +124,18 @@ class StarEffect {
             fontSize: `${size}px`,
             pointerEvents: 'none',
             userSelect: 'none',
-            transform: `rotate(${angle}rad)`,
-            // 增强发光效果
+            transform: `rotate(${angle}rad) scale(1)`,
             textShadow: `0 0 10px ${color},
                         0 0 20px ${color},
                         0 0 30px ${color},
                         0 0 40px ${color}`,
-            transition: 'none'
+            transition: 'none',
+            opacity: '1'
         });
 
-        this.container.appendChild(star);
+        if (!star.parentNode) {
+            this.container.appendChild(star);
+        }
 
         let frame = 0;
         const maxFrames = 120;
@@ -130,27 +143,40 @@ class StarEffect {
         const animate = () => {
             if (frame >= maxFrames) {
                 if (this.container.contains(star)) {
-                    this.container.removeChild(star);
+                    // 将星星放回对象池而不是删除
+                    if (this.particlePool.length < this.maxPoolSize) {
+                        this.particlePool.push(star);
+                        star.remove();
+                    } else {
+                        star.remove();
+                    }
                 }
                 return;
             }
 
-            velocity.y += this.gravity;
+            // 增强重力效果
+            velocity.y += this.gravity * (1 + frame / maxFrames * 0.5);
             position.x += velocity.x;
             position.y += velocity.y;
 
-            const swing = Math.sin(frame * 0.1) * 0.5;
-            velocity.x += swing * 0.1;
+            // 添加摆动效果
+            const swingAmplitude = Math.sin(frame * 0.1) * (1 - frame / maxFrames);
+            velocity.x += swingAmplitude * 0.2;
 
+            // 缩放效果
+            const scale = 1 - (frame / maxFrames) * 0.3;
+            
             star.style.left = `${position.x}px`;
             star.style.top = `${position.y}px`;
-            star.style.transform = `rotate(${angle + frame * 0.05}rad)`;
+            star.style.transform = `rotate(${angle + frame * rotationSpeed}rad) scale(${scale})`;
             
-            // 添加脉冲发光效果
-            const pulseIntensity = Math.sin(frame * 0.1) * 0.3 + 0.7;
+            // 增强的脉冲发光效果
+            const pulseIntensity = Math.sin(frame * pulseSpeed) * 0.3 + 0.7;
             star.style.filter = `brightness(${pulseIntensity})`;
             
-            star.style.opacity = Math.max(0, 1 - (frame / maxFrames));
+            // 平滑的淡出效果
+            const fadeOut = Math.max(0, 1 - (frame / maxFrames) * fadeOutSpeed);
+            star.style.opacity = fadeOut;
 
             frame++;
             requestAnimationFrame(animate);

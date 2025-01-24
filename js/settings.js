@@ -72,20 +72,14 @@ class Settings {
 
     initializeParticleEffects(enabled) {
         if (enabled) {
-            // 初始化粒子画布和事件监听
-            const canvas = document.getElementById('particles');
-            if (canvas) {
-                canvas.style.display = 'block';
-                // 确保粒子动画正在运行
-                if (typeof animate === 'function') {
-                    requestAnimationFrame(animate);
-                }
+            // 启用粒子效果
+            if (window.particleEffect) {
+                window.particleEffect.enable();
             }
         } else {
             // 禁用粒子效果
-            const canvas = document.getElementById('particles');
-            if (canvas) {
-                canvas.style.display = 'none';
+            if (window.particleEffect) {
+                window.particleEffect.disable();
             }
         }
     }
@@ -114,6 +108,13 @@ class Settings {
         // Handle click effects toggle
         this.clickEffectsToggle.addEventListener('change', (e) => {
             CONFIG.EFFECTS.CLICK_EFFECTS.PARTICLES = e.target.checked;
+            if (window.particleEffect) {
+                if (e.target.checked) {
+                    window.particleEffect.enable();
+                } else {
+                    window.particleEffect.disable();
+                }
+            }
             this.setCookie('clickEffects', e.target.checked);
         });
 

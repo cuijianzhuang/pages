@@ -64,31 +64,6 @@
       </div>
       <p class="footer">Copyright © 2024-<span id="currentYear"></span></p>
     </div>
-
-    <!-- Settings Panel -->
-    <div class="settings-panel">
-      <div class="settings-header">
-        <h3>设置</h3>
-        <i class="fa fa-times close-settings"></i>
-      </div>
-      <div class="settings-content">
-        <div class="setting-item">
-          <span>点击特效</span>
-          <label class="switch">
-            <input type="checkbox" id="click-effects-toggle" checked>
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <div class="setting-item">
-          <span>鼠标轨迹</span>
-          <label class="switch">
-            <input type="checkbox" id="mouse-trail-toggle" checked>
-            <span class="slider round"></span>
-          </label>
-        </div>
-      </div>
-    </div>
-
     <script src="./js/config.js"></script>
     <script src="./js/particles.js" defer></script>
     <script src="./js/main.js" defer></script>
@@ -103,12 +78,14 @@
 <!--   初始化特效-->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始化设置
-            new Settings();
+            // 初始化星星特效
+            window.starEffect = new StarEffect();
+            // 初始化粒子特效
+            window.particleEffect = new ParticleEffect();
             // 初始化雪花效果
             new SnowEffect();
-            // 初始化粒子特效
-            new ParticleEffect();
+            // 初始化设置（最后初始化，这样可以正确应用保存的设置）
+            new Settings();
         });
     </script>
   </body>
