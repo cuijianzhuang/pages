@@ -32,6 +32,7 @@ class ParticleEffect {
         this.init();
         this.particles = [];
         this.animate = this.animate.bind(this);
+        this.isEnabled = true; // 添加状态标志
         requestAnimationFrame(this.animate);
     }
 
@@ -53,7 +54,7 @@ class ParticleEffect {
         const clickEffectsEnabled = document.cookie.split(';')
             .find(c => c.trim().startsWith('clickEffects='));
         if (clickEffectsEnabled && clickEffectsEnabled.split('=')[1] === 'false') {
-            this.canvas.style.display = 'none';
+            this.disable();
         }
 
         // 处理点击事件
@@ -64,11 +65,7 @@ class ParticleEffect {
             }
 
             // 检查特效是否启用
-            const clickEffectsEnabled = document.cookie.split(';')
-                .find(c => c.trim().startsWith('clickEffects='));
-            if (clickEffectsEnabled && clickEffectsEnabled.split('=')[1] === 'false') {
-                return;
-            }
+            if (!this.isEnabled) return;
 
             if (CONFIG.EFFECTS.CLICK_EFFECTS.PARTICLES) {
                 for (let i = 0; i < CONFIG.EFFECTS.PARTICLES.COUNT; i++) {
@@ -84,7 +81,30 @@ class ParticleEffect {
         });
     }
 
+    enable() {
+        this.isEnabled = true;
+        if (this.canvas) {
+            this.canvas.style.display = '';
+            this.particles = []; // 清空现有粒子
+        }
+    }
+
+    disable() {
+        this.isEnabled = false;
+        if (this.canvas) {
+            this.canvas.style.display = 'none';
+            this.particles = []; // 清空现有粒子
+            // 清除画布
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+    }
+
     animate() {
+        if (!this.isEnabled) {
+            requestAnimationFrame(this.animate);
+            return;
+        }
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         for (let i = this.particles.length - 1; i >= 0; i--) {
