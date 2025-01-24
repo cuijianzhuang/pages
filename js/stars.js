@@ -2,25 +2,49 @@ class StarEffect {
     constructor() {
         this.lastX = 0;
         this.lastY = 0;
-        this.minDistance = 25; // 更小的距离，更密集的星星
+        this.minDistance = 15; // Reduced distance for more frequent stars
         this.colors = [
-            '#c1a86a', // 基础金色
-            '#d4c293', // 浅金色
-            '#a89155', // 深金色
-            '#e6d5a7', // 特别浅的金色
-            '#8f7b47'  // 特别深的金色
+            '#FF69B4', // 热粉色
+            '#00FFFF', // 青色
+            '#FF6B6B', // 珊瑚红
+            '#4FFFB0', // 绿松石色
+            '#FFD700', // 金色
+            '#FF1493', // 深粉色
+            '#00FF7F', // 春绿色
+            '#FF4500'  // 橙红色
         ];
-        this.specialStarChance = 0.2; // 20%几率生成特殊星星
+        this.characters = ["✦", "✧", "⋆", "✫", "✬", "✭", "✯", "✰"];
+        this.isEnabled = CONFIG.EFFECTS.MOUSE_STARS.ENABLED;
+        this.gravity = 0.15;
         this.init();
     }
 
     init() {
-        document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        document.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-        document.addEventListener('click', (e) => this.handleClick(e));
+        if (this.isEnabled) {
+            this.container = document.createElement('div');
+            this.container.className = 'star-container';
+            Object.assign(this.container.style, {
+                position: 'fixed',
+                top: '0',
+                left: '0',
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+                zIndex: '99999'
+            });
+            document.body.appendChild(this.container);
+
+            this.mouseMoveHandler = (e) => this.handleMouseMove(e);
+            this.touchMoveHandler = (e) => this.handleTouchMove(e);
+            
+            document.addEventListener('mousemove', this.mouseMoveHandler);
+            document.addEventListener('touchmove', this.touchMoveHandler, { passive: false });
+        }
     }
 
     handleMouseMove(e) {
+        if (!this.isEnabled) return;
+        
         const distance = Math.hypot(e.clientX - this.lastX, e.clientY - this.lastY);
         if (distance < this.minDistance) return;
 
@@ -30,10 +54,7 @@ class StarEffect {
     }
 
     handleTouchMove(e) {
-        // 检查是否在播放器区域内
-        if (e.target.closest('.aplayer')) {
-            return; // 如果在播放器内，不处理星星效果
-        }
+        if (!this.isEnabled || e.target.closest('.aplayer')) return;
         
         e.preventDefault();
         const touch = e.touches[0];
@@ -45,161 +66,127 @@ class StarEffect {
         this.createStar(touch.clientX, touch.clientY);
     }
 
-    handleClick(e) {
-        // 检查是否启用星星效果
-        if (!CONFIG.EFFECTS.CLICK_EFFECTS.STARS) {
-            return;
-        }
-
-        // 检查是否在播放器区域内
-        if (e.target.closest('.aplayer')) {
-            return;
-        }
-
-        const config = CONFIG.EFFECTS.STARS;
-        // 随机确定这次爆炸产生的星星数量
-        const starCount = Math.floor(
-            Math.random() * (config.COUNT.MAX - config.COUNT.MIN + 1) + config.COUNT.MIN
-        );
-
-        // 创建星星组
-        for (let i = 0; i < starCount; i++) {
-            // 计算每个星星的角度
-            const angle = (Math.PI * 2 * i) / starCount + Math.random() * 0.5 - 0.25;
-            
-            // 随机确定这个星星的扩散距离
-            const distance = Math.random() * 
-                (config.DISTANCE.MAX - config.DISTANCE.MIN) + config.DISTANCE.MIN;
-            
-            // 随机确定延迟时间
-            const delay = Math.random() * 
-                (config.DELAY.MAX - config.DELAY.MIN) + config.DELAY.MIN;
-
-            setTimeout(() => {
-                const x = e.clientX + Math.cos(angle) * distance;
-                const y = e.clientY + Math.sin(angle) * distance;
-                this.createExplosionStar(x, y, config);
-            }, delay);
-        }
-    }
-
-    createExplosionStar(x, y, config) {
-        const star = document.createElement('div');
-        star.className = 'star star-explosion';
+    createStar(x, y) {
+        const star = document.createElement('span');
+        star.className = 'mouse-star';
         
-        // 随机大小
-        const size = Math.random() * 
-            (config.SIZE.MAX - config.SIZE.MIN) + config.SIZE.MIN;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        
-        // 随机颜色
-        const colorIndex = Math.floor(Math.random() * this.colors.length);
-        const color = this.colors[colorIndex];
-        
-        // 随机星星样式
-        const starTypes = ['fa-star', 'fa-star-o', 'fa-asterisk', 'fa-snowflake-o'];
-        const starType = starTypes[Math.floor(Math.random() * starTypes.length)];
-        
-        // 随机旋转角度
-        const rotation = Math.random() * 
-            (config.ROTATION.MAX - config.ROTATION.MIN) + config.ROTATION.MIN;
-        
-        // 随机生命周期
-        const life = Math.random() * 
-            (config.LIFE.MAX - config.LIFE.MIN) + config.LIFE.MIN;
-        
-        // 设置CSS变量用于动画
-        star.style.setProperty('--rotation', `${rotation}deg`);
-        star.style.setProperty('--scale', Math.random() * 0.5 + 1.5);
-        star.style.setProperty('--life', `${life}ms`);
-        star.style.setProperty('--color', color);
-        
-        // 随机选择动画类型
-        const animationTypes = ['scale', 'rotate', 'fade', 'spiral'];
-        const animationType = animationTypes[Math.floor(Math.random() * animationTypes.length)];
-        star.classList.add(`star-explosion-${animationType}`);
-        
-        star.style.left = `${x}px`;
-        star.style.top = `${y}px`;
-        
-        // 创建内部星星和光晕效果
-        star.innerHTML = `
-            <i class="fa ${starType}" style="color: ${color}"></i>
-            <div class="star-glow"></div>
-            ${Math.random() > 0.5 ? '<div class="star-trail"></div>' : ''}
-        `;
-        
-        document.body.appendChild(star);
-        
-        // 添加粒子轨迹效果
-        if (Math.random() > 0.3) {
-            this.createStarTrail(x, y, color, rotation, life);
-        }
-        
-        setTimeout(() => {
-            if (document.body.contains(star)) {
-                star.classList.add('removing');
-                setTimeout(() => {
-                    document.body.removeChild(star);
-                }, 300);
-            }
-        }, life);
-    }
-
-    createStarTrail(x, y, color, rotation, life) {
-        const trail = document.createElement('div');
-        trail.className = 'star-particle-trail';
-        trail.style.setProperty('--color', color);
-        trail.style.setProperty('--rotation', `${rotation}deg`);
-        trail.style.setProperty('--life', `${life * 0.8}ms`);
-        trail.style.left = `${x}px`;
-        trail.style.top = `${y}px`;
-        document.body.appendChild(trail);
-        
-        setTimeout(() => {
-            if (document.body.contains(trail)) {
-                document.body.removeChild(trail);
-            }
-        }, life * 0.8);
-    }
-
-    createStar(x, y, isSpecial = false) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        
-        // 随机偏移
-        const offsetX = (Math.random() - 0.5) * 20;
-        const offsetY = (Math.random() - 0.5) * 20;
-        
-        star.style.left = `${x + offsetX}px`;
-        star.style.top = `${y + offsetY}px`;
-        
-        // 随机大小
-        const size = Math.random() * 12 + (isSpecial ? 12 : 8);
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        
-        // 随机颜色
+        // Random properties
+        const character = this.characters[Math.floor(Math.random() * this.characters.length)];
         const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+        const size = Math.random() * 15 + 10;
+        const angle = Math.random() * Math.PI * 2;
         
-        // 随机星星样式
-        const starTypes = ['fa-star', 'fa-star-o', 'fa-asterisk', 'fa-snowflake-o'];
-        const starType = starTypes[Math.floor(Math.random() * starTypes.length)];
+        // 创建发光效果的容器
+        const glowContainer = document.createElement('div');
+        glowContainer.className = 'star-glow-container';
         
-        // 特殊效果星星
-        if (isSpecial || Math.random() < this.specialStarChance) {
-            star.classList.add('star-special');
-        }
+        // 添加内部发光星星
+        const innerStar = document.createElement('span');
+        innerStar.textContent = character;
+        innerStar.className = 'inner-star';
         
-        star.innerHTML = `<i class="fa ${starType}" style="color: ${color};"></i>`;
+        // 将内部星星添加到发光容器中
+        glowContainer.appendChild(innerStar);
+        star.appendChild(glowContainer);
         
-        document.body.appendChild(star);
-        
-        star.addEventListener('animationend', () => {
-            if (document.body.contains(star)) {
-                document.body.removeChild(star);
-            }
+        // 初始速度和位置
+        const velocity = {
+            x: (Math.random() - 0.5) * 4,
+            y: -Math.random() * 3 - 2
+        };
+        const position = {
+            x: x,
+            y: y
+        };
+
+        // Apply styles
+        Object.assign(star.style, {
+            position: 'fixed',
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+            color: color,
+            fontSize: `${size}px`,
+            pointerEvents: 'none',
+            userSelect: 'none',
+            transform: `rotate(${angle}rad)`,
+            // 增强发光效果
+            textShadow: `0 0 10px ${color},
+                        0 0 20px ${color},
+                        0 0 30px ${color},
+                        0 0 40px ${color}`,
+            transition: 'none'
         });
+
+        this.container.appendChild(star);
+
+        let frame = 0;
+        const maxFrames = 120;
+        
+        const animate = () => {
+            if (frame >= maxFrames) {
+                if (this.container.contains(star)) {
+                    this.container.removeChild(star);
+                }
+                return;
+            }
+
+            velocity.y += this.gravity;
+            position.x += velocity.x;
+            position.y += velocity.y;
+
+            const swing = Math.sin(frame * 0.1) * 0.5;
+            velocity.x += swing * 0.1;
+
+            star.style.left = `${position.x}px`;
+            star.style.top = `${position.y}px`;
+            star.style.transform = `rotate(${angle + frame * 0.05}rad)`;
+            
+            // 添加脉冲发光效果
+            const pulseIntensity = Math.sin(frame * 0.1) * 0.3 + 0.7;
+            star.style.filter = `brightness(${pulseIntensity})`;
+            
+            star.style.opacity = Math.max(0, 1 - (frame / maxFrames));
+
+            frame++;
+            requestAnimationFrame(animate);
+        };
+
+        requestAnimationFrame(animate);
+    }
+
+    enable() {
+        this.isEnabled = true;
+        if (!this.container) {
+            this.init();
+        } else {
+            // Re-add event listeners if container exists
+            document.addEventListener('mousemove', this.mouseMoveHandler);
+            document.addEventListener('touchmove', this.touchMoveHandler, { passive: false });
+        }
+    }
+
+    disable() {
+        this.isEnabled = false;
+        // Remove event listeners
+        if (this.mouseMoveHandler) {
+            document.removeEventListener('mousemove', this.mouseMoveHandler);
+        }
+        if (this.touchMoveHandler) {
+            document.removeEventListener('touchmove', this.touchMoveHandler);
+        }
+        // Remove container if it exists
+        if (this.container && this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+            this.container = null;
+        }
+    }
+
+    toggle() {
+        if (this.isEnabled) {
+            this.disable();
+        } else {
+            this.enable();
+        }
+        return this.isEnabled;
     }
 } 

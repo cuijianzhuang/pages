@@ -39,21 +39,48 @@
 
       </div>
       <div class="menu-icons">
-        <a href="https://github.com/cuijianzhuang" target="_blank">
-          <i aria-hidden="true" class="fa fa-2x fa-github"></i>
-        </a>
-        <div class="snow-toggle">
-          <i aria-hidden="true" class="fa fa-2x fa-snowflake-o"></i>
+        <div class="settings-toggle">
+          <i aria-hidden="true" class="fa fa-2x fa-cog"></i>
         </div>
         <div class="theme-toggle">
           <i aria-hidden="true" class="fa fa-2x fa-moon-o"></i>
         </div>
+        <div class="snow-toggle">
+          <i aria-hidden="true" class="fa fa-2x fa-snowflake-o"></i>
+        </div>
+        <a href="https://github.com/cuijianzhuang" target="_blank">
+          <i aria-hidden="true" class="fa fa-2x fa-github"></i>
+        </a>
       </div>
       <p class="footer">
         Copyright © 2024-<span id="currentYear"></span>
         <span class="footer-divider">·</span>
         <a href="about.html" class="about-link">About</a>
       </p>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+      <div class="settings-header">
+        <h3>设置</h3>
+        <i class="fa fa-times close-settings"></i>
+      </div>
+      <div class="settings-content">
+        <div class="setting-item">
+          <span>点击特效</span>
+          <label class="switch">
+            <input type="checkbox" id="click-effects-toggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <span>鼠标轨迹</span>
+          <label class="switch">
+            <input type="checkbox" id="mouse-trail-toggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
     </div>
   </body>
 
@@ -68,6 +95,7 @@
   <script src="./js/main.js" defer></script>
   <script src="./js/stars.js" defer></script>
   <script src="./js/snow.js" defer></script>
+  <script src="./js/settings.js" defer></script>
 <meting-js server="netease"
            type="playlist"
            id="961896580"
@@ -77,12 +105,11 @@
            order="random"
            volume="0.2"
            mutex="true"
-           storage="metingjs"
+           storage-name	="metingjs"
 >
 </meting-js>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    new StarEffect();
     new SnowEffect();
   });
 </script>

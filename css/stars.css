@@ -214,4 +214,73 @@
     transition: all 0.3s ease;
     opacity: 0 !important;
     transform: scale(0) !important;
+}
+
+.mouse-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+    will-change: transform, opacity, filter;
+    opacity: 1;
+    filter: brightness(1.2);
+}
+
+.star-container {
+    pointer-events: none;
+    z-index: 99999;
+}
+
+.star-glow-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner-star {
+    position: relative;
+    display: inline-block;
+    animation: star-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes star-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(1.2);
+    }
+}
+
+/* 添加模糊发光效果 */
+.mouse-star::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    filter: blur(8px);
+    opacity: 0.7;
+    z-index: -1;
+}
+
+/* 添加外部光晕 */
+.mouse-star::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, currentColor 0%, transparent 70%);
+    opacity: 0.3;
+    z-index: -2;
 } 

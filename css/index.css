@@ -120,6 +120,46 @@ a:hover {
 
 .menu-icons {
   margin: 3vh 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-icons > * {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.menu-icons > *:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.settings-toggle {
+  order: 1;
+}
+
+.theme-toggle {
+  order: 2;
+}
+
+.snow-toggle {
+  order: 3;
+}
+
+.menu-icons a {
+  order: 4;
+}
+
+/* 设置图标旋转动画 */
+.settings-toggle i {
+  transition: transform 0.3s ease;
+}
+
+.settings-toggle:hover i {
+  transform: rotate(90deg);
 }
 
 .footer {
@@ -504,5 +544,155 @@ body {
 .header,
 .footer {
   transition: all 0.5s ease;
+}
+
+/* Settings Panel Styles */
+.settings-toggle {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.settings-toggle:hover {
+  transform: rotate(45deg);
+}
+
+.settings-panel {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 300px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  display: none;
+  z-index: 1000;
+  animation: settingsPanelShow 0.3s ease;
+  border: 1px solid rgba(193, 168, 106, 0.1);
+}
+
+.settings-panel.show {
+  display: block;
+}
+
+@keyframes settingsPanelShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.settings-header h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.close-settings {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+  color: var(--text-color);
+}
+
+/* Toggle Switch Styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(193, 168, 106, 0.05);
+  transition: .4s;
+  border: 1px solid rgba(193, 168, 106, 0.15);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 3px;
+  background-color: rgba(193, 168, 106, 0.3);
+  transition: .4s;
+  box-shadow: 0 0 8px rgba(193, 168, 106, 0.2);
+}
+
+input:checked + .slider {
+  background-color: rgba(193, 168, 106, 0.5);
+  border-color: rgba(193, 168, 106, 0.3);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+  background-color: rgba(193, 168, 106, 0.9);
+  box-shadow: 0 0 12px rgba(193, 168, 106, 0.4);
+}
+
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Dark theme adjustments */
+.dark-theme .settings-panel {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(193, 168, 106, 0.1);
+}
+
+.dark-theme .slider {
+  background-color: rgba(193, 168, 106, 0.03);
+  border-color: rgba(193, 168, 106, 0.1);
+}
+
+.dark-theme .slider:before {
+  background-color: rgba(193, 168, 106, 0.2);
+}
+
+.dark-theme input:checked + .slider {
+  background-color: rgba(193, 168, 106, 0.4);
+  border-color: rgba(193, 168, 106, 0.3);
+}
+
+.dark-theme input:checked + .slider:before {
+  background-color: rgba(193, 168, 106, 0.9);
+  box-shadow: 0 0 12px rgba(193, 168, 106, 0.4);
 }
 
