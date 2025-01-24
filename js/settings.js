@@ -31,23 +31,63 @@ class Settings {
         this.setupEventListeners();
     }
 
+    getCookie(name) {
+        const cookies = document.cookie.split(';');
+        const cookie = cookies.find(c => c.trim().startsWith(name + '='));
+        return cookie ? cookie.split('=')[1].trim() : null;
+    }
+
+    setCookie(name, value) {
+        // 设置cookie，过期时间为1年
+        const expiryDate = new Date();
+        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+        document.cookie = `${name}=${value};expires=${expiryDate.toUTCString()};path=/`;
+    }
+
     initializeSettings() {
-        // Load settings from localStorage or use defaults
-        const savedSettings = JSON.parse(localStorage.getItem('pageSettings')) || {};
-        
-        // Click effects
-        const clickEffectsEnabled = savedSettings.clickEffects !== undefined 
-            ? savedSettings.clickEffects 
+        // Load settings from cookies or use defaults
+        const clickEffectsEnabled = this.getCookie('clickEffects') !== null 
+            ? this.getCookie('clickEffects') === 'true'
             : CONFIG.EFFECTS.CLICK_EFFECTS.PARTICLES;
         this.clickEffectsToggle.checked = clickEffectsEnabled;
         CONFIG.EFFECTS.CLICK_EFFECTS.PARTICLES = clickEffectsEnabled;
 
         // Mouse trail
-        const mouseTrailEnabled = savedSettings.mouseTrail !== undefined 
-            ? savedSettings.mouseTrail 
+        const mouseTrailEnabled = this.getCookie('mouseTrail') !== null
+            ? this.getCookie('mouseTrail') === 'true'
             : CONFIG.EFFECTS.MOUSE_STARS.ENABLED;
         this.mouseTrailToggle.checked = mouseTrailEnabled;
         CONFIG.EFFECTS.MOUSE_STARS.ENABLED = mouseTrailEnabled;
+
+        // 初始化时应用设置
+        if (!mouseTrailEnabled && window.starEffect) {
+            window.starEffect.disable();
+        }
+        
+        // 如果在 about 页面，初始化粒子效果
+        if (document.querySelector('.AboutPage')) {
+            this.initializeParticleEffects(clickEffectsEnabled);
+        }
+    }
+
+    initializeParticleEffects(enabled) {
+        if (enabled) {
+            // 初始化粒子画布和事件监听
+            const canvas = document.getElementById('particles');
+            if (canvas) {
+                canvas.style.display = 'block';
+                // 确保粒子动画正在运行
+                if (typeof animate === 'function') {
+                    requestAnimationFrame(animate);
+                }
+            }
+        } else {
+            // 禁用粒子效果
+            const canvas = document.getElementById('particles');
+            if (canvas) {
+                canvas.style.display = 'none';
+            }
+        }
     }
 
     setupEventListeners() {
@@ -74,7 +114,7 @@ class Settings {
         // Handle click effects toggle
         this.clickEffectsToggle.addEventListener('change', (e) => {
             CONFIG.EFFECTS.CLICK_EFFECTS.PARTICLES = e.target.checked;
-            this.saveSettings();
+            this.setCookie('clickEffects', e.target.checked);
         });
 
         // Handle mouse trail toggle
@@ -87,16 +127,8 @@ class Settings {
                     window.starEffect.disable();
                 }
             }
-            this.saveSettings();
+            this.setCookie('mouseTrail', e.target.checked);
         });
-    }
-
-    saveSettings() {
-        const settings = {
-            clickEffects: CONFIG.EFFECTS.CLICK_EFFECTS.PARTICLES,
-            mouseTrail: CONFIG.EFFECTS.MOUSE_STARS.ENABLED
-        };
-        localStorage.setItem('pageSettings', JSON.stringify(settings));
     }
 }
 

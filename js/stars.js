@@ -14,7 +14,12 @@ class StarEffect {
             '#FF4500'  // 橙红色
         ];
         this.characters = ["✦", "✧", "⋆", "✫", "✬", "✭", "✯", "✰"];
-        this.isEnabled = CONFIG.EFFECTS.MOUSE_STARS.ENABLED;
+        // 从 cookie 读取状态
+        const mouseTrailEnabled = document.cookie.split(';')
+            .find(c => c.trim().startsWith('mouseTrail='));
+        this.isEnabled = mouseTrailEnabled 
+            ? mouseTrailEnabled.split('=')[1] === 'true'
+            : CONFIG.EFFECTS.MOUSE_STARS.ENABLED;
         this.gravity = 0.15;
         this.init();
     }
