@@ -71,6 +71,23 @@
     <script src="./js/snow.js" defer></script>
     <script src="./js/settings.js" defer></script>
     <script>
+        // 从cookie中读取主题设置并同步
+        function syncTheme() {
+            const cookies = document.cookie.split(';');
+            const theme = cookies.find(cookie => cookie.trim().startsWith('theme='));
+
+            if (theme) {
+                const themeValue = theme.split('=')[1].trim();
+                document.body.classList.remove('light-mode', 'dark-mode');
+                document.body.classList.add(themeValue);
+            } else {
+                // 默认使用亮色主题
+                document.body.classList.add('light-mode');
+            }
+        }
+        // 页面加载时同步主题
+        window.addEventListener('load', syncTheme);
+
         // 更新年份
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
