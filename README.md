@@ -74,12 +74,16 @@ THEME_UPDATE_INTERVAL: 3600000 // 1小时
 };
 ```
 
-## 部署说明
+## 部署说明 
+
+### 一键部署vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcuijianzhuang%2Fpages)
 
 1. 克隆仓库
 
 ```bash
-git clone https://github.com/yourusername/homepage.git
+git clone https://github.com/cuijianzhuang/pages.git
 ```
 2. 配置 API Keys
 - 在 `js/config.js` 中替换相应的 API keys
