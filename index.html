@@ -8,9 +8,13 @@
     <link rel="stylesheet" href="./css/player.css">
     <link rel="stylesheet" href="./css/stars.css">
     <link rel="stylesheet" href="./css/snow.css">
+    <!-- Add Sakana Widget CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.7.0/lib/sakana.min.css">
   </head>
   <body>
     <canvas id="particles"></canvas>
+    <!-- Add Sakana Widget container -->
+    <div id="sakana-widget" style="position: fixed; right: 0; bottom: 0; z-index: 100;"></div>
     <div id="app">
       <h2 class="title">崔健壮</h2>
 <!--  <p class="description">想让所有人认识我，却不知道我是谁</p>-->
@@ -80,38 +84,67 @@
             <span class="slider round"></span>
           </label>
         </div>
+        <!-- Add Sakana Widget toggle -->
+        <div class="setting-item">
+          <span>看板娘</span>
+          <label class="switch">
+            <input type="checkbox" id="sakana-widget-toggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
       </div>
     </div>
-  </body>
 
-<!-- https://github.com/metowolf/MetingJS -->
-<!-- require APlayer -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
-<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<!-- require MetingJS -->
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-<!--本地js引入-->
-  <script src="./js/config.js"></script>
-  <script src="./js/particles.js" defer></script>
-  <script src="./js/main.js" defer></script>
-  <script src="./js/stars.js" defer></script>
-  <script src="./js/snow.js" defer></script>
-  <script src="./js/settings.js" defer></script>
-<meting-js server="netease"
-           type="playlist"
-           id="961896580"
-           fixed="true"
-           mini="true"
-           autoplay="true"
-           order="random"
-           volume="0.2"
-           mutex="true"
-           storage-name	="metingjs"
->
-</meting-js>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    new SnowEffect();
-  });
-</script>
+    <!-- https://github.com/metowolf/MetingJS -->
+    <!-- require APlayer -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+    <!-- require MetingJS -->
+    <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+    <!--本地js引入-->
+    <script src="./js/config.js"></script>
+    <script src="./js/particles.js" defer></script>
+    <script src="./js/main.js" defer></script>
+    <script src="./js/stars.js" defer></script>
+    <script src="./js/snow.js" defer></script>
+    <script src="./js/settings.js" defer></script>
+    <meting-js server="netease"
+               type="playlist"
+               id="961896580"
+               fixed="true"
+               mini="true"
+               autoplay="true"
+               order="random"
+               volume="0.2"
+               mutex="true"
+               storage-name	="metingjs"
+    >
+    </meting-js>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        new SnowEffect();
+      });
+    </script>
+    <!-- Add Sakana Widget JS before closing body tag -->
+    <script>
+        function initSakanaWidget() {
+            // 从cookie中读取状态
+            const cookies = document.cookie.split(';');
+            const sakanaWidget = cookies.find(cookie => cookie.trim().startsWith('sakanaWidget='));
+            const enabled = sakanaWidget ? sakanaWidget.split('=')[1].trim() === 'true' : true;
+
+            if (!enabled) {
+                document.getElementById('sakana-widget').style.display = 'none';
+                return;
+            }
+            
+            const sakana = new SakanaWidget(sakanaConfig.rightWidget).mount('#sakana-widget');
+        }
+    </script>
+    <script
+        async
+        onload="initSakanaWidget()"
+        src="https://cdn.jsdelivr.net/npm/sakana-widget@2.7.0/lib/sakana.min.js"
+    ></script>
+  </body>
 </html>

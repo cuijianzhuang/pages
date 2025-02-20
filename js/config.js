@@ -57,4 +57,21 @@ CONFIG.EFFECTS = {
 };
 
 // MetingApi配置（用于解析网易云音乐黑胶歌曲）
-var meting_api='https://v.iarc.top/api?server=:server&type=:type&id=:id&auth=:auth&r=:r'; 
+var meting_api='https://v.iarc.top/api?server=:server&type=:type&id=:id&auth=:auth&r=:r';
+
+// Sakana Widget Configuration
+const sakanaConfig = {
+    enabled: true,
+    rightWidget: {
+        character: 'chisato',
+        controls: false,
+        autoFit: false,
+        size: 200
+    },
+    leftWidget: {
+        character: 'takina',
+        controls: false,
+        autoFit: false,
+        size: 200
+    }
+}; 

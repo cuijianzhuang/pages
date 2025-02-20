@@ -9,9 +9,15 @@
     <link rel="stylesheet" href="./css/stars.css">
     <link rel="stylesheet" href="./css/snow.css">
     <link rel="stylesheet" href="./css/about.css">
+    <!-- Add Sakana Widget CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.7.0/lib/sakana.min.css">
   </head>
   <body>
     <canvas id="particles"></canvas>
+    <!-- Add left Sakana Widget container -->
+    <div id="sakana-widget-left" style="position: fixed; left: 0; bottom: 0; z-index: 100;"></div>
+    <!-- Existing right Sakana Widget container -->
+    <div id="sakana-widget" style="position: fixed; right: 0; bottom: 0; z-index: 100;"></div>
     <div id="app">
       <div class="back-button">
 <!--        <a href="index.html" title="返回首页">-->
@@ -106,6 +112,61 @@
             new Settings();
         });
     </script>
+    <script>
+        function initSakanaWidget() {
+            // 从cookie中读取状态
+            const cookies = document.cookie.split(';');
+            const sakanaWidget = cookies.find(cookie => cookie.trim().startsWith('sakanaWidget='));
+            const enabled = sakanaWidget ? sakanaWidget.split('=')[1].trim() === 'true' : true;
+
+            if (!enabled) {
+                document.getElementById('sakana-widget').style.display = 'none';
+                document.getElementById('sakana-widget-left').style.display = 'none';
+                return;
+            }
+
+            // Right widget
+            const sakanaRight = new SakanaWidget(sakanaConfig.rightWidget).mount('#sakana-widget');
+            // Left widget
+            const sakanaLeft = new SakanaWidget(sakanaConfig.leftWidget).mount('#sakana-widget-left');
+        }
+    </script>
+    <script
+        async
+        onload="initSakanaWidget()"
+        src="https://cdn.jsdelivr.net/npm/sakana-widget@2.7.0/lib/sakana.min.js"
+    ></script>
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+        <div class="settings-header">
+            <h3>设置</h3>
+            <i class="fa fa-times close-settings"></i>
+        </div>
+        <div class="settings-content">
+            <div class="setting-item">
+                <span>点击特效</span>
+                <label class="switch">
+                    <input type="checkbox" id="click-effects-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <span>鼠标轨迹</span>
+                <label class="switch">
+                    <input type="checkbox" id="mouse-trail-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <!-- Add Sakana Widget toggle -->
+            <div class="setting-item">
+                <span>看板娘</span>
+                <label class="switch">
+                    <input type="checkbox" id="sakana-widget-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+    </div>
   </body>
 
 </html> 

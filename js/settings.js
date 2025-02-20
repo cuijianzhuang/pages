@@ -29,6 +29,12 @@ class Settings {
         
         // Setup event listeners last
         this.setupEventListeners();
+
+        // Add Sakana Widget toggle handler
+        this.sakanaToggle = document.getElementById('sakana-widget-toggle');
+        if (this.sakanaToggle) {
+            this.initSakanaToggle();
+        }
     }
 
     getCookie(name) {
@@ -130,6 +136,36 @@ class Settings {
             }
             this.setCookie('mouseTrail', e.target.checked);
         });
+    }
+
+    initSakanaToggle() {
+        // 从 cookie 读取状态
+        const enabled = this.getCookie('sakanaWidget') !== null 
+            ? this.getCookie('sakanaWidget') === 'true'
+            : true; // 默认开启
+        
+        this.sakanaToggle.checked = enabled;
+        sakanaConfig.enabled = enabled;
+        this.updateSakanaVisibility();
+
+        // 添加事件监听
+        this.sakanaToggle.addEventListener('change', () => {
+            sakanaConfig.enabled = this.sakanaToggle.checked;
+            this.setCookie('sakanaWidget', this.sakanaToggle.checked);
+            this.updateSakanaVisibility();
+        });
+    }
+
+    updateSakanaVisibility() {
+        const widget = document.getElementById('sakana-widget');
+        const widgetLeft = document.getElementById('sakana-widget-left');
+        
+        if (widget) {
+            widget.style.display = sakanaConfig.enabled ? 'block' : 'none';
+        }
+        if (widgetLeft) {
+            widgetLeft.style.display = sakanaConfig.enabled ? 'block' : 'none';
+        }
     }
 }
 
