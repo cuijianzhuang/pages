@@ -43,7 +43,11 @@ CONFIG.EFFECTS = {
     // 点击特效开关
     CLICK_EFFECTS: {
         // 是否启用粒子特效
-        PARTICLES: true,
+        PARTICLES: false,
+    },
+    sakanaConfig:{
+        //是否默认开启看板娘
+        ENABLED: true
     },
     // 粒子特效配置
     PARTICLES: {

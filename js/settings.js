@@ -142,7 +142,7 @@ class Settings {
         // 从 cookie 读取状态
         const enabled = this.getCookie('sakanaWidget') !== null 
             ? this.getCookie('sakanaWidget') === 'true'
-            : true; // 默认开启
+            : CONFIG.EFFECTS.sakanaConfig.ENABLED; // 默认开启
         
         this.sakanaToggle.checked = enabled;
         sakanaConfig.enabled = enabled;
