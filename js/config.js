@@ -37,13 +37,13 @@ const CONFIG = {
 CONFIG.EFFECTS = {
 
     MOUSE_STARS: {
-        ENABLED: true,
+        ENABLED: false,
         MIN_DISTANCE: 15
     },
     // 点击特效开关
     CLICK_EFFECTS: {
         // 是否启用粒子特效
-        PARTICLES: false,
+        PARTICLES: true,
     },
     sakanaConfig:{
         //是否默认开启看板娘
