@@ -91,8 +91,8 @@ a:hover {
   font-family: 'Note-Script', serif;
   font-size: 2em;
   letter-spacing: 0.02em;
-  animation: goldenGlow 2s ease-in-out infinite;
-  animation-delay: 0.7s;
+  animation: goldenGlow 2s ease-in-out infinite, blurEffect 3s ease-in-out forwards, splitText 0.5s ease-in-out forwards;
+  animation-delay: 0.7s, 0s, 0.5s;
   font-weight: 600;
 }
 
@@ -694,5 +694,50 @@ input:checked + .slider:before {
 .dark-theme input:checked + .slider:before {
   background-color: rgba(193, 168, 106, 0.9);
   box-shadow: 0 0 12px rgba(193, 168, 106, 0.4);
+}
+
+@keyframes blurEffect {
+  0% {
+    filter: blur(5px);
+  }
+  50% {
+    filter: blur(0);
+  }
+  100% {
+    filter: blur(0);
+  }
+}
+
+/*@keyframes splitText {*/
+/*  0% {*/
+/*    transform: translateY(100%);*/
+/*    opacity: 0;*/
+/*  }*/
+/*  50% {*/
+/*    transform: translateY(-20%);*/
+/*    opacity: 1;*/
+/*  }*/
+/*  100% {*/
+/*    transform: translateY(0);*/
+/*    opacity: 1;*/
+/*  }*/
+/*}*/
+
+span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: letterFadeIn 0.5s forwards;
+}
+
+@keyframes letterFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
