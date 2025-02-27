@@ -18,7 +18,9 @@
     <div id="app">
       <h2 class="title">崔健壮</h2>
 <!--  <p class="description">想让所有人认识我，却不知道我是谁</p>-->
-      <p class="description">Carpe diem, Quam minimum credula postero.</p>
+      <p class="description">
+        <span>C</span><span>a</span><span>r</span><span>p</span><span>e</span> <span>d</span><span>i</span><span>e</span><span>m</span><span>,</span> <span>Q</span><span>u</span><span>a</span><span>m</span> <span>m</span><span>i</span><span>n</span><span>i</span><span>m</span> <span>c</span><span>r</span><span>e</span><span>d</span><span>u</span><span>l</span><span>a</span> <span>p</span><span>o</span><span>s</span><span>t</span><span>e</span><span>r</span><span>o</span><span>.</span>
+      </p>
 <!--   添加一言api-->
       <div class="hitokoto">
         <span id="hitokoto-text">获取中...</span>
@@ -123,6 +125,10 @@
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         new SnowEffect();
+        const letters = document.querySelectorAll('.description span');
+        letters.forEach((letter, index) => {
+          letter.style.animationDelay = `${index * 0.1}s`;
+        });
       });
     </script>
     <!-- Add Sakana Widget JS before closing body tag -->
