@@ -1,6 +1,90 @@
 // 更新年份
 document.getElementById('currentYear').textContent = new Date().getFullYear();
 
+// 添加必应壁纸功能
+function getBingWallpaper() {
+  // 检查是否启用必应壁纸，默认启用
+  const cookies = document.cookie.split(';');
+  const bingWallpaperCookie = cookies.find(cookie => cookie.trim().startsWith('bingWallpaper='));
+  // 只有明确设置为false时才禁用，否则默认启用
+  const enabled = !bingWallpaperCookie || bingWallpaperCookie.split('=')[1].trim() !== 'false';
+  
+  // 在开始加载壁纸前，先应用临时样式，避免闪烁
+  if (enabled) {
+    document.documentElement.setAttribute('data-loading-wallpaper', 'true');
+    document.body.setAttribute('data-loading-wallpaper', 'true');
+  } else {
+    document.documentElement.removeAttribute('data-loading-wallpaper');
+    document.body.removeAttribute('data-loading-wallpaper');
+  }
+  
+  if (!enabled) {
+    // 如果禁用，移除已有的背景
+    document.body.style.transition = 'background-image 0.5s ease-out';
+    document.body.style.backgroundImage = '';
+    
+    // 移除遮罩层
+    const existingOverlay = document.querySelector('.bg-wallpaper-overlay');
+    if (existingOverlay) {
+      existingOverlay.style.opacity = '0';
+      setTimeout(() => {
+        existingOverlay.remove();
+      }, 500);
+    }
+    return;
+  }
+  
+  // 使用配置中的必应壁纸API
+  const bingUrl = CONFIG.BING_WALLPAPER.ENDPOINT;
+  
+  // 创建图片对象预加载
+  const img = new Image();
+  
+  // 图片加载成功后设置背景
+  img.onload = function() {
+    // 平滑过渡
+    document.body.style.transition = 'background-image 0.8s ease-in';
+    document.body.style.backgroundImage = `url(${img.src})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundAttachment = 'fixed'; // 固定背景
+    document.documentElement.removeAttribute('data-loading-wallpaper');
+    document.body.removeAttribute('data-loading-wallpaper');
+    
+    // 添加暗色遮罩层以确保文字可见
+    let overlay = document.querySelector('.bg-wallpaper-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'bg-wallpaper-overlay';
+      overlay.style.opacity = '0';
+      
+      // 根据当前主题设置正确的遮罩颜色
+      const isLightTheme = document.body.classList.contains('light-theme');
+      overlay.style.backgroundColor = isLightTheme ? 
+        'rgba(255, 255, 255, 0)' : 'rgba(0, 0, 0, 0.5)';
+      
+      document.body.appendChild(overlay);
+      // 淡入遮罩层
+      setTimeout(() => {
+        overlay.style.transition = 'opacity 0.5s ease-in';
+        overlay.style.opacity = '1';
+      }, 10);
+    }
+  };
+  
+  // 图片加载错误处理
+  img.onerror = function() {
+    console.error('必应壁纸加载失败，使用默认背景');
+    document.body.style.backgroundImage = '';
+    document.documentElement.removeAttribute('data-loading-wallpaper');
+    document.body.removeAttribute('data-loading-wallpaper');
+  };
+  
+  // 开始加载图片
+  img.src = bingUrl;
+}
+
 // 更新时间日期
 /*
 function updateDateTime() {
@@ -201,6 +285,11 @@ getHitokoto();
 // 每5分钟更新一次一言
 setInterval(getHitokoto, CONFIG.HITOKOTO_UPDATE_INTERVAL);
 
+// 初始化必应壁纸
+getBingWallpaper();
+// 每24小时更新一次壁纸
+setInterval(getBingWallpaper, CONFIG.BING_WALLPAPER.UPDATE_INTERVAL);
+
 // 初始化
 /*
 updateDateTime();
@@ -212,126 +301,133 @@ setInterval(getWeather, CONFIG.WEATHER_UPDATE_INTERVAL);
 
 // 主题切换功能
 function initThemeToggle() {
-  const body = document.body;
-  const themeToggle = document.querySelector('.theme-toggle');
-  const themeIcon = themeToggle.querySelector('i');
-  const aplayer = document.querySelector('.aplayer');
-  
-  // 从 Cookie 中获取主题设置
-  const savedTheme = getCookie('theme');
-  if (savedTheme) {
-    body.classList.add(savedTheme);
-    if (aplayer) {
-      aplayer.classList.add(savedTheme);
+  try {
+    const body = document.body;
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (!themeToggle) {
+      console.error('无法找到主题切换按钮');
+      return;
     }
-    updateThemeIcon(savedTheme === 'light-theme');
-  }
-
-  // 设置主题
-  function setTheme(theme) {
-    body.classList.remove('light-theme', 'dark-theme');
-    body.classList.add(theme);
-    if (aplayer) {
-      aplayer.classList.remove('light-theme', 'dark-theme');
-      aplayer.classList.add(theme);
+    
+    const themeIcon = themeToggle.querySelector('i');
+    if (!themeIcon) {
+      console.error('无法找到主题切换图标');
+      return;
     }
-    // 设置会话级别的 Cookie
-    document.cookie = `theme=${theme};path=/`;
-    updateThemeIcon(theme === 'light-theme');
-  }
+    
+    const aplayer = document.querySelector('.aplayer');
+    
+    // 从 Cookie 中获取主题设置
+    const savedTheme = getCookie('theme');
+    if (savedTheme) {
+      body.classList.remove('light-theme', 'dark-theme'); // 先清除所有主题类
+      body.classList.add(savedTheme);
+      if (aplayer) {
+        aplayer.classList.remove('light-theme', 'dark-theme');
+        aplayer.classList.add(savedTheme);
+      }
+      updateThemeIcon(savedTheme === 'light-theme');
+      console.log('从Cookie加载主题: ' + savedTheme);
+    }
 
-  // 获取 Cookie 值的辅助函数
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-  }
-
-  // 自动设置主题的函数保持不变，但使用 Cookie 替代 sessionStorage
-  async function autoSetTheme() {
-    try {
-      if (!getCookie('theme')) {
-        const locationResponse = await fetch(
-          `${CONFIG.AMAP.ENDPOINTS.IP_LOCATION}?key=${CONFIG.AMAP.KEY}`
-        );
-        const locationData = await locationResponse.json();
-        
-        if (locationData.status === '1') {
-          const cityName = locationData.city;
-          const geocodeResponse = await fetch(
-            `${CONFIG.AMAP.ENDPOINTS.GEOCODE}?address=${encodeURIComponent(cityName)}&key=${CONFIG.AMAP.KEY}`
-          );
-          const geocodeData = await geocodeResponse.json();
-          
-          if (geocodeData.status === '1' && geocodeData.geocodes.length > 0) {
-            const location = geocodeData.geocodes[0].location;
-            const [longitude, latitude] = location.split(',');
-            
-            const date = new Date();
-            const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '');
-            
-            const sunResponse = await fetch(
-              `${CONFIG.QWEATHER.ENDPOINTS.SUN}?location=${longitude},${latitude}&date=${formattedDate}&key=${CONFIG.QWEATHER.KEY}`
-            );
-            const sunData = await sunResponse.json();
-            
-            if (sunData.code === '200') {
-              const now = new Date();
-              const sunrise = new Date(sunData.sunrise);
-              const sunset = new Date(sunData.sunset);
-              
-              // 直接比较 Date 对象
-              if (now >= sunrise && now <= sunset) {
-                setTheme('light-theme');
-              } else {
-                setTheme('dark-theme');
-              }
-            } else {
-              // 如果API调用失败，使用默认的时间判断
-              const hour = new Date().getHours();
-              const isDay = hour >= 6 && hour < 18;
-              setTheme(isDay ? 'light-theme' : 'dark-theme');
-            }
-          }
+    // 设置主题
+    function setTheme(theme) {
+      console.log('准备设置主题: ' + theme);
+      
+      // 清除现有主题类并添加新主题类
+      body.classList.remove('light-theme', 'dark-theme');
+      body.classList.add(theme);
+      
+      // 应用到音乐播放器
+      if (aplayer) {
+        aplayer.classList.remove('light-theme', 'dark-theme');
+        aplayer.classList.add(theme);
+      }
+      
+      // 设置会话级别的 Cookie
+      document.cookie = `theme=${theme};path=/`;
+      
+      // 更新主题图标
+      updateThemeIcon(theme === 'light-theme');
+      
+      // 检查是否有壁纸背景
+      const hasBingWallpaper = body.style.backgroundImage && body.style.backgroundImage !== '';
+      
+      // 如果有壁纸背景，需要更新壁纸遮罩的颜色
+      if (hasBingWallpaper) {
+        const overlay = document.querySelector('.bg-wallpaper-overlay');
+        if (overlay) {
+          // 根据主题调整遮罩透明度
+          const overlayColor = theme === 'light-theme' ? 
+            'rgba(255, 255, 255, 0)' : 'rgba(0, 0, 0, 0.5)';
+          overlay.style.backgroundColor = overlayColor;
+          console.log('更新壁纸遮罩颜色为: ' + overlayColor);
+        } else {
+          console.log('未找到壁纸遮罩层');
         }
       }
-    } catch (error) {
-      console.error('获取日出日落时间失败:', error);
-      // 如果API调用失败，使用默认的时间判断
+      
+      console.log(`主题已切换为: ${theme}`);
+    }
+
+    // 获取 Cookie 值的辅助函数
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+    // 更新主题图标
+    function updateThemeIcon(isLight) {
+      if (!themeIcon) {
+        console.error('无法更新主题图标：未找到图标元素');
+        return;
+      }
+      
+      themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+      themeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
+      console.log('图标已更新为: ' + (isLight ? '月亮(深色模式)' : '太阳(亮色模式)'));
+    }
+
+    // 手动切换主题
+    // 移除旧的事件监听器
+    const newThemeToggle = themeToggle.cloneNode(true);
+    themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+    
+    // 获取新的DOM引用
+    const updatedThemeToggle = document.querySelector('.theme-toggle');
+    const updatedThemeIcon = updatedThemeToggle.querySelector('i');
+    
+    updatedThemeToggle.addEventListener('click', (event) => {
+      // 防止事件冒泡
+      event.stopPropagation();
+      console.log('主题切换按钮被点击');
+      
+      // 添加旋转动画
+      updatedThemeToggle.classList.add('rotating');
+      
+      // 切换主题
+      const currentTheme = body.classList.contains('light-theme') ? 'dark-theme' : 'light-theme';
+      setTheme(currentTheme);
+      
+      // 动画结束后移除类
+      setTimeout(() => {
+        updatedThemeToggle.classList.remove('rotating');
+      }, 600);
+    });
+
+    // 初始化默认主题（如果没有设置）
+    if (!savedTheme) {
       const hour = new Date().getHours();
       const isDay = hour >= 6 && hour < 18;
-      if (!getCookie('theme')) {
-        setTheme(isDay ? 'light-theme' : 'dark-theme');
-      }
+      setTheme(isDay ? 'light-theme' : 'dark-theme');
     }
-  }
-
-  // 更新主题图标
-  function updateThemeIcon(isLight) {
-    themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
-    themeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
-  }
-
-  // 手动切换主题
-  themeToggle.addEventListener('click', () => {
-    // 添加旋转动画
-    themeToggle.classList.add('rotating');
     
-    // 切换主题
-    const currentTheme = body.classList.contains('light-theme') ? 'dark-theme' : 'light-theme';
-    setTheme(currentTheme);
-    
-    // 动画结束后移除类
-    setTimeout(() => {
-      themeToggle.classList.remove('rotating');
-    }, 600);
-  });
-
-  // 初始化自动主题
-  autoSetTheme();
-  // 每小时检查一次是否需要切换主题
-  setInterval(autoSetTheme, CONFIG.THEME_UPDATE_INTERVAL);
+    console.log('主题切换功能初始化完成');
+  } catch (error) {
+    console.error('主题切换初始化失败:', error);
+  }
 }
 
 // 在初始化代码中添加主题切换初始化
@@ -340,5 +436,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
   // 初始化粒子特效
   new ParticleEffect();
+});
+
+// 页面加载时初始化功能
+document.addEventListener('DOMContentLoaded', function() {
+  // 最高优先级：立即初始化壁纸，防止卡片闪烁
+  getBingWallpaper();
+  
+  // 其他初始化逻辑
+  initThemeToggle();
+  new ParticleEffect();
+  
+  // 设置定时刷新壁纸
+  setInterval(getBingWallpaper, CONFIG.BING_WALLPAPER.UPDATE_INTERVAL);
 });
 

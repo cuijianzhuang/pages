@@ -4,6 +4,93 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>About Me - CJZ's Home</title>
+    <!-- 添加内联脚本，提前标记壁纸状态并设置主题 -->
+    <script>
+      (function() {
+        // 初始化必要的CSS变量
+        const lightThemeVars = {
+          '--bg-color': '#f5f5f5',
+          '--text-color': '#8b7355',
+          '--link-bg': '#e8e8e8',
+          '--link-hover-bg': '#8b7355',
+          '--link-hover-text': '#ffffff',
+          '--shadow-color': 'rgba(139, 115, 85, 0.3)',
+          '--app-bg': 'rgba(245, 245, 245, 0.75)',
+          '--overlay-color': 'rgba(255, 255, 255, 0)'
+        };
+        
+        const darkThemeVars = {
+          '--bg-color': '#121212',
+          '--text-color': '#c1a86a',
+          '--link-bg': '#0d0d0d',
+          '--link-hover-bg': '#c1a86a',
+          '--link-hover-text': '#0c0c0c',
+          '--shadow-color': 'rgba(193, 168, 106, 0.3)',
+          '--app-bg': 'rgba(18, 18, 18, 0.75)',
+          '--overlay-color': 'rgba(0, 0, 0, 0.5)'
+        };
+        
+        // 壁纸标记
+        document.documentElement.setAttribute('data-loading-wallpaper', 'true');
+        
+        // 获取主题设置并立即应用
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+          return null;
+        }
+        
+        // 获取保存的主题
+        const savedTheme = getCookie('theme');
+        const theme = savedTheme || (function() {
+          // 如果没有保存的主题，默认使用时间判断
+          const hour = new Date().getHours();
+          const isDay = hour >= 6 && hour < 18;
+          return isDay ? 'light-theme' : 'dark-theme';
+        })();
+        
+        // 清除可能存在的其他主题类
+        document.body.classList.remove('light-theme', 'dark-theme');
+        // 应用主题类
+        document.body.classList.add(theme);
+        
+        // 应用CSS变量
+        const themeVars = theme === 'light-theme' ? lightThemeVars : darkThemeVars;
+        for (const [prop, value] of Object.entries(themeVars)) {
+          document.documentElement.style.setProperty(prop, value);
+        }
+        
+        // 如果没有保存过主题，保存当前主题
+        if (!savedTheme) {
+          document.cookie = `theme=${theme};path=/`;
+        }
+        
+        console.log('初始主题已设置为:', theme);
+      })();
+    </script>
+    <!-- 添加内联样式，防止加载闪烁 -->
+    <style>
+      #app {
+        background-color: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      
+      /* 页面加载时的卡片和内容区域样式 */
+      .info-card {
+        background-color: transparent !important;
+        border: none !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+      }
+      
+      .about-content {
+        background-color: transparent !important;
+        border: none !important;
+      }
+    </style>
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/stars.css">
@@ -24,6 +111,19 @@
         <a href="./" title="返回首页">
           <i class="fa fa-arrow-left"></i>
         </a>
+      </div>
+      
+      <!-- 添加主题切换按钮 -->
+      <div class="menu-icons" style="position: fixed; top: 20px; right: 30px;">
+        <div class="settings-toggle">
+          <i aria-hidden="true" class="fa fa-cog"></i>
+        </div>
+        <div class="theme-toggle">
+          <i aria-hidden="true" class="fa fa-moon-o"></i>
+        </div>
+        <div class="snow-toggle">
+          <i aria-hidden="true" class="fa fa-snowflake-o"></i>
+        </div>
       </div>
       
       <h2 class="title">关于我</h2>
@@ -80,20 +180,154 @@
     <script>
         // 从cookie中读取主题设置并同步
         function syncTheme() {
-            const cookies = document.cookie.split(';');
-            const theme = cookies.find(cookie => cookie.trim().startsWith('theme='));
+            try {
+                const cookies = document.cookie.split(';');
+                const theme = cookies.find(cookie => cookie.trim().startsWith('theme='));
 
-            if (theme) {
-                const themeValue = theme.split('=')[1].trim();
-                document.body.classList.remove('light-mode', 'dark-mode');
-                document.body.classList.add(themeValue);
-            } else {
-                // 默认使用亮色主题
-                document.body.classList.add('light-mode');
+                if (theme) {
+                    const themeValue = theme.split('=')[1].trim();
+                    document.body.classList.remove('light-theme', 'dark-theme');
+                    document.body.classList.add(themeValue);
+                    console.log('从Cookie加载主题:', themeValue);
+                } else {
+                    // 默认使用当前时间判断
+                    const hour = new Date().getHours();
+                    const isDay = hour >= 6 && hour < 18;
+                    const defaultTheme = isDay ? 'light-theme' : 'dark-theme';
+                    document.body.classList.add(defaultTheme);
+                    document.cookie = `theme=${defaultTheme};path=/`;
+                    console.log('使用默认主题:', defaultTheme);
+                }
+            } catch (error) {
+                console.error('同步主题失败:', error);
             }
         }
         // 页面加载时同步主题
         window.addEventListener('load', syncTheme);
+
+        // 手动切换主题
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const themeToggle = document.querySelector('.theme-toggle');
+                if (!themeToggle) {
+                    console.error('未找到主题切换按钮');
+                    return;
+                }
+                
+                const themeIcon = themeToggle.querySelector('i');
+                if (!themeIcon) {
+                    console.error('未找到主题图标');
+                    return;
+                }
+                
+                // 雪花效果切换
+                const snowToggle = document.querySelector('.snow-toggle');
+                if (snowToggle) {
+                    // 移除旧的事件监听器
+                    const newSnowToggle = snowToggle.cloneNode(true);
+                    snowToggle.parentNode.replaceChild(newSnowToggle, snowToggle);
+                    
+                    // 使用新的DOM引用
+                    const updatedSnowToggle = document.querySelector('.snow-toggle');
+                    
+                    updatedSnowToggle.addEventListener('click', function() {
+                        // 这里切换雪花效果
+                        const snowContainer = document.querySelector('.snow-container');
+                        if (snowContainer) {
+                            const visible = snowContainer.style.display !== 'none';
+                            snowContainer.style.display = visible ? 'none' : 'block';
+                            // 保存状态到cookie
+                            document.cookie = `snowEffect=${!visible};path=/`;
+                            console.log('雪花效果已' + (!visible ? '启用' : '禁用'));
+                        }
+                    });
+                    
+                    // 初始化时检查雪花状态
+                    window.addEventListener('load', function() {
+                        const cookies = document.cookie.split(';');
+                        const snowCookie = cookies.find(cookie => cookie.trim().startsWith('snowEffect='));
+                        const snowEnabled = !snowCookie || snowCookie.split('=')[1].trim() === 'true';
+                        
+                        const snowContainer = document.querySelector('.snow-container');
+                        if (snowContainer) {
+                            snowContainer.style.display = snowEnabled ? 'block' : 'none';
+                        }
+                    });
+                }
+                
+                // 根据当前主题设置图标
+                function updateThemeIcon() {
+                    const isLight = document.body.classList.contains('light-theme');
+                    themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+                    themeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
+                    console.log('更新主题图标为:', isLight ? '月亮(深色)' : '太阳(亮色)');
+                }
+                
+                // 初始更新图标
+                updateThemeIcon();
+                
+                // 移除旧的事件监听器
+                const newThemeToggle = themeToggle.cloneNode(true);
+                themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+                
+                // 使用新的DOM引用
+                const updatedThemeToggle = document.querySelector('.theme-toggle');
+                const updatedThemeIcon = updatedThemeToggle.querySelector('i');
+                
+                // 添加点击事件
+                updatedThemeToggle.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                    console.log('主题切换按钮被点击');
+                    
+                    // 添加旋转动画
+                    updatedThemeToggle.classList.add('rotating');
+                    
+                    // 切换主题
+                    const isLight = document.body.classList.contains('light-theme');
+                    document.body.classList.remove('light-theme', 'dark-theme');
+                    const newTheme = isLight ? 'dark-theme' : 'light-theme';
+                    document.body.classList.add(newTheme);
+                    
+                    // 设置cookie
+                    document.cookie = `theme=${newTheme};path=/`;
+                    
+                    // 更新图标
+                    updateThemeIcon();
+                    
+                    // 更新壁纸遮罩颜色
+                    const overlay = document.querySelector('.bg-wallpaper-overlay');
+                    if (overlay) {
+                        overlay.style.backgroundColor = newTheme === 'light-theme' ? 
+                            'rgba(255, 255, 255, 0)' : 'rgba(0, 0, 0, 0.5)';
+                    }
+                    
+                    // 动画结束后移除类
+                    setTimeout(() => {
+                        updatedThemeToggle.classList.remove('rotating');
+                    }, 600);
+                    
+                    console.log('主题已切换为:', newTheme);
+                });
+                
+                // 添加旋转动画样式
+                if (!document.getElementById('theme-toggle-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'theme-toggle-style';
+                    style.textContent = `
+                        .theme-toggle.rotating {
+                            animation: rotate360 0.6s ease;
+                        }
+                        @keyframes rotate360 {
+                            from { transform: rotate(0deg); }
+                            to { transform: rotate(360deg); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            } catch (error) {
+                console.error('初始化主题切换失败:', error);
+            }
+        });
 
         // 更新年份
         document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -102,6 +336,39 @@
 <!--   初始化特效-->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 设置面板切换
+            const settingsToggle = document.querySelector('.settings-toggle');
+            const settingsPanel = document.querySelector('.settings-panel');
+            const closeSettings = document.querySelector('.close-settings');
+            
+            // 设置面板显示/隐藏
+            if (settingsToggle && settingsPanel) {
+                settingsToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    settingsPanel.classList.toggle('show');
+                });
+                
+                if (closeSettings) {
+                    closeSettings.addEventListener('click', () => {
+                        settingsPanel.classList.remove('show');
+                    });
+                }
+                
+                // 点击外部关闭设置面板
+                document.addEventListener('click', (e) => {
+                    if (settingsPanel.classList.contains('show') && 
+                        !settingsPanel.contains(e.target) && 
+                        !settingsToggle.contains(e.target)) {
+                        settingsPanel.classList.remove('show');
+                    }
+                });
+            }
+            
+            // 最高优先级：立即初始化壁纸
+            if (typeof getBingWallpaper === 'function') {
+                getBingWallpaper();
+            }
+            
             // 初始化星星特效
             window.starEffect = new StarEffect();
             // 初始化粒子特效
@@ -162,6 +429,14 @@
                 <span>看板娘</span>
                 <label class="switch">
                     <input type="checkbox" id="sakana-widget-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <!-- Add Bing Wallpaper toggle -->
+            <div class="setting-item">
+                <span>必应壁纸</span>
+                <label class="switch">
+                    <input type="checkbox" id="bing-wallpaper-toggle" checked>
                     <span class="slider round"></span>
                 </label>
             </div>

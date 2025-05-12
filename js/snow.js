@@ -9,14 +9,23 @@ class SnowEffect {
         // 检查是否是冬季
         const isWinterSeason = this.isWinter();
         
-        // 获取本地存储的状态
-        // 冬季时默认开启，非冬季时默认关闭
-        if (localStorage.getItem('snowEnabled') === null) {
-            localStorage.setItem('snowEnabled', isWinterSeason ? 'true' : 'false');
-        }
+        // 使用cookie代替localStorage，确保跨页面状态一致
+        const getCookie = (name) => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        };
         
-        // 设置初始状态
-        this.isEnabled = localStorage.getItem('snowEnabled') === 'true';
+        // 获取存储的状态
+        // 冬季时默认开启，非冬季时默认关闭
+        const snowEnabledCookie = getCookie('snowEffect');
+        if (snowEnabledCookie === null) {
+            document.cookie = `snowEffect=${isWinterSeason ? 'true' : 'false'};path=/`;
+            this.isEnabled = isWinterSeason;
+        } else {
+            this.isEnabled = snowEnabledCookie === 'true';
+        }
         
         // 设置开关
         this.setupToggle();
@@ -41,7 +50,9 @@ class SnowEffect {
             // 添加点击事件
             this.toggle.addEventListener('click', () => {
                 this.isEnabled = !this.isEnabled;
-                localStorage.setItem('snowEnabled', this.isEnabled);
+                
+                // 使用cookie代替localStorage
+                document.cookie = `snowEffect=${this.isEnabled};path=/`;
                 
                 if (this.isEnabled) {
                     this.toggle.classList.add('active');
@@ -51,6 +62,8 @@ class SnowEffect {
                     this.toggle.classList.remove('active');
                     this.removeSnow();
                 }
+                
+                console.log('雪花效果状态:', this.isEnabled ? '已启用' : '已禁用');
             });
         }
     }

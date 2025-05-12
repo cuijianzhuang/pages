@@ -31,6 +31,8 @@
   --link-hover-bg: #c1a86a;
   --link-hover-text: #0c0c0c;
   --shadow-color: rgba(193, 168, 106, 0.3);
+  --app-bg: rgba(18, 18, 18, 0.75);
+  --overlay-color: rgba(0, 0, 0, 0.5);
 }
 
 /* 日间主题 */
@@ -41,12 +43,14 @@ body.light-theme {
   --link-hover-bg: #8b7355;
   --link-hover-text: #ffffff;
   --shadow-color: rgba(139, 115, 85, 0.3);
+  --app-bg: rgba(245, 245, 245, 0.75);
+  --overlay-color: rgba(255, 255, 255, 0);
 }
 
 /* 应用主题变量 */
 body {
   margin: 0;
-  padding: 10vh 0;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Pingfang SC', 'Microsoft Yahei', sans-serif;
   color: var(--text-color);
   background-color: var(--bg-color);
@@ -54,10 +58,16 @@ body {
   font-size: 14px;
   font-weight: 500;
   width: 100vw;
+  height: 100vh;
   cursor: default;
   user-select: none;
   transition: all 0.5s ease;
-  overflow: hidden;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 如果需要滚动但不显示滚动条，可以添加以下样式 */
@@ -79,11 +89,56 @@ a:hover {
   text-decoration: none;
 }
 
+/* 确保布局中心一致，无论是否有壁纸 */
+#app {
+  padding: 2rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 700px;
+  transition: all 0.5s ease;
+  background-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* 当使用必应壁纸时，调整卡片样式使其完全透明 */
+body[style*="background-image"] #app {
+  padding: 40px 20px;
+  background-color: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* 确保非壁纸模式下的卡片样式保持不变 */
+body:not([style*="background-image"]) #app {
+  background-color: var(--app-bg);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 40px 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 标题样式统一 */
 .title {
   margin: 0;
   font-family: '迷你繁方篆', serif;
-  padding-top: 20vh;
   font-size: 6.5vmax;
+  margin-bottom: 1rem;
+}
+
+/* 非壁纸模式下的标题样式 */
+body:not([style*="background-image"]) .title {
+  text-shadow: 0 0 10px var(--shadow-color);
+  animation: titleGlow 2s ease-in-out infinite alternate;
 }
 
 .description {
@@ -179,21 +234,70 @@ a:hover {
   font-style: italic;
 }
 
+/* 修改菜单样式确保一致性 */
 .menu {
-  margin-top: 10vh;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin: 30px 0;
+  padding: 0 10px;
 }
 
+/* 统一菜单样式 */
 .menu .link {
-  padding: 0.5em 0.8em;
-  color: var(--text-color);
-  background: var(--link-bg);
-  text-decoration: none;
-  transition: all 0.1s;
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
 }
 
-.menu .link:hover {
+/* 非壁纸模式下的菜单样式 */
+body:not([style*="background-image"]) .menu .link {
+  background-color: var(--link-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 非壁纸模式下的菜单hover样式 */
+body:not([style*="background-image"]) .menu .link:hover {
+  transform: translateY(-2px);
+  background-color: var(--link-hover-bg);
   color: var(--link-hover-text);
-  background: var(--link-hover-bg);
+}
+
+/* 壁纸模式的菜单样式 */
+body[style*="background-image"] .menu .link {
+  background-color: transparent;
+  border: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  font-weight: 500;
+  position: relative;
+  padding: 10px 20px;
+}
+
+body[style*="background-image"] .menu .link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background-color: var(--text-color);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  opacity: 0.7;
+}
+
+body[style*="background-image"] .menu .link:hover {
+  background-color: transparent;
+  transform: translateY(-3px);
+}
+
+body[style*="background-image"] .menu .link:hover::after {
+  width: 70%;
 }
 
 .menu-icons {
@@ -221,6 +325,19 @@ a:hover {
 
 .theme-toggle {
   order: 2;
+  cursor: pointer;
+  margin: 0 15px;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  display: inline-block;
+  padding: 5px;
+  z-index: 100;
+  position: relative;
+}
+
+.theme-toggle:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .snow-toggle {
@@ -774,43 +891,63 @@ input:checked + .slider:before {
   box-shadow: 0 0 12px rgba(193, 168, 106, 0.4);
 }
 
- /*.quote-section {*/
- /*  margin: 20px 0;*/
- /*  font-size: 1.2rem;*/
- /*  text-align: center;*/
- /*  font-family: 'Arial', sans-serif;*/
- /*  letter-spacing: 1px;*/
- /*  padding: 15px;*/
- /*  font-weight: 300;*/
- /*  position: relative;*/
- /*  animation: float 3s ease-in-out infinite;*/
- /*  transition: all 0.5s ease;*/
- /*}*/
+/* 引用区域样式统一 */
+.quote-section {
+  margin: 25px 0;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
 
-/*@keyframes float {*/
-/*  0% { transform: translateY(0px); }*/
-/*  50% { transform: translateY(-10px); }*/
-/*  100% { transform: translateY(0px); }*/
-/*}*/
+/* 非壁纸模式的引用区域样式 */
+body:not([style*="background-image"]) .quote-section {
+  background-color: rgba(193, 168, 106, 0.05);
+  border: 1px solid rgba(193, 168, 106, 0.1);
+}
 
-/*.quote-section:hover {*/
-/*  transform: scale(1.05);*/
-/*}*/
+/* 壁纸模式的引用区域样式，修正冲突 */
+body[style*="background-image"] .quote-section {
+  background-color: transparent !important;
+  border: none !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9) !important;
+  font-weight: 500;
+  padding: 20px;
+  position: relative;
+}
 
-/*.quote-text {*/
-/*  background: linear-gradient(90deg, #8a9cff, #ff6b6b, #8a9cff);*/
-/*  background-size: 200% auto;*/
-/*  color: transparent;*/
-/*  -webkit-background-clip: text;*/
-/*  background-clip: text;*/
-/*  animation: gradient 3s linear infinite;*/
-/*  text-shadow: 0 0 5px rgba(138, 156, 255, 0.3);*/
-/*}*/
+/* 为壁纸模式的引用区域添加上下装饰线 */
+body[style*="background-image"] .quote-section::before,
+body[style*="background-image"] .quote-section::after {
+  content: '';
+  position: absolute;
+  height: 1px;
+  width: 100px;
+  background: linear-gradient(90deg, transparent, var(--text-color), transparent);
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-/*@keyframes gradient {*/
-/*  0% { background-position: 0% center; }*/
-/*  100% { background-position: 200% center; }*/
-/*}*/
+body[style*="background-image"] .quote-section::before {
+  top: 0;
+}
+
+body[style*="background-image"] .quote-section::after {
+  bottom: 0;
+}
+
+/* 暗色主题下的非壁纸模式引用区域 */
+body.dark-theme:not([style*="background-image"]) .quote-section {
+  background-color: rgba(193, 168, 106, 0.05);
+  border: 1px solid rgba(193, 168, 106, 0.1);
+}
+
+/* 亮色主题下的非壁纸模式引用区域 */
+body.light-theme:not([style*="background-image"]) .quote-section {
+  background-color: rgba(139, 115, 85, 0.05);
+  border: 1px solid rgba(139, 115, 85, 0.1);
+}
 
 .heart-icon {
   display: inline-block;
@@ -824,4 +961,189 @@ input:checked + .slider:before {
   50% { transform: scale(1); }
   75% { transform: scale(1.2); }
   100% { transform: scale(1); }
+}
+
+/* 必应壁纸遮罩层 */
+.bg-wallpaper-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: var(--overlay-color);
+  pointer-events: none;
+  transition: background-color 0.5s ease;
+}
+
+body.light-theme[style*="background-image"] #app {
+  background-color: transparent;
+}
+
+/* 为了保持文字可读性，需要添加文字阴影 */
+body[style*="background-image"] .title,
+body[style*="background-image"] .description,
+body[style*="background-image"] .hitokoto,
+body[style*="background-image"] .menu .link,
+body[style*="background-image"] .footer,
+body[style*="background-image"] .about-link,
+body[style*="background-image"] .quote-section {
+  color: var(--text-color);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* 针对不同主题设置不同的文字阴影 */
+body.light-theme[style*="background-image"] .title,
+body.light-theme[style*="background-image"] .description,
+body.light-theme[style*="background-image"] .hitokoto,
+body.light-theme[style*="background-image"] .menu .link,
+body.light-theme[style*="background-image"] .footer,
+body.light-theme[style*="background-image"] .about-link,
+body.light-theme[style*="background-image"] .quote-section {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 当使用必应壁纸时，调整设置面板透明度 */
+body[style*="background-image"] .settings-panel {
+  background-color: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.light-theme[style*="background-image"] .settings-panel {
+  background-color: rgba(245, 245, 245, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* 增强文字在壁纸上的可读性 */
+body[style*="background-image"] .title {
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.7);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+body[style*="background-image"] .hitokoto-text {
+  font-weight: 500;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
+}
+
+body[style*="background-image"] .quote-section {
+  background-color: transparent !important;
+  border: none !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9) !important;
+  font-weight: 500;
+  padding: 20px;
+  position: relative;
+}
+
+/* 壁纸模式下的一言样式增强 */
+body[style*="background-image"] .hitokoto {
+  background-color: transparent;
+  margin: 30px auto;
+}
+
+body[style*="background-image"] #hitokoto-text {
+  font-size: 1.3em;
+  line-height: 1.8;
+  font-weight: 500;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9);
+  letter-spacing: 0.02em;
+}
+
+body[style*="background-image"] #hitokoto-from {
+  margin-top: 15px;
+  font-style: italic;
+  opacity: 0.9;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 调整壁纸模式下的描述文字样式 */
+body[style*="background-image"] .description {
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.9);
+  font-weight: 600;
+  opacity: 0.9;
+  padding-bottom: 4vh;
+}
+
+/* 移除可能存在的所有背景元素，确保透明 */
+body[style*="background-image"] .menu,
+body[style*="background-image"] .menu-icons,
+body[style*="background-image"] .footer {
+  background-color: transparent;
+}
+
+/* 优化壁纸模式下的footer样式 */
+body[style*="background-image"] .footer {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+  font-weight: 500;
+  background-color: transparent;
+}
+
+body[style*="background-image"] .about-link {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+}
+
+body[style*="background-image"] .about-link:hover {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 10px var(--shadow-color);
+}
+
+/* 壁纸加载状态样式 */
+html[data-loading-wallpaper="true"] #app,
+body[data-loading-wallpaper="true"] #app,
+body[style*="background-image"] #app {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 处理壁纸加载状态下的菜单样式 */
+html[data-loading-wallpaper="true"] .menu .link,
+body[data-loading-wallpaper="true"] .menu .link {
+  background-color: transparent;
+  border: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  font-weight: 500;
+  position: relative;
+  padding: 10px 20px;
+}
+
+/* 壁纸加载状态下的引用区域样式 */
+html[data-loading-wallpaper="true"] .quote-section,
+body[data-loading-wallpaper="true"] .quote-section {
+  background-color: transparent !important;
+  border: none !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9) !important;
+  font-weight: 500;
+  padding: 20px;
+  position: relative;
+}
+
+/* 为壁纸加载状态下的引用区域添加上下装饰线 */
+html[data-loading-wallpaper="true"] .quote-section::before,
+html[data-loading-wallpaper="true"] .quote-section::after,
+body[data-loading-wallpaper="true"] .quote-section::before,
+body[data-loading-wallpaper="true"] .quote-section::after {
+  content: '';
+  position: absolute;
+  height: 1px;
+  width: 100px;
+  background: linear-gradient(90deg, transparent, var(--text-color), transparent);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+html[data-loading-wallpaper="true"] .quote-section::before,
+body[data-loading-wallpaper="true"] .quote-section::before {
+  top: 0;
+}
+
+html[data-loading-wallpaper="true"] .quote-section::after,
+body[data-loading-wallpaper="true"] .quote-section::after {
+  bottom: 0;
 }

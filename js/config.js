@@ -30,7 +30,14 @@ const CONFIG = {
     HITOKOTO_UPDATE_INTERVAL: 300000,  // 5分钟
     
     // 主题自动更新间隔 (毫秒)
-    THEME_UPDATE_INTERVAL: 3600000     // 1小时
+    THEME_UPDATE_INTERVAL: 3600000,     // 1小时
+
+    // 必应壁纸API
+    BING_WALLPAPER: {
+        ENABLED: true,
+        ENDPOINT: 'https://bing.img.run/rand.php',
+        UPDATE_INTERVAL: 86400000 // 24小时
+    }
 };
 
 // 鼠标点击特效配置
