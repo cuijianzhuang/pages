@@ -31,7 +31,7 @@ class Settings {
         this.initializeSettings();
         
         // Initialize star effect with current settings
-        if (window.StarEffect && !window.starEffect) {
+        if (typeof StarEffect !== 'undefined' && !window.starEffect) {
             window.starEffect = new StarEffect();
         }
         

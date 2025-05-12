@@ -114,7 +114,7 @@
       </div>
       
       <!-- 添加主题切换按钮 -->
-      <div class="menu-icons" style="position: fixed; top: 20px; right: 30px;">
+      <div class="menu-icons fade-in-text" style="position: fixed; top: 20px; right: 30px;">
         <div class="settings-toggle">
           <i aria-hidden="true" class="fa fa-cog"></i>
         </div>
@@ -138,26 +138,26 @@
         </div>
 
         <div class="info-section">
-          <div class="info-card">
+          <div class="info-card fade-in-text delay-3">
             <i class="fa fa-code"></i>
             <h4>技术栈</h4>
             <p>Java / Python / JavaScript </p>
           </div>
           
-          <div class="info-card">
+          <div class="info-card fade-in-text delay-4">
             <i class="fa fa-heart"></i>
             <h4>兴趣爱好</h4>
             <p>编程 / 音乐 / 影视 / 摄影 / 旅行</p>
           </div>
           
-          <div class="info-card">
+          <div class="info-card fade-in-text delay-5">
             <i class="fa fa-quote-left"></i>
             <h4>座右铭</h4>
             <p class="description">Carpe diem, Quam minimum credula postero.</p>
           </div>
         </div>
 
-        <div class="contact-section">
+        <div class="contact-section fade-in-text delay-6">
           <a href="https://github.com/cuijianzhuang" target="_blank" class="contact-link">
             <i class="fa fa-github"></i>
           </a>
@@ -169,7 +169,7 @@
           </a>
         </div>
       </div>
-      <p class="footer">Copyright © 2024-<span id="currentYear"></span></p>
+      <p class="footer fade-in-text delay-7">Copyright © 2024-<span id="currentYear"></span></p>
     </div>
     <script src="./js/config.js"></script>
     <script src="./js/particles.js" defer></script>
@@ -378,6 +378,33 @@
             // 初始化设置（最后初始化，这样可以正确应用保存的设置）
             new Settings();
         });
+    </script>
+    <!-- 确保鼠标轨迹效果初始化 -->
+    <script>
+      // 在页面完全加载后再次确认鼠标轨迹效果已初始化
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          if (!window.starEffect) {
+            console.log('初始化鼠标轨迹效果（延迟加载）');
+            window.starEffect = new StarEffect();
+          } else if (!window.starEffect.isEnabled) {
+            // 读取cookie判断是否应该启用
+            const mouseTrailCookie = document.cookie.split(';')
+              .find(c => c.trim().startsWith('mouseTrail='));
+            const shouldEnable = !mouseTrailCookie || mouseTrailCookie.split('=')[1] === 'true';
+            
+            if (shouldEnable) {
+              console.log('启用鼠标轨迹效果');
+              window.starEffect.enable();
+              // 更新开关状态
+              const toggle = document.getElementById('mouse-trail-toggle');
+              if (toggle) {
+                toggle.checked = true;
+              }
+            }
+          }
+        }, 1000); // 延迟1秒确保其他脚本已加载
+      });
     </script>
     <script>
         function initSakanaWidget() {

@@ -44,7 +44,7 @@ const CONFIG = {
 CONFIG.EFFECTS = {
 
     MOUSE_STARS: {
-        ENABLED: false,
+        ENABLED: true,
         MIN_DISTANCE: 15
     },
     // 点击特效开关
