@@ -2,6 +2,7 @@
 document.getElementById('currentYear').textContent = new Date().getFullYear();
 
 // 更新时间日期
+/*
 function updateDateTime() {
   const now = new Date();
   
@@ -145,6 +146,7 @@ function getWeatherIcon(weatherText) {
 
   return iconMap[weatherText] || 'fa-question-circle-o';
 }
+*/
 
 // 在现有代码后添加一言功能
 async function getHitokoto() {
@@ -200,11 +202,13 @@ getHitokoto();
 setInterval(getHitokoto, CONFIG.HITOKOTO_UPDATE_INTERVAL);
 
 // 初始化
+/*
 updateDateTime();
 setInterval(updateDateTime, 1000);
 getWeather();
 // 每30分钟更新一次天气
 setInterval(getWeather, CONFIG.WEATHER_UPDATE_INTERVAL);
+*/
 
 // 主题切换功能
 function initThemeToggle() {
