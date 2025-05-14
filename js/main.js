@@ -315,6 +315,12 @@ function initThemeToggle() {
       return;
     }
     
+    // 确保初始图标状态正确
+    const initialTheme = body.classList.contains('light-theme');
+    themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+    themeIcon.classList.add(initialTheme ? 'fa-moon-o' : 'fa-sun-o');
+    console.log('初始主题图标设置为:', initialTheme ? '月亮(深色模式)' : '太阳(亮色模式)');
+    
     const aplayer = document.querySelector('.aplayer');
     
     // 从 Cookie 中获取主题设置
@@ -385,9 +391,18 @@ function initThemeToggle() {
         return;
       }
       
-      themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
-      themeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
-      console.log('图标已更新为: ' + (isLight ? '月亮(深色模式)' : '太阳(亮色模式)'));
+      // 确保图标元素始终是最新的
+      const latestThemeIcon = document.querySelector('.theme-toggle i');
+      if (latestThemeIcon) {
+        latestThemeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+        latestThemeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
+        console.log('图标已更新为: ' + (isLight ? '月亮(深色模式)' : '太阳(亮色模式)'));
+      } else {
+        // 使用原始引用的备选方案
+        themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+        themeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
+        console.log('使用原始引用更新图标为: ' + (isLight ? '月亮(深色模式)' : '太阳(亮色模式)'));
+      }
     }
 
     // 手动切换主题

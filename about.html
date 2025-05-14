@@ -274,6 +274,12 @@
                 const updatedThemeToggle = document.querySelector('.theme-toggle');
                 const updatedThemeIcon = updatedThemeToggle.querySelector('i');
                 
+                // 重新初始化图标
+                const isLight = document.body.classList.contains('light-theme');
+                updatedThemeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+                updatedThemeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
+                console.log('重置主题图标为:', isLight ? '月亮(深色)' : '太阳(亮色)');
+                
                 // 添加点击事件
                 updatedThemeToggle.addEventListener('click', function(e) {
                     e.stopPropagation(); // 阻止事件冒泡
@@ -291,8 +297,10 @@
                     // 设置cookie
                     document.cookie = `theme=${newTheme};path=/`;
                     
-                    // 更新图标
-                    updateThemeIcon();
+                    // 直接更新图标
+                    updatedThemeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+                    updatedThemeIcon.classList.add(newTheme === 'light-theme' ? 'fa-moon-o' : 'fa-sun-o');
+                    console.log('更新主题图标为:', newTheme === 'light-theme' ? '月亮(深色)' : '太阳(亮色)');
                     
                     // 更新壁纸遮罩颜色
                     const overlay = document.querySelector('.bg-wallpaper-overlay');
