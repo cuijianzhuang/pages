@@ -62,7 +62,7 @@ function getBingWallpaper() {
       // 根据当前主题设置正确的遮罩颜色
       const isLightTheme = document.body.classList.contains('light-theme');
       overlay.style.backgroundColor = isLightTheme ? 
-        'rgba(255, 255, 255, 0)' : 'rgba(0, 0, 0, 0.5)';
+        'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.5)';
       
       document.body.appendChild(overlay);
       // 淡入遮罩层
@@ -365,7 +365,7 @@ function initThemeToggle() {
         if (overlay) {
           // 根据主题调整遮罩透明度
           const overlayColor = theme === 'light-theme' ? 
-            'rgba(255, 255, 255, 0)' : 'rgba(0, 0, 0, 0.5)';
+            'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.5)';
           overlay.style.backgroundColor = overlayColor;
           console.log('更新壁纸遮罩颜色为: ' + overlayColor);
         } else {

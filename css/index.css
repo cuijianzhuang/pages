@@ -963,7 +963,58 @@ body.light-theme:not([style*="background-image"]) .quote-section {
   100% { transform: scale(1); }
 }
 
-/* 必应壁纸遮罩层 */
+/* 针对不同主题设置不同的文字阴影 */
+body.light-theme[style*="background-image"] .title {
+  -webkit-text-stroke: 0.8px rgba(0, 0, 0, 0.7);
+  text-stroke: 0.8px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  filter: brightness(1.15) contrast(1.1);
+}
+
+body.light-theme[style*="background-image"] .description {
+  -webkit-text-stroke: 0.7px rgba(0, 0, 0, 0.7);
+  text-stroke: 0.7px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  filter: brightness(1.15) contrast(1.1);
+}
+
+body.light-theme[style*="background-image"] #hitokoto-text {
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.6);
+  text-stroke: 0.5px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+  filter: brightness(1.15) contrast(1.1);
+}
+
+body.light-theme[style*="background-image"] #hitokoto-from {
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.5);
+  text-stroke: 0.3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 500;
+  filter: brightness(1.15) contrast(1.1);
+}
+
+body.light-theme[style*="background-image"] .menu .link {
+  -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
+  text-stroke: 0.4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+  filter: brightness(1.15) contrast(1.1);
+}
+
+body.light-theme[style*="background-image"] .footer,
+body.light-theme[style*="background-image"] .about-link,
+body.light-theme[style*="background-image"] .quote-section {
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.5);
+  text-stroke: 0.3px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 500;
+  filter: brightness(1.15) contrast(1.1);
+}
+
+/* 删除老的壁纸遮罩样式 */
 .bg-wallpaper-overlay {
   position: fixed;
   top: 0;
@@ -976,176 +1027,34 @@ body.light-theme:not([style*="background-image"]) .quote-section {
   transition: background-color 0.5s ease;
 }
 
-body.light-theme[style*="background-image"] #app {
-  background-color: transparent;
+/* 更新日间模式下壁纸遮罩颜色 */
+body.light-theme .bg-wallpaper-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
-/* 为了保持文字可读性，需要添加文字阴影 */
-body[style*="background-image"] .title,
-body[style*="background-image"] .description,
-body[style*="background-image"] .hitokoto,
-body[style*="background-image"] .menu .link,
-body[style*="background-image"] .footer,
-body[style*="background-image"] .about-link,
-body[style*="background-image"] .quote-section {
-  color: var(--text-color);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+/* 菜单链接悬停效果增强 */
+body.light-theme[style*="background-image"] .menu .link:hover {
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.7);
+  text-stroke: 0.5px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  filter: brightness(1.2);
+  transition: all 0.3s ease;
 }
 
-/* 针对不同主题设置不同的文字阴影 */
+/* 统一增加亮度和对比度 */
 body.light-theme[style*="background-image"] .title,
 body.light-theme[style*="background-image"] .description,
-body.light-theme[style*="background-image"] .hitokoto,
+body.light-theme[style*="background-image"] #hitokoto-text,
+body.light-theme[style*="background-image"] #hitokoto-from,
 body.light-theme[style*="background-image"] .menu .link,
 body.light-theme[style*="background-image"] .footer,
 body.light-theme[style*="background-image"] .about-link,
 body.light-theme[style*="background-image"] .quote-section {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* 当使用必应壁纸时，调整设置面板透明度 */
-body[style*="background-image"] .settings-panel {
-  background-color: rgba(20, 20, 20, 0.6);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-body.light-theme[style*="background-image"] .settings-panel {
-  background-color: rgba(245, 245, 245, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-/* 增强文字在壁纸上的可读性 */
-body[style*="background-image"] .title {
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.7);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
-}
-
-body[style*="background-image"] .hitokoto-text {
-  font-weight: 500;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.8);
-}
-
-body[style*="background-image"] .quote-section {
-  background-color: transparent !important;
-  border: none !important;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9) !important;
-  font-weight: 500;
-  padding: 20px;
-  position: relative;
-}
-
-/* 壁纸模式下的一言样式增强 */
-body[style*="background-image"] .hitokoto {
-  background-color: transparent;
-  margin: 30px auto;
-}
-
-body[style*="background-image"] #hitokoto-text {
-  font-size: 1.3em;
-  line-height: 1.8;
-  font-weight: 500;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9);
-  letter-spacing: 0.02em;
-}
-
-body[style*="background-image"] #hitokoto-from {
-  margin-top: 15px;
-  font-style: italic;
-  opacity: 0.9;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-/* 调整壁纸模式下的描述文字样式 */
-body[style*="background-image"] .description {
-  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.9);
-  font-weight: 600;
-  opacity: 0.9;
-  padding-bottom: 4vh;
-}
-
-/* 移除可能存在的所有背景元素，确保透明 */
-body[style*="background-image"] .menu,
-body[style*="background-image"] .menu-icons,
-body[style*="background-image"] .footer {
-  background-color: transparent;
-}
-
-/* 优化壁纸模式下的footer样式 */
-body[style*="background-image"] .footer {
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
-  font-weight: 500;
-  background-color: transparent;
-}
-
-body[style*="background-image"] .about-link {
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
-}
-
-body[style*="background-image"] .about-link:hover {
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 10px var(--shadow-color);
-}
-
-/* 壁纸加载状态样式 */
-html[data-loading-wallpaper="true"] #app,
-body[data-loading-wallpaper="true"] #app,
-body[style*="background-image"] #app {
-  background-color: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* 处理壁纸加载状态下的菜单样式 */
-html[data-loading-wallpaper="true"] .menu .link,
-body[data-loading-wallpaper="true"] .menu .link {
-  background-color: transparent;
-  border: none;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-  font-weight: 500;
-  position: relative;
-  padding: 10px 20px;
-}
-
-/* 壁纸加载状态下的引用区域样式 */
-html[data-loading-wallpaper="true"] .quote-section,
-body[data-loading-wallpaper="true"] .quote-section {
-  background-color: transparent !important;
-  border: none !important;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9) !important;
-  font-weight: 500;
-  padding: 20px;
-  position: relative;
-}
-
-/* 为壁纸加载状态下的引用区域添加上下装饰线 */
-html[data-loading-wallpaper="true"] .quote-section::before,
-html[data-loading-wallpaper="true"] .quote-section::after,
-body[data-loading-wallpaper="true"] .quote-section::before,
-body[data-loading-wallpaper="true"] .quote-section::after {
-  content: '';
-  position: absolute;
-  height: 1px;
-  width: 100px;
-  background: linear-gradient(90deg, transparent, var(--text-color), transparent);
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-html[data-loading-wallpaper="true"] .quote-section::before,
-body[data-loading-wallpaper="true"] .quote-section::before {
-  top: 0;
-}
-
-html[data-loading-wallpaper="true"] .quote-section::after,
-body[data-loading-wallpaper="true"] .quote-section::after {
-  bottom: 0;
+  filter: brightness(1.15) contrast(1.1);
 }
 
 /* 标题打字机效果 */
@@ -1262,3 +1171,122 @@ body[data-loading-wallpaper="true"] .quote-section::after {
 .letter-animation span:nth-child(38) { animation-delay: 2.35s; }
 .letter-animation span:nth-child(39) { animation-delay: 2.4s; }
 .letter-animation span:nth-child(40) { animation-delay: 2.45s; }
+
+/* 壁纸加载状态样式 */
+html[data-loading-wallpaper="true"] #app,
+body[data-loading-wallpaper="true"] #app,
+body[style*="background-image"] #app {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+body.light-theme[style*="background-image"] #app {
+  background-color: transparent;
+}
+
+/* 为了保持文字可读性，需要添加文字阴影 */
+body[style*="background-image"] .title,
+body[style*="background-image"] .description,
+body[style*="background-image"] .hitokoto,
+body[style*="background-image"] .menu .link,
+body[style*="background-image"] .footer,
+body[style*="background-image"] .about-link,
+body[style*="background-image"] .quote-section {
+  color: var(--text-color);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* 当使用必应壁纸时，调整设置面板透明度 */
+body[style*="background-image"] .settings-panel {
+  background-color: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.light-theme[style*="background-image"] .settings-panel {
+  background-color: rgba(245, 245, 245, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* 增强文字在壁纸上的可读性 */
+body[style*="background-image"] .title {
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.7);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+/* 壁纸模式下的一言样式增强 */
+body[style*="background-image"] .hitokoto {
+  background-color: transparent;
+  margin: 30px auto;
+}
+
+body[style*="background-image"] #hitokoto-text {
+  font-size: 1.3em;
+  line-height: 1.8;
+  font-weight: 500;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9);
+  letter-spacing: 0.02em;
+}
+
+body[style*="background-image"] #hitokoto-from {
+  margin-top: 15px;
+  font-style: italic;
+  opacity: 0.9;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* 壁纸模式下的引用区域样式 */
+body[style*="background-image"] .quote-section {
+  background-color: transparent !important;
+  border: none !important;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9) !important;
+  font-weight: 500;
+  padding: 20px;
+  position: relative;
+}
+
+/* 为壁纸加载状态下的引用区域添加上下装饰线 */
+body[style*="background-image"] .quote-section::before,
+body[style*="background-image"] .quote-section::after {
+  content: '';
+  position: absolute;
+  height: 1px;
+  width: 100px;
+  background: linear-gradient(90deg, transparent, var(--text-color), transparent);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+body[style*="background-image"] .quote-section::before {
+  top: 0;
+}
+
+body[style*="background-image"] .quote-section::after {
+  bottom: 0;
+}
+
+/* 移除可能存在的所有背景元素，确保透明 */
+body[style*="background-image"] .menu,
+body[style*="background-image"] .menu-icons,
+body[style*="background-image"] .footer {
+  background-color: transparent;
+}
+
+/* 处理壁纸加载状态下的菜单样式 */
+html[data-loading-wallpaper="true"] .menu .link,
+body[data-loading-wallpaper="true"] .menu .link {
+  background-color: transparent;
+  border: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  font-weight: 500;
+  position: relative;
+  padding: 10px 20px;
+}

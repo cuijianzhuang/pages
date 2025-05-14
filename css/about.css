@@ -461,3 +461,76 @@ body[style*="background-image"] .info-card i,
 body[style*="background-image"] .contact-link i {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
 }
+
+/* 关于页面文字描边增强可读性 */
+body.light-theme[style*="background-image"] .title {
+  -webkit-text-stroke: 0.8px rgba(0, 0, 0, 0.7);
+  text-stroke: 0.8px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+}
+
+body.light-theme[style*="background-image"] .name {
+  -webkit-text-stroke: 0.7px rgba(0, 0, 0, 0.7);
+  text-stroke: 0.7px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+}
+
+body.light-theme[style*="background-image"] .subtitle {
+  -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
+  text-stroke: 0.4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+}
+
+body.light-theme[style*="background-image"] .info-card h4 {
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.6);
+  text-stroke: 0.5px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+body.light-theme[style*="background-image"] .info-card p {
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.6);
+  text-stroke: 0.3px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+body.light-theme[style*="background-image"] .contact-link i {
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.7);
+  text-stroke: 0.3px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.2);
+}
+
+/* 增加亮度和对比度 */
+body.light-theme[style*="background-image"] .title,
+body.light-theme[style*="background-image"] .name,
+body.light-theme[style*="background-image"] .subtitle,
+body.light-theme[style*="background-image"] .info-card h4,
+body.light-theme[style*="background-image"] .info-card p,
+body.light-theme[style*="background-image"] .info-card i,
+body.light-theme[style*="background-image"] .contact-link,
+body.light-theme[style*="background-image"] .footer {
+  filter: brightness(1.15) contrast(1.1);
+}
+
+/* 联系链接悬停效果 */
+body.light-theme[style*="background-image"] .contact-link:hover i {
+  -webkit-text-stroke: 0;
+  text-stroke: 0;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+  transform: translateY(-3px) scale(1.1);
+  transition: all 0.3s ease;
+  filter: brightness(1.3);
+}
+
+/* 返回按钮增强 */
+body.light-theme[style*="background-image"] .back-button a {
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.6);
+  text-stroke: 0.3px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.15) contrast(1.1);
+}
