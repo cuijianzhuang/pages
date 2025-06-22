@@ -14,6 +14,9 @@
     opacity: 0;
     animation: fall linear infinite;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    /* 确保雪花在有壁纸时依然可见 */
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+    z-index: 10; /* 确保雪花在遮罩层之上 */
 }
 
 @keyframes fall {
@@ -76,11 +79,11 @@
     }
 }
 
-/* 添加日间主题雪花样式 */
-body.light-theme .snowflake {
-    color: #8b7355 !important; /* 使用主题的深金色 */
-    text-shadow: 0 0 8px rgba(139, 115, 85, 0.6),
-                 0 0 15px rgba(139, 115, 85, 0.4);
+/* 雪花始终保持白色，提供更好的视觉效果 */
+.snowflake {
+    color: #ffffff !important; /* 强制白色，不受主题影响 */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8),
+                 0 0 15px rgba(255, 255, 255, 0.5) !important;
 }
 
 /* 修改雪花开关在日间主题下的样式 */

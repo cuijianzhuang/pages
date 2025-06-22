@@ -35,7 +35,11 @@ const CONFIG = {
     // 必应壁纸API
     BING_WALLPAPER: {
         ENABLED: true,
-        ENDPOINT: 'https://bing.img.run/rand.php',
+        ENDPOINT: 'https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN',
+        FALLBACK_ENDPOINTS: [
+            'https://bing.biturl.top/?resolution=1920&format=image&index=random&mkt=zh-CN',
+            'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
+        ],
         UPDATE_INTERVAL: 86400000 // 24小时
     }
 };

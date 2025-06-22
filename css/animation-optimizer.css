@@ -1,0 +1,124 @@
+/* 动画优化 - 使用CSS变量替代重复的nth-child选择器 */
+
+/* 字母动画延迟变量定义 */
+:root {
+  --letter-delay-base: 0.05s;
+  --split-delay-base: 0.1s;
+  --fade-delay-base: 0.2s;
+}
+
+/* 使用CSS自定义属性和calc()函数优化动画延迟 */
+.letter-animation span {
+  --delay-index: 0;
+  animation: letterReveal 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  animation-delay: calc(var(--letter-delay-base) * var(--delay-index) + 0.5s);
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.description span {
+  --delay-index: 0;
+  animation: splitText 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  animation-delay: calc(var(--split-delay-base) * var(--delay-index));
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* 批量设置延迟索引 - 减少CSS体积 */
+.letter-animation span:nth-child(1) { --delay-index: 1; }
+.letter-animation span:nth-child(2) { --delay-index: 2; }
+.letter-animation span:nth-child(3) { --delay-index: 3; }
+.letter-animation span:nth-child(4) { --delay-index: 4; }
+.letter-animation span:nth-child(5) { --delay-index: 5; }
+.letter-animation span:nth-child(6) { --delay-index: 6; }
+.letter-animation span:nth-child(7) { --delay-index: 7; }
+.letter-animation span:nth-child(8) { --delay-index: 8; }
+.letter-animation span:nth-child(9) { --delay-index: 9; }
+.letter-animation span:nth-child(10) { --delay-index: 10; }
+
+/* 使用CSS循环生成更多延迟（如果浏览器支持） */
+@supports (--css: variables) {
+  .letter-animation span:nth-child(n+11):nth-child(-n+50) {
+    --delay-index: calc(var(--n) + 10);
+  }
+}
+
+/* 优化的淡入动画类 */
+.fade-in-optimized {
+  --fade-delay: 0;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease-out forwards;
+  animation-delay: calc(var(--fade-delay-base) * var(--fade-delay));
+}
+
+.fade-in-optimized.delay-1 { --fade-delay: 1; }
+.fade-in-optimized.delay-2 { --fade-delay: 2; }
+.fade-in-optimized.delay-3 { --fade-delay: 3; }
+.fade-in-optimized.delay-4 { --fade-delay: 4; }
+.fade-in-optimized.delay-5 { --fade-delay: 5; }
+.fade-in-optimized.delay-6 { --fade-delay: 6; }
+.fade-in-optimized.delay-7 { --fade-delay: 7; }
+
+/* 动画性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  .letter-animation span,
+  .description span,
+  .fade-in-optimized {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 使用硬件加速优化性能 */
+.letter-animation,
+.description,
+.fade-in-optimized {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 动画完成后清理变换属性 */
+@keyframes letterReveal {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes splitText {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式动画调整 */
+@media (max-width: 768px) {
+  :root {
+    --letter-delay-base: 0.03s;
+    --split-delay-base: 0.08s;
+    --fade-delay-base: 0.15s;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .letter-animation span,
+  .description span {
+    text-shadow: none;
+  }
+} 

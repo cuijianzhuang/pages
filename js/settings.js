@@ -211,6 +211,9 @@ class Settings {
 
         // 绑定各种开关的事件处理程序
         this.bindToggleEvents();
+        
+        // 初始化主题切换功能
+        this.initThemeToggle();
     }
 
     bindToggleEvents() {
@@ -260,10 +263,14 @@ class Settings {
             this.bingWallpaperToggle.addEventListener('change', (e) => {
                 CONFIG.BING_WALLPAPER.ENABLED = e.target.checked;
                 this.setCookie('bingWallpaper', e.target.checked);
-                // 立即应用壁纸设置
-                if (typeof getBingWallpaper === 'function') {
+                
+                // 使用新的壁纸管理器
+                if (window.wallpaperManager) {
+                    window.wallpaperManager.load();
+                } else if (typeof getBingWallpaper === 'function') {
                     getBingWallpaper();
                 }
+                
                 console.log('必应壁纸已' + (e.target.checked ? '启用' : '禁用'));
             });
         }
@@ -306,6 +313,122 @@ class Settings {
         }
         if (widgetLeft) {
             widgetLeft.style.display = (typeof sakanaConfig !== 'undefined' && sakanaConfig.enabled) ? 'block' : 'none';
+        }
+    }
+
+    // 主题切换功能
+    initThemeToggle() {
+        const themeToggle = document.querySelector('.theme-toggle');
+        if (!themeToggle) {
+            console.warn('未找到主题切换按钮');
+            return;
+        }
+
+        const themeIcon = themeToggle.querySelector('i');
+        if (!themeIcon) {
+            console.warn('未找到主题切换图标');
+            return;
+        }
+
+        // 设置初始图标状态
+        this.updateThemeIcon();
+
+        // 清除可能的旧事件监听器
+        const newThemeToggle = themeToggle.cloneNode(true);
+        themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+        
+        // 重新获取DOM引用
+        const updatedThemeToggle = document.querySelector('.theme-toggle');
+        const updatedThemeIcon = updatedThemeToggle.querySelector('i');
+
+        // 添加点击事件
+        updatedThemeToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log('主题切换按钮被点击');
+
+            // 添加旋转动画
+            this.addRotationAnimation();
+            updatedThemeToggle.classList.add('rotating');
+
+            // 切换主题
+            const currentTheme = document.body.classList.contains('light-theme');
+            const newTheme = currentTheme ? 'dark-theme' : 'light-theme';
+            
+            this.setTheme(newTheme);
+
+            // 动画结束后移除类
+            setTimeout(() => {
+                updatedThemeToggle.classList.remove('rotating');
+            }, 600);
+        });
+
+        console.log('主题切换功能初始化完成');
+    }
+
+    setTheme(theme) {
+        const body = document.body;
+        const aplayer = document.querySelector('.aplayer');
+
+        // 清除现有主题类并添加新主题类
+        body.classList.remove('light-theme', 'dark-theme');
+        body.classList.add(theme);
+
+        // 应用到音乐播放器
+        if (aplayer) {
+            aplayer.classList.remove('light-theme', 'dark-theme');
+            aplayer.classList.add(theme);
+        }
+
+        // 保存主题设置
+        this.setCookie('theme', theme);
+
+        // 更新主题图标
+        this.updateThemeIcon();
+
+        // 更新壁纸遮罩颜色
+        this.updateWallpaperOverlay(theme);
+
+        console.log(`主题已切换为: ${theme}`);
+    }
+
+    updateThemeIcon() {
+        const themeIcon = document.querySelector('.theme-toggle i');
+        if (!themeIcon) return;
+
+        const isLight = document.body.classList.contains('light-theme');
+        themeIcon.classList.remove('fa-sun-o', 'fa-moon-o');
+        themeIcon.classList.add(isLight ? 'fa-moon-o' : 'fa-sun-o');
+    }
+
+    updateWallpaperOverlay(theme) {
+        // 使用新的壁纸管理器
+        if (window.wallpaperManager) {
+            window.wallpaperManager.updateOverlay();
+        } else {
+            // 降级处理
+            const overlay = document.querySelector('.bg-wallpaper-overlay');
+            if (overlay) {
+                const overlayColor = theme === 'light-theme' ? 
+                    'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.5)';
+                overlay.style.backgroundColor = overlayColor;
+            }
+        }
+    }
+
+    addRotationAnimation() {
+        if (!document.getElementById('theme-rotation-style')) {
+            const style = document.createElement('style');
+            style.id = 'theme-rotation-style';
+            style.textContent = `
+                .theme-toggle.rotating {
+                    animation: rotate360 0.6s ease;
+                }
+                @keyframes rotate360 {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
         }
     }
 }

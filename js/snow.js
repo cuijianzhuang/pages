@@ -1,10 +1,7 @@
 class SnowEffect {
     constructor() {
-        // 初始化颜色数组
-        this.colors = {
-            dark: ['#ffffff', '#f0f0f0', '#e0e0e0'],
-            light: ['#8b7355', '#a08b6c', '#b39c7d']
-        };
+        // 雪花颜色始终保持白色系，提供最佳视觉效果
+        this.colors = ['#ffffff', '#f8f8ff', '#f0f8ff'];
         
         // 检查是否是冬季
         const isWinterSeason = this.isWinter();
@@ -110,10 +107,8 @@ class SnowEffect {
         const snowflake = document.createElement('i');
         snowflake.className = `fa ${this.icons[Math.floor(Math.random() * this.icons.length)]} snowflake`;
         
-        // 根据主题选择颜色
-        const isLightTheme = document.body.classList.contains('light-theme');
-        const colorArray = isLightTheme ? this.colors.light : this.colors.dark;
-        const color = colorArray[Math.floor(Math.random() * colorArray.length)];
+        // 随机选择白色系颜色
+        const color = this.colors[Math.floor(Math.random() * this.colors.length)];
         
         // 随机属性
         const size = Math.random() * 15 + 8;
@@ -129,10 +124,8 @@ class SnowEffect {
             color: color,
             animationDuration: `${duration}s`,
             animationDelay: `${delay}s`,
-            // 添加阴影效果
-            textShadow: isLightTheme 
-                ? `0 0 8px rgba(139, 115, 85, 0.6), 0 0 15px rgba(139, 115, 85, 0.4)`
-                : `0 0 5px rgba(255, 255, 255, 0.5)`
+            // 统一的白色发光效果，不受主题影响
+            textShadow: `0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.5)`
         });
 
         this.container.appendChild(snowflake);
