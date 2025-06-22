@@ -84,6 +84,11 @@ class Settings {
             this.mouseTrailToggle.checked = mouseTrailEnabled;
         }
         CONFIG.EFFECTS.MOUSE_STARS.ENABLED = mouseTrailEnabled;
+        
+        // 首次加载时如果没有cookie，设置cookie为false
+        // if (this.getCookie('mouseTrail') === null) {
+        //     this.setCookie('mouseTrail', 'false');
+        // }
 
         // Particles background
         const particlesEnabled = this.getCookie('particles') !== null

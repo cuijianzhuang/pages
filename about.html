@@ -395,20 +395,29 @@
           if (!window.starEffect) {
             console.log('初始化鼠标轨迹效果（延迟加载）');
             window.starEffect = new StarEffect();
-          } else if (!window.starEffect.isEnabled) {
+            // 确保默认状态正确
+            if (!CONFIG.EFFECTS.MOUSE_STARS.ENABLED) {
+              window.starEffect.disable();
+            }
+          } else {
             // 读取cookie判断是否应该启用
             const mouseTrailCookie = document.cookie.split(';')
               .find(c => c.trim().startsWith('mouseTrail='));
-            const shouldEnable = !mouseTrailCookie || mouseTrailCookie.split('=')[1] === 'true';
+            const shouldEnable = mouseTrailCookie ? mouseTrailCookie.split('=')[1] === 'true' : false;
             
-            if (shouldEnable) {
+            // 根据设置启用或禁用
+            if (shouldEnable && !window.starEffect.isEnabled) {
               console.log('启用鼠标轨迹效果');
               window.starEffect.enable();
-              // 更新开关状态
-              const toggle = document.getElementById('mouse-trail-toggle');
-              if (toggle) {
-                toggle.checked = true;
-              }
+            } else if (!shouldEnable && window.starEffect.isEnabled) {
+              console.log('禁用鼠标轨迹效果');
+              window.starEffect.disable();
+            }
+            
+            // 更新开关状态
+            const toggle = document.getElementById('mouse-trail-toggle');
+            if (toggle) {
+              toggle.checked = shouldEnable;
             }
           }
         }, 1000); // 延迟1秒确保其他脚本已加载
@@ -455,7 +464,7 @@
             <div class="setting-item">
                 <span>鼠标轨迹</span>
                 <label class="switch">
-                    <input type="checkbox" id="mouse-trail-toggle" checked>
+                    <input type="checkbox" id="mouse-trail-toggle">
                     <span class="slider round"></span>
                 </label>
             </div>
