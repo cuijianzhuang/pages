@@ -7,6 +7,141 @@ class ApiManager {
     this.retryDelay = 1000; // 1秒
     this.cache = new Map();
     this.cacheExpiry = new Map();
+    this.fastMode = false; // 快速模式标志
+  }
+
+  /**
+   * 设置快速模式
+   * @param {boolean} enabled - 是否启用快速模式
+   */
+  setFastMode(enabled) {
+    this.fastMode = enabled;
+    if (enabled) {
+      this.retryCount = CONFIG.BING_WALLPAPER.PERFORMANCE?.MAX_RETRIES || 2;
+      this.retryDelay = CONFIG.BING_WALLPAPER.PERFORMANCE?.RETRY_DELAY || 500;
+      console.log('⚡ API管理器已切换到快速模式');
+    } else {
+      this.retryCount = 3;
+      this.retryDelay = 1000;
+      console.log('🔄 API管理器已切换到标准模式');
+    }
+  }
+
+  /**
+   * 并发请求多个API端点（竞速模式）
+   * @param {Array} urls - API端点数组
+   * @param {Object} options - 请求选项
+   * @returns {Promise} 最快响应的结果
+   */
+  async raceRequests(urls, options = {}) {
+    console.log('🏁 开始并发竞速请求，端点数量:', urls.length);
+    
+    const promises = urls.map(async (url, index) => {
+      try {
+        console.log(`🚀 启动竞速请求 ${index + 1}: ${url}`);
+        const result = await this.requestImageFast(url, options);
+        console.log(`✅ 竞速请求 ${index + 1} 获胜!`);
+        return { url, result, index };
+      } catch (error) {
+        console.warn(`❌ 竞速请求 ${index + 1} 失败:`, error.message);
+        throw { url, error, index };
+      }
+    });
+
+    try {
+      // 使用Promise.any获取最快的成功响应
+      const winner = await Promise.any(promises);
+      console.log(`🏆 竞速获胜者: ${winner.url}`);
+      return winner.result;
+    } catch (aggregateError) {
+      console.error('💥 所有竞速请求都失败了');
+      throw new Error('所有并发请求都失败了');
+    }
+  }
+
+  /**
+   * 快速图片请求方法（减少超时和重试）
+   * @param {string} url - 图片URL
+   * @param {Object} options - 请求选项
+   * @returns {Promise<string>} 图片URL或Blob URL
+   */
+  async requestImageFast(url, options = {}) {
+    const timeout = this.fastMode ? 
+      (CONFIG.BING_WALLPAPER.PERFORMANCE?.FAST_TIMEOUT || 8000) : 
+      15000;
+    
+    console.log(`⚡ 快速图片请求: ${url} (超时: ${timeout}ms)`);
+    
+    // 创建AbortController来处理超时
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'default', // 允许缓存以提高速度
+        credentials: 'omit',
+        signal: controller.signal,
+        headers: {
+          'Accept': 'image/*,*/*',
+          'Cache-Control': 'public, max-age=3600', // 1小时缓存
+          ...options.headers
+        },
+        ...options
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const contentType = response.headers.get('content-type');
+      let imageUrl;
+
+      // 判断响应类型并处理
+      if (contentType && contentType.startsWith('image/')) {
+        // 直接返回图片数据
+        const blob = await response.blob();
+        if (blob.size === 0) {
+          throw new Error('接收到空的图片数据');
+        }
+        
+        imageUrl = URL.createObjectURL(blob);
+        console.log(`💾 快速Blob创建: ${blob.size} bytes`);
+
+        // 定时释放Blob URL
+        setTimeout(() => URL.revokeObjectURL(imageUrl), 3600000);
+
+      } else if (contentType && contentType.includes('application/json')) {
+        // JSON响应格式
+        const data = await response.json();
+        if (data.images && data.images[0]) {
+          imageUrl = 'https://www.bing.com' + data.images[0].url;
+        } else if (data.url) {
+          imageUrl = data.url;
+        } else {
+          throw new Error('无效的JSON响应格式');
+        }
+      } else {
+        // 重定向URL
+        imageUrl = response.url;
+      }
+
+      if (!imageUrl) {
+        throw new Error('无法获取有效的图片URL');
+      }
+
+      return imageUrl;
+
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        throw new Error(`请求超时 (${timeout}ms)`);
+      }
+      throw error;
+    }
   }
 
   /**
@@ -57,6 +192,122 @@ class ApiManager {
     }
 
     throw new Error(`API请求最终失败: ${lastError.message}`);
+  }
+
+  /**
+   * 专门用于图片请求的方法
+   * @param {string} url - 图片URL
+   * @param {Object} options - 请求选项
+   * @param {number} cacheTime - 缓存时间（毫秒），0表示不缓存
+   * @returns {Promise<string>} 图片URL或Blob URL
+   */
+  async requestImage(url, options = {}, cacheTime = 0) {
+    // 检查缓存
+    if (cacheTime > 0 && this.isValidCache(url)) {
+      console.log('使用缓存的图片数据:', url);
+      return this.cache.get(url);
+    }
+
+    let lastError;
+    for (let attempt = 1; attempt <= this.retryCount; attempt++) {
+      try {
+        console.log(`图片API请求 (尝试 ${attempt}/${this.retryCount}):`, url);
+        
+        // 创建一个AbortController来处理超时
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'omit',
+          signal: controller.signal,
+          headers: {
+            'Accept': 'image/*,*/*',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+          },
+          ...options
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const contentType = response.headers.get('content-type');
+        console.log('🔍 响应内容类型:', contentType);
+
+        let imageUrl;
+
+        // 判断响应类型并处理
+        if (contentType && contentType.startsWith('image/')) {
+          // 直接返回图片数据的API（如 bing.img.run）
+          console.log('📸 检测到直接图片响应，创建Blob URL');
+          const blob = await response.blob();
+          console.log(`💾 Blob创建成功: ${blob.size} bytes, 类型: ${blob.type}`);
+          
+          if (blob.size === 0) {
+            throw new Error('接收到空的图片数据');
+          }
+          
+          imageUrl = URL.createObjectURL(blob);
+          console.log('🔗 Blob URL创建:', imageUrl.substring(0, 50) + '...');
+
+          // 定时释放Blob URL（1小时后）
+          setTimeout(() => {
+            URL.revokeObjectURL(imageUrl);
+            console.log('🗑️ Blob URL已自动释放');
+          }, 3600000);
+
+        } else if (contentType && contentType.includes('application/json')) {
+          // JSON响应格式（如官方API）
+          const data = await response.json();
+          if (data.images && data.images[0]) {
+            imageUrl = 'https://www.bing.com' + data.images[0].url;
+          } else if (data.url) {
+            imageUrl = data.url;
+          } else {
+            throw new Error('无效的JSON响应格式');
+          }
+        } else if (contentType && contentType.includes('text/html')) {
+          // 可能是错误页面或重定向页面
+          throw new Error('服务器返回HTML页面，可能是错误或重定向');
+        } else {
+          // 重定向到图片URL（如biturl.top）
+          console.log('🔄 检测到重定向或其他响应类型，使用response.url');
+          imageUrl = response.url;
+        }
+
+        if (!imageUrl) {
+          throw new Error('无法获取有效的图片URL');
+        }
+        
+        // 缓存成功的响应
+        if (cacheTime > 0) {
+          this.setCache(url, imageUrl, cacheTime);
+        }
+
+        console.log('✅ 图片URL获取成功:', imageUrl.substring(0, 100) + '...');
+        return imageUrl;
+
+      } catch (error) {
+        lastError = error;
+        console.warn(`图片API请求失败 (尝试 ${attempt}/${this.retryCount}):`, error.message);
+        
+        // 如果是CORS错误，尝试不同的策略
+        if (error.message.includes('cors') || error.message.includes('CORS')) {
+          console.warn('🌐 检测到CORS问题，将在下次尝试中使用不同策略');
+        }
+        
+        if (attempt < this.retryCount) {
+          await this.delay(this.retryDelay * attempt); // 递增延迟
+        }
+      }
+    }
+
+    throw new Error(`图片API请求最终失败: ${lastError.message}`);
   }
 
   /**

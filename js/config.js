@@ -35,12 +35,27 @@ const CONFIG = {
     // 必应壁纸API
     BING_WALLPAPER: {
         ENABLED: true,
-        ENDPOINT: 'https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN',
+        ENDPOINT: 'https://bing.img.run/rand.php',
         FALLBACK_ENDPOINTS: [
-            'https://bing.biturl.top/?resolution=1920&format=image&index=random&mkt=zh-CN',
-            'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
+            // 'https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN',
+            // 'https://bing.biturl.top/?resolution=1920&format=image&index=random&mkt=zh-CN',
+            // 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
         ],
-        UPDATE_INTERVAL: 86400000 // 24小时
+        UPDATE_INTERVAL: 86400000, // 24小时
+        ENDPOINT_TYPES: {
+            'bing.img.run': 'direct_image',
+            'bing.biturl.top': 'redirect',
+            'bing.com': 'json'
+        },
+        // 性能优化配置
+        PERFORMANCE: {
+            FAST_TIMEOUT: 8000,        // 快速超时（8秒）
+            MAX_RETRIES: 2,            // 减少重试次数
+            RETRY_DELAY: 500,          // 减少重试延迟（0.5秒）
+            PARALLEL_REQUESTS: true,   // 启用并发请求
+            PRELOAD_ENABLED: true,     // 启用预加载
+            CACHE_AGGRESSIVE: true     // 积极缓存策略
+        }
     }
 };
 
