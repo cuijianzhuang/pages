@@ -6,7 +6,7 @@
   const THEME_VARS = {
     light: {
       '--bg-color': '#f5f5f5',
-      '--text-color': '#8b7355',
+      '--text-color': '#ffffff',
       '--link-bg': '#e8e8e8',
       '--link-hover-bg': '#8b7355',
       '--link-hover-text': '#ffffff',
@@ -26,26 +26,9 @@
     }
   };
 
-  /**
-   * 获取Cookie值
-   * @param {string} name - Cookie名称
-   * @returns {string|null} Cookie值
-   */
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    return parts.length === 2 ? parts.pop().split(';').shift() : null;
-  }
-
-  /**
-   * 设置Cookie
-   * @param {string} name - Cookie名称
-   * @param {string} value - Cookie值
-   */
-  function setCookie(name, value) {
-    const expiryDate = new Date();
-    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-    document.cookie = `${name}=${value};expires=${expiryDate.toUTCString()};path=/`;
+  // 使用统一的主题管理器（如果可用）
+  function useThemeStorage() {
+    return window.ThemeStorage || null;
   }
 
   /**
@@ -80,24 +63,44 @@
       // 设置壁纸加载标记
       document.documentElement.setAttribute('data-loading-wallpaper', 'true');
       
-      // 获取保存的主题或使用默认主题
-      const savedTheme = getCookie('theme');
-      const themeType = savedTheme ? savedTheme.replace('-theme', '') : getDefaultTheme();
-      const themeClass = `${themeType}-theme`;
+      console.log('===== 主题加载器 =====');
+      
+      // 尝试使用统一的主题管理器
+      const themeStorage = useThemeStorage();
+      let themeClass;
+      
+      if (themeStorage) {
+        console.log('✅ 使用统一主题管理器');
+        themeClass = themeStorage.initTheme();
+      } else {
+        console.log('⚠️ 降级到基本主题逻辑');
+        // 降级处理
+        const savedTheme = localStorage.getItem('cjz-theme') || localStorage.getItem('theme');
+        if (savedTheme) {
+          themeClass = savedTheme;
+          console.log('🎨 使用已保存的主题:', themeClass);
+        } else {
+          const themeType = getDefaultTheme();
+          themeClass = `${themeType}-theme`;
+          localStorage.setItem('cjz-theme', themeClass);
+          console.log('🎨 首次访问，根据时间选择主题:', themeClass);
+        }
+      }
       
       // 清除现有主题类并应用新主题
       document.body.classList.remove('light-theme', 'dark-theme');
       document.body.classList.add(themeClass);
       
       // 应用主题变量
+      const themeType = themeClass.replace('-theme', '');
       applyThemeVars(themeType);
       
-      // 保存主题设置
-      if (!savedTheme) {
-        setCookie('theme', themeClass);
-      }
+      // 防止其他脚本覆盖主题设置
+      window.themeLoaderCompleted = true;
+      window.currentTheme = themeClass;
       
-      console.log('主题初始化完成:', themeClass);
+      console.log('🎨 主题初始化完成:', themeClass);
+      console.log('======================');
       
     } catch (error) {
       console.error('主题初始化失败:', error);

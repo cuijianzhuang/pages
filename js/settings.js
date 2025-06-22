@@ -52,6 +52,24 @@ class Settings {
         console.log('设置面板初始化完成');
     }
 
+    getSessionStorage(name) {
+        try {
+            return sessionStorage.getItem(name);
+        } catch (error) {
+            console.warn('无法访问sessionStorage:', error);
+            return null;
+        }
+    }
+
+    setSessionStorage(name, value) {
+        try {
+            sessionStorage.setItem(name, value);
+        } catch (error) {
+            console.warn('无法设置sessionStorage:', error);
+        }
+    }
+
+    // 保持getCookie和setCookie方法用于非主题相关的设置
     getCookie(name) {
         const cookies = document.cookie.split(';');
         const cookie = cookies.find(c => c.trim().startsWith(name + '='));
@@ -323,6 +341,11 @@ class Settings {
 
     // 主题切换功能
     initThemeToggle() {
+        // 检查主题加载器是否已经完成初始化，如果是则不重新设置主题
+        if (window.themeLoaderCompleted) {
+            console.log('⚙️ Settings: 主题加载器已完成，跳过重复初始化');
+        }
+        
         const themeToggle = document.querySelector('.theme-toggle');
         if (!themeToggle) {
             console.warn('未找到主题切换按钮');
@@ -371,21 +394,39 @@ class Settings {
     }
 
     setTheme(theme) {
-        const body = document.body;
-        const aplayer = document.querySelector('.aplayer');
+        console.log('⚙️ Settings: 开始切换主题为:', theme);
+        
+        // 使用统一的主题管理器保存和应用
+        if (window.ThemeStorage) {
+            // 保存主题
+            window.ThemeStorage.saveTheme(theme);
+            // 应用主题
+            window.ThemeStorage.applyTheme(theme);
+        } else {
+            // 降级处理
+            console.log('⚠️ 主题管理器不可用，使用降级模式');
+            const body = document.body;
+            const aplayer = document.querySelector('.aplayer');
 
-        // 清除现有主题类并添加新主题类
-        body.classList.remove('light-theme', 'dark-theme');
-        body.classList.add(theme);
+            // 清除现有主题类并添加新主题类
+            body.classList.remove('light-theme', 'dark-theme');
+            body.classList.add(theme);
 
-        // 应用到音乐播放器
-        if (aplayer) {
-            aplayer.classList.remove('light-theme', 'dark-theme');
-            aplayer.classList.add(theme);
+            // 应用到音乐播放器
+            if (aplayer) {
+                aplayer.classList.remove('light-theme', 'dark-theme');
+                aplayer.classList.add(theme);
+            }
+            
+            try {
+                localStorage.setItem('cjz-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.setCookie('theme', theme);
+                console.log('⚙️ Settings: 主题已保存(降级模式):', theme);
+            } catch (error) {
+                console.warn('保存主题失败:', error);
+            }
         }
-
-        // 保存主题设置
-        this.setCookie('theme', theme);
 
         // 更新主题图标
         this.updateThemeIcon();
@@ -393,7 +434,7 @@ class Settings {
         // 更新壁纸遮罩颜色
         this.updateWallpaperOverlay(theme);
 
-        console.log(`主题已切换为: ${theme}`);
+        console.log(`✅ Settings: 主题已切换为: ${theme}`);
     }
 
     updateThemeIcon() {

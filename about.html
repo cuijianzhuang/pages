@@ -4,13 +4,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>About Me - CJZ's Home</title>
+    <!-- 加载主题存储管理器 -->
+    <script src="./js/theme-storage.js"></script>
     <!-- 添加内联脚本，提前标记壁纸状态并设置主题 -->
     <script>
       (function() {
         // 初始化必要的CSS变量
         const lightThemeVars = {
           '--bg-color': '#f5f5f5',
-          '--text-color': '#8b7355',
+          '--text-color': '#ffffff',
           '--link-bg': '#e8e8e8',
           '--link-hover-bg': '#8b7355',
           '--link-hover-text': '#ffffff',
@@ -33,22 +35,46 @@
         // 壁纸标记
         document.documentElement.setAttribute('data-loading-wallpaper', 'true');
         
-        // 获取主题设置并立即应用
-        function getCookie(name) {
-          const value = `; ${document.cookie}`;
-          const parts = value.split(`; ${name}=`);
-          if (parts.length === 2) return parts.pop().split(';').shift();
-          return null;
+        // 主题设置逻辑
+        
+        // 等待主题存储管理器加载
+        if (window.ThemeStorage) {
+          console.log('📄 About页面: 使用统一主题管理器');
+          const theme = window.ThemeStorage.initTheme();
+          
+          // 清除可能存在的其他主题类
+          document.body.classList.remove('light-theme', 'dark-theme');
+          // 应用主题类
+          document.body.classList.add(theme);
+          
+          // 应用CSS变量
+          const themeType = theme.replace('-theme', '');
+          const themeVars = themeType === 'light' ? lightThemeVars : darkThemeVars;
+          for (const [prop, value] of Object.entries(themeVars)) {
+            document.documentElement.style.setProperty(prop, value);
+          }
+          
+          console.log('📄 About页面: 主题已设置为:', theme);
+          return;
         }
         
-        // 获取保存的主题
-        const savedTheme = getCookie('theme');
-        const theme = savedTheme || (function() {
-          // 如果没有保存的主题，默认使用时间判断
+        // 降级处理
+        console.log('📄 About页面: 使用降级主题逻辑');
+        const savedTheme = localStorage.getItem('cjz-theme') || localStorage.getItem('theme');
+        let theme;
+        
+        if (!savedTheme || savedTheme === '') {
+          // 如果没有保存的主题，根据时间设置默认主题并保存
           const hour = new Date().getHours();
           const isDay = hour >= 6 && hour < 18;
-          return isDay ? 'light-theme' : 'dark-theme';
-        })();
+          theme = isDay ? 'light-theme' : 'dark-theme';
+          localStorage.setItem('cjz-theme', theme);
+          console.log('📄 About页面: 首次访问，根据时间选择主题:', theme);
+        } else {
+          // 如果有保存的主题，直接使用
+          theme = savedTheme;
+          console.log('📄 About页面: 使用已保存的主题:', theme);
+        }
         
         // 清除可能存在的其他主题类
         document.body.classList.remove('light-theme', 'dark-theme');
@@ -59,11 +85,6 @@
         const themeVars = theme === 'light-theme' ? lightThemeVars : darkThemeVars;
         for (const [prop, value] of Object.entries(themeVars)) {
           document.documentElement.style.setProperty(prop, value);
-        }
-        
-        // 如果没有保存过主题，保存当前主题
-        if (!savedTheme) {
-          document.cookie = `theme=${theme};path=/`;
         }
         
         console.log('初始主题已设置为:', theme);
@@ -178,32 +199,7 @@
     <script src="./js/snow.js" defer></script>
     <script src="./js/settings.js" defer></script>
     <script>
-        // 从cookie中读取主题设置并同步
-        function syncTheme() {
-            try {
-                const cookies = document.cookie.split(';');
-                const theme = cookies.find(cookie => cookie.trim().startsWith('theme='));
 
-                if (theme) {
-                    const themeValue = theme.split('=')[1].trim();
-                    document.body.classList.remove('light-theme', 'dark-theme');
-                    document.body.classList.add(themeValue);
-                    console.log('从Cookie加载主题:', themeValue);
-                } else {
-                    // 默认使用当前时间判断
-                    const hour = new Date().getHours();
-                    const isDay = hour >= 6 && hour < 18;
-                    const defaultTheme = isDay ? 'light-theme' : 'dark-theme';
-                    document.body.classList.add(defaultTheme);
-                    document.cookie = `theme=${defaultTheme};path=/`;
-                    console.log('使用默认主题:', defaultTheme);
-                }
-            } catch (error) {
-                console.error('同步主题失败:', error);
-            }
-        }
-        // 页面加载时同步主题
-        window.addEventListener('load', syncTheme);
 
         // 手动切换主题
         document.addEventListener('DOMContentLoaded', function() {
@@ -290,12 +286,21 @@
                     
                     // 切换主题
                     const isLight = document.body.classList.contains('light-theme');
-                    document.body.classList.remove('light-theme', 'dark-theme');
                     const newTheme = isLight ? 'dark-theme' : 'light-theme';
-                    document.body.classList.add(newTheme);
                     
-                    // 设置cookie
-                    document.cookie = `theme=${newTheme};path=/`;
+                    console.log('📄 About页面: 切换主题为:', newTheme);
+                    
+                    // 使用统一的主题管理器
+                    if (window.ThemeStorage) {
+                        window.ThemeStorage.saveTheme(newTheme);
+                        window.ThemeStorage.applyTheme(newTheme);
+                    } else {
+                        // 降级处理
+                        document.body.classList.remove('light-theme', 'dark-theme');
+                        document.body.classList.add(newTheme);
+                        localStorage.setItem('cjz-theme', newTheme);
+                        localStorage.setItem('theme', newTheme);
+                    }
                     
                     // 直接更新图标
                     updatedThemeIcon.classList.remove('fa-sun-o', 'fa-moon-o');

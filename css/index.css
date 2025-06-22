@@ -38,7 +38,7 @@
 /* 日间主题 */
 body.light-theme {
   --bg-color: #f5f5f5;
-  --text-color: #8b7355;
+  --text-color: #ffffff;
   --link-bg: #e8e8e8;
   --link-hover-bg: #8b7355;
   --link-hover-text: #ffffff;
