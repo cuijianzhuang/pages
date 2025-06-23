@@ -1290,3 +1290,394 @@ body[data-loading-wallpaper="true"] .menu .link {
   position: relative;
   padding: 10px 20px;
 }
+
+/* 日期时间显示样式 - 精美紧凑设计 */
+.datetime-container {
+  margin: 12px 0;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.datetime-display {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.04), 
+    rgba(255, 255, 255, 0.01)
+  );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.85em;
+}
+
+/* 壁纸模式下的透明样式 */
+body[style*="background-image"] .datetime-display {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 非壁纸模式下的样式 */
+body:not([style*="background-image"]) .datetime-display {
+  background: linear-gradient(135deg, 
+    rgba(193, 168, 106, 0.06), 
+    rgba(193, 168, 106, 0.02)
+  );
+  border: 1px solid rgba(193, 168, 106, 0.12);
+}
+
+.datetime-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.04), 
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.datetime-display:hover::before {
+  left: 100%;
+}
+
+.datetime-display:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* 时间样式 - 精简设计 */
+.current-time {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+#current-time-text {
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--text-color);
+  letter-spacing: 0.01em;
+  opacity: 0.95;
+}
+
+/* 日期和星期样式 - 极简布局 */
+.current-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+#current-date-text {
+  font-size: 0.9em;
+  font-weight: 400;
+  color: var(--text-color);
+  opacity: 0.85;
+}
+
+.weekday {
+  font-size: 0.8em;
+  color: var(--text-color);
+  opacity: 0.75;
+  padding: 1px 6px;
+  background: rgba(193, 168, 106, 0.12);
+  border-radius: 8px;
+  font-weight: 400;
+  border: 1px solid rgba(193, 168, 106, 0.15);
+}
+
+/* 农历样式 - 最小化显示 */
+.lunar-date {
+  position: relative;
+}
+
+#lunar-date-text {
+  font-size: 0.75em;
+  color: var(--text-color);
+  opacity: 0.7;
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* 精美的分隔符 */
+.datetime-display .current-time::after,
+.datetime-display .current-date::after {
+  content: '·';
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-color);
+  opacity: 0.3;
+  font-size: 0.8em;
+}
+
+/* 日间主题适配 */
+body.light-theme .datetime-display {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.8), 
+    rgba(255, 255, 255, 0.6)
+  );
+  border: 1px solid rgba(139, 115, 85, 0.15);
+  box-shadow: 
+    0 2px 8px rgba(139, 115, 85, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+body.light-theme[style*="background-image"] .datetime-display {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+body.light-theme .weekday {
+  background: rgba(139, 115, 85, 0.12);
+  border: 1px solid rgba(139, 115, 85, 0.2);
+}
+
+/* 响应式设计 - 移动端超紧凑 */
+@media (max-width: 768px) {
+  .datetime-display {
+    gap: 6px;
+    padding: 3px 10px;
+    font-size: 0.8em;
+  }
+  
+  .datetime-display .current-time::after,
+  .datetime-display .current-date::after {
+    display: none;
+  }
+  
+  #current-time-text {
+    font-size: 0.95em;
+  }
+  
+  #current-date-text {
+    font-size: 0.85em;
+  }
+  
+  .weekday {
+    font-size: 0.75em;
+    padding: 1px 4px;
+  }
+  
+  #lunar-date-text {
+    font-size: 0.7em;
+  }
+}
+
+@media (max-width: 480px) {
+  .datetime-container {
+    margin: 8px 0;
+  }
+  
+  .datetime-display {
+    flex-direction: column;
+    gap: 3px;
+    padding: 4px 8px;
+    font-size: 0.75em;
+  }
+  
+  #current-time-text {
+    font-size: 0.9em;
+  }
+  
+  #current-date-text {
+    font-size: 0.8em;
+  }
+  
+  .current-date {
+    gap: 4px;
+  }
+  
+  .weekday {
+    font-size: 0.7em;
+  }
+  
+  #lunar-date-text {
+    font-size: 0.65em;
+  }
+}
+
+/* 移除过多的装饰效果 */
+.datetime-display::after {
+  display: none;
+}
+
+/* 壁纸模式下的精美文字阴影 */
+body[style*="background-image"] .datetime-display {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+body[style*="background-image"] #current-time-text {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+body[style*="background-image"] #current-date-text,
+body[style*="background-image"] #lunar-date-text {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* 移除时间脉冲动画 */
+#current-time-text {
+  animation: none;
+}
+
+/* 强制覆盖 - 紧凑美观的日期时间样式 */
+.datetime-container {
+  margin: 8px 0 !important;
+}
+
+.datetime-display {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 3px 10px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  font-size: 0.8em !important;
+}
+
+body[style*="background-image"] .datetime-display {
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+body:not([style*="background-image"]) .datetime-display {
+  background: linear-gradient(135deg, rgba(193, 168, 106, 0.04), rgba(193, 168, 106, 0.01)) !important;
+  border: 1px solid rgba(193, 168, 106, 0.08) !important;
+}
+
+#current-time-text {
+  font-size: 0.95em !important;
+  font-weight: 500 !important;
+  opacity: 0.9 !important;
+  letter-spacing: 0.02em !important;
+}
+
+#current-date-text {
+  font-size: 0.85em !important;
+  font-weight: 400 !important;
+  opacity: 0.8 !important;
+}
+
+.weekday {
+  font-size: 0.75em !important;
+  opacity: 0.7 !important;
+  padding: 1px 4px !important;
+  background: rgba(193, 168, 106, 0.1) !important;
+  border-radius: 6px !important;
+  font-weight: 400 !important;
+  border: none !important;
+}
+
+#lunar-date-text {
+  font-size: 0.7em !important;
+  font-weight: 300 !important;
+  font-style: italic !important;
+  opacity: 0.65 !important;
+}
+
+.datetime-display .current-time::after,
+.datetime-display .current-date::after {
+  content: '•' !important;
+  position: static !important;
+  margin: 0 2px !important;
+  opacity: 0.3 !important;
+  font-size: 0.6em !important;
+  width: auto !important;
+  height: auto !important;
+  background: none !important;
+  transform: none !important;
+  right: auto !important;
+  top: auto !important;
+}
+
+body.light-theme .datetime-display {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(139, 115, 85, 0.1) !important;
+}
+
+body.light-theme[style*="background-image"] .datetime-display {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+body.light-theme .weekday {
+  background: rgba(139, 115, 85, 0.1) !important;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .datetime-display {
+    gap: 4px !important;
+    padding: 2px 8px !important;
+    font-size: 0.75em !important;
+  }
+  
+  .datetime-display .current-time::after,
+  .datetime-display .current-date::after {
+    display: none !important;
+  }
+  
+  #current-time-text {
+    font-size: 0.9em !important;
+  }
+  
+  #current-date-text {
+    font-size: 0.8em !important;
+  }
+  
+  .weekday {
+    font-size: 0.7em !important;
+    padding: 0 3px !important;
+  }
+  
+  #lunar-date-text {
+    font-size: 0.65em !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .datetime-display {
+    flex-direction: column !important;
+    gap: 2px !important;
+    padding: 3px 6px !important;
+    font-size: 0.7em !important;
+  }
+  
+  .current-date {
+    gap: 3px !important;
+  }
+}
+}

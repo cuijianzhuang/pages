@@ -30,6 +30,7 @@
       }
     </style>
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/datetime-compact.css">
     <link rel="stylesheet" href="./css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/player.css">
     <link rel="stylesheet" href="./css/stars.css">
@@ -54,18 +55,22 @@
         <span id="hitokoto-text">获取中...</span>
         <div id="hitokoto-from"></div>
       </div>
-      <!--
-      <div class="datetime-weather">
-        <div id="datetime">
-          <span id="date"></span>
-          <span id="time"></span>
-        </div>
-        <div id="weather">
-          <span id="weather-info">获取天气中...</span>
+      
+      <div class="datetime-container fade-in-text delay-4">
+        <div class="datetime-display">
+          <div class="current-time">
+            <span id="current-time-text">00:00:00</span>
+          </div>
+          <div class="current-date">
+            <span id="current-date-text">2024年1月1日</span>
+            <span class="weekday" id="current-weekday">星期一</span>
+          </div>
+          <div class="lunar-date">
+            <span id="lunar-date-text">甲辰龙年 正月初一</span>
+          </div>
         </div>
       </div>
-      -->
-      <div class="menu fade-in-text delay-4">
+      <div class="menu fade-in-text delay-5">
         <a href="https://blog.cuijianzhuang.com/" title="Blog" class="link" target="_blank">Blog</a>
 <!--        <a href="https://pan.cuijianzhuang.com/" title="网盘" class="link" target="_blank">Alist Drive</a>-->
         <a href="https://panel.cuijianzhuang.com/" title="1panel" class="link" target="_blank">1Panel</a>
@@ -74,7 +79,7 @@
         <a href="https://server.cuijianzhuang.com/" title="UptimeFlare" class="link" target="_blank">服务</a>
 
       </div>
-      <div class="menu-icons fade-in-text delay-5">
+      <div class="menu-icons fade-in-text delay-6">
         <div class="settings-toggle">
           <i aria-hidden="true" class="fa fa-2x fa-cog"></i>
         </div>
@@ -89,13 +94,13 @@
         </a>
       </div>
       
-      <div class="quote-section fade-in-text delay-6">
+      <div class="quote-section fade-in-text delay-7">
         <span class="heart-icon">❤️</span> 
         <span class="quote-text">有趣的人终将相遇</span> 
         <span class="heart-icon">❤️</span>
       </div>
       
-      <p class="footer fade-in-text delay-7">
+      <p class="footer fade-in-text delay-8">
         Copyright © 2024-<span id="currentYear"></span>
         <span class="footer-divider">·</span>
         <a href="about.html" class="about-link">About</a>
@@ -150,6 +155,7 @@
     <!--本地js引入-->
     <script src="./js/config.js"></script>
     <script src="./js/api-manager.js"></script>
+    <script src="./js/lunar-calendar.js"></script>
     <script src="./js/particles.js" defer></script>
     <script src="./js/main.js" defer></script>
     <script src="./js/stars.js" defer></script>
@@ -173,6 +179,9 @@
         // 基础效果初始化
         new SnowEffect();
         window.starEffect = new StarEffect();
+        
+        // 初始化日期时间显示
+        window.dateTimeDisplay = new DateTimeDisplay();
         
         // 其他功能由独立模块处理
         // Settings类将在其自己的文件中自动初始化

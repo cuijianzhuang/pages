@@ -1,0 +1,294 @@
+/* 日期时间显示样式 */
+
+.datetime-container {
+  margin: 20px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.datetime-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1), 
+    rgba(255, 255, 255, 0.05)
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 壁纸模式下的透明样式 */
+body[style*="background-image"] .datetime-display {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+/* 非壁纸模式下的样式 */
+body:not([style*="background-image"]) .datetime-display {
+  background: linear-gradient(135deg, 
+    rgba(193, 168, 106, 0.1), 
+    rgba(193, 168, 106, 0.05)
+  );
+  border: 1px solid rgba(193, 168, 106, 0.2);
+}
+
+.datetime-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1), 
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.datetime-display:hover::before {
+  left: 100%;
+}
+
+.datetime-display:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 时间样式 */
+.current-time {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+#current-time-text {
+  font-family: 'Courier New', 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--text-color);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.05em;
+  background: linear-gradient(45deg, 
+    var(--text-color), 
+    rgba(193, 168, 106, 0.8)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: timeGlow 3s ease-in-out infinite alternate;
+}
+
+/* 日期样式 */
+.current-date {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+#current-date-text {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.9;
+}
+
+.weekday {
+  font-size: 1.1em;
+  color: var(--text-color);
+  opacity: 0.8;
+  padding: 4px 12px;
+  background: rgba(193, 168, 106, 0.2);
+  border-radius: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(193, 168, 106, 0.3);
+}
+
+/* 农历样式 */
+.lunar-date {
+  margin-top: 5px;
+}
+
+#lunar-date-text {
+  font-size: 1.1em;
+  color: var(--text-color);
+  opacity: 0.85;
+  font-weight: 500;
+  background: linear-gradient(45deg, 
+    rgba(193, 168, 106, 0.8), 
+    rgba(193, 168, 106, 0.6)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+/* 光晕动画 */
+@keyframes timeGlow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(193, 168, 106, 0.3));
+  }
+  100% {
+    filter: drop-shadow(0 0 15px rgba(193, 168, 106, 0.6));
+  }
+}
+
+/* 淡入动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 日间主题适配 */
+body.light-theme .datetime-display {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9), 
+    rgba(255, 255, 255, 0.7)
+  );
+  border: 1px solid rgba(139, 115, 85, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(139, 115, 85, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+body.light-theme[style*="background-image"] .datetime-display {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+body.light-theme #current-time-text {
+  background: linear-gradient(45deg, 
+    rgba(139, 115, 85, 1), 
+    rgba(139, 115, 85, 0.8)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .weekday {
+  background: rgba(139, 115, 85, 0.2);
+  border: 1px solid rgba(139, 115, 85, 0.3);
+}
+
+body.light-theme #lunar-date-text {
+  background: linear-gradient(45deg, 
+    rgba(139, 115, 85, 0.9), 
+    rgba(139, 115, 85, 0.7)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .datetime-display {
+    padding: 15px;
+    gap: 8px;
+  }
+  
+  #current-time-text {
+    font-size: 1.8em;
+  }
+  
+  #current-date-text {
+    font-size: 1.1em;
+  }
+  
+  .weekday {
+    font-size: 1em;
+    padding: 3px 10px;
+  }
+  
+  #lunar-date-text {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .datetime-container {
+    margin: 15px 0;
+  }
+  
+  .datetime-display {
+    padding: 12px;
+    gap: 6px;
+  }
+  
+  #current-time-text {
+    font-size: 1.6em;
+  }
+  
+  #current-date-text {
+    font-size: 1em;
+  }
+  
+  .current-date {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .weekday {
+    font-size: 0.9em;
+    padding: 2px 8px;
+  }
+  
+  #lunar-date-text {
+    font-size: 0.9em;
+  }
+}
+
+/* 特殊效果 */
+.datetime-display {
+  position: relative;
+}
+
+.datetime-display::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(193, 168, 106, 0.5), 
+    transparent
+  );
+  animation: borderGlow 4s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+} 

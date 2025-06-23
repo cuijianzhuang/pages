@@ -1161,6 +1161,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // 立即初始化壁纸，防止卡片闪烁
   getBingWallpaper();
   
+  // 初始化日期时间显示
+  if (typeof DateTimeDisplay !== 'undefined') {
+    window.dateTimeDisplay = new DateTimeDisplay();
+  }
+  
   // 设置定时刷新壁纸
   setInterval(getBingWallpaper, CONFIG.BING_WALLPAPER.UPDATE_INTERVAL);
 });

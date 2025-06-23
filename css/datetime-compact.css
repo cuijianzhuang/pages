@@ -1,0 +1,208 @@
+/* 紧凑美观的日期时间样式 */
+
+.datetime-container {
+  margin: 8px 0;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.datetime-display {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.03), 
+    rgba(255, 255, 255, 0.01)
+  );
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 1px 6px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.8em;
+}
+
+/* 壁纸模式适配 */
+body[style*="background-image"] .datetime-display {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* 非壁纸模式 */
+body:not([style*="background-image"]) .datetime-display {
+  background: linear-gradient(135deg, 
+    rgba(193, 168, 106, 0.04), 
+    rgba(193, 168, 106, 0.01)
+  );
+  border: 1px solid rgba(193, 168, 106, 0.08);
+}
+
+.datetime-display:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* 时间 */
+.current-time {
+  display: flex;
+  align-items: center;
+}
+
+#current-time-text {
+  font-family: 'SF Mono', 'Monaco', monospace;
+  font-size: 0.95em;
+  font-weight: 500;
+  color: var(--text-color);
+  opacity: 0.9;
+  letter-spacing: 0.02em;
+}
+
+/* 日期 */
+.current-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#current-date-text {
+  font-size: 0.85em;
+  font-weight: 400;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.weekday {
+  font-size: 0.75em;
+  color: var(--text-color);
+  opacity: 0.7;
+  padding: 1px 4px;
+  background: rgba(193, 168, 106, 0.1);
+  border-radius: 6px;
+  font-weight: 400;
+}
+
+/* 农历 */
+.lunar-date {
+  opacity: 0.65;
+}
+
+#lunar-date-text {
+  font-size: 0.7em;
+  color: var(--text-color);
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* 分隔符 */
+.current-time::after,
+.current-date::after {
+  content: '•';
+  margin: 0 2px;
+  opacity: 0.3;
+  font-size: 0.6em;
+}
+
+/* 日间主题 */
+body.light-theme .datetime-display {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(139, 115, 85, 0.1);
+}
+
+body.light-theme[style*="background-image"] .datetime-display {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.light-theme .weekday {
+  background: rgba(139, 115, 85, 0.1);
+}
+
+/* 超级紧凑的移动端 */
+@media (max-width: 768px) {
+  .datetime-display {
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 0.75em;
+  }
+  
+  .current-time::after,
+  .current-date::after {
+    display: none;
+  }
+  
+  #current-time-text {
+    font-size: 0.9em;
+  }
+  
+  #current-date-text {
+    font-size: 0.8em;
+  }
+  
+  .weekday {
+    font-size: 0.7em;
+    padding: 0 3px;
+  }
+  
+  #lunar-date-text {
+    font-size: 0.65em;
+  }
+}
+
+@media (max-width: 480px) {
+  .datetime-display {
+    flex-direction: column;
+    gap: 2px;
+    padding: 3px 6px;
+    font-size: 0.7em;
+  }
+  
+  .current-date {
+    gap: 3px;
+  }
+  
+  #current-time-text {
+    font-size: 0.85em;
+  }
+  
+  #current-date-text {
+    font-size: 0.75em;
+  }
+  
+  .weekday {
+    font-size: 0.65em;
+  }
+  
+  #lunar-date-text {
+    font-size: 0.6em;
+  }
+}
+
+/* 壁纸模式文字阴影 */
+body[style*="background-image"] .datetime-display {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 移除额外动画 */
+.datetime-display::before,
+.datetime-display::after {
+  display: none;
+}
+
+#current-time-text {
+  animation: none;
+} 
