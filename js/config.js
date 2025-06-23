@@ -44,15 +44,14 @@ const CONFIG = {
         UPDATE_INTERVAL: 86400000, // 24小时
         ENDPOINT_TYPES: {
             'bing.img.run': 'direct_image',
-            'bing.biturl.top': 'redirect',
-            'bing.com': 'json'
+            'bing.biturl.top': 'direct_image',
         },
         // 性能优化配置
         PERFORMANCE: {
             FAST_TIMEOUT: 8000,        // 快速超时（8秒）
             MAX_RETRIES: 2,            // 减少重试次数
             RETRY_DELAY: 500,          // 减少重试延迟（0.5秒）
-            PARALLEL_REQUESTS: true,   // 启用并发请求
+            PARALLEL_REQUESTS: false,  // 禁用并发请求，使用顺序请求
             PRELOAD_ENABLED: true,     // 启用预加载
             CACHE_AGGRESSIVE: true     // 积极缓存策略
         }

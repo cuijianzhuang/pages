@@ -4,7 +4,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>CJZ's Home</title>
     <!-- 使用独立的主题管理系统 -->
-    <script src="./theme-debug.js"></script>
     <script src="./js/theme-storage.js"></script>
     <script src="./js/theme-loader.js"></script>
     <!-- 添加内联样式，防止加载闪烁 -->
@@ -208,5 +207,56 @@
         onload="initSakanaWidget()"
         src="https://cdn.jsdelivr.net/npm/sakana-widget@2.7.0/lib/sakana.min.js"
     ></script>
+    
+    <!-- 修复脚本 - 解决theme-debug.js和预加载undefined问题 -->
+    <script>
+      (function() {
+        console.log('🔧 执行快速修复...');
+        
+        // 修复1: 移除theme-debug.js已在HTML中处理
+        
+        // 修复2: 修复预加载壁纸的undefined问题
+        setTimeout(() => {
+          if (window.wallpaperManager) {
+            const originalPreload = window.wallpaperManager.preloadNextWallpaper;
+            
+            window.wallpaperManager.preloadNextWallpaper = async function() {
+              if (!this.preloadEnabled) return;
+              
+              console.log('🔮 开始预加载下一张壁纸（修复版本）...');
+              try {
+                // 安全获取配置
+                const endpoints = CONFIG?.BING_WALLPAPER?.FALLBACK_ENDPOINTS || [];
+                const mainEndpoint = CONFIG?.BING_WALLPAPER?.ENDPOINT;
+                
+                let preloadUrl;
+                if (endpoints.length > 0) {
+                  preloadUrl = endpoints[0] + '&t=' + (Date.now() + 1000);
+                } else if (mainEndpoint) {
+                  preloadUrl = mainEndpoint + '?t=' + (Date.now() + 1000);
+                } else {
+                  preloadUrl = 'https://bing.img.run/rand.php?t=' + (Date.now() + 1000);
+                }
+                
+                // 验证URL
+                if (!preloadUrl || preloadUrl.includes('undefined')) {
+                  console.error('❌ 预加载URL无效，跳过');
+                  return;
+                }
+                
+                await window.apiManager.requestImageFast(preloadUrl);
+                console.log('✅ 预加载完成（修复版本）');
+              } catch (error) {
+                console.log('⚠️ 预加载失败（已修复）:', error.message);
+              }
+            };
+            
+            console.log('✅ 预加载函数已修复');
+          }
+        }, 1000);
+        
+        console.log('✅ 快速修复完成');
+      })();
+    </script>
   </body>
 </html>

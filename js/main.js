@@ -25,9 +25,25 @@ class BingWallpaperManager {
     
     console.log('🔮 开始预加载下一张壁纸...');
     try {
-      // 预加载一个随机端点的图片
-      const randomEndpoint = CONFIG.BING_WALLPAPER.FALLBACK_ENDPOINTS[0] + '&t=' + (Date.now() + 1000);
-      await window.apiManager.requestImageFast(randomEndpoint);
+      // 选择预加载端点：优先使用主端点，其次使用备用端点
+      let preloadUrl;
+      
+      const mainEndpoint = CONFIG.BING_WALLPAPER.ENDPOINT;
+      const fallbackEndpoints = CONFIG.BING_WALLPAPER.FALLBACK_ENDPOINTS || [];
+      
+      if (mainEndpoint) {
+        // 使用主端点
+        preloadUrl = mainEndpoint + '?t=' + (Date.now() + 1000);
+      } else if (fallbackEndpoints.length > 0) {
+        // 使用第一个备用端点
+        preloadUrl = fallbackEndpoints[0] + '&t=' + (Date.now() + 1000);
+      } else {
+        console.warn('⚠️ 没有可用的壁纸端点进行预加载');
+        return;
+      }
+      
+      console.log('🔗 预加载URL:', preloadUrl.substring(0, 50) + '...');
+      await window.apiManager.requestImageFast(preloadUrl);
       console.log('✅ 下一张壁纸预加载完成');
     } catch (error) {
       console.log('⚠️ 预加载失败，不影响主要功能:', error.message);
@@ -871,7 +887,7 @@ class BingWallpaperManager {
     });
   }
 
-  // 获取壁纸URL（优化版本，支持并发请求）
+  // 获取壁纸URL（简化版本，只使用第一个可用的API）
   async fetchWallpaperUrl() {
     // 检查缓存
     const now = Date.now();
@@ -890,23 +906,10 @@ class BingWallpaperManager {
       `${endpoint}${endpoint.includes('?') ? '&' : '?'}t=${now}`
     );
 
-    let imageUrl;
-
-    if (this.fastMode && timestampedEndpoints.length > 1) {
-      // 并发模式：同时请求多个API，使用最快的响应
-      console.log('🏁 启用并发竞速模式');
-      try {
-        imageUrl = await window.apiManager.raceRequests(timestampedEndpoints);
-        console.log('⚡ 并发请求获得结果');
-      } catch (error) {
-        console.warn('⚠️ 并发模式失败，回退到串行模式:', error.message);
-        // 回退到串行模式
-        imageUrl = await this.fetchWallpaperSequential(timestampedEndpoints);
-      }
-    } else {
-      // 串行模式：逐个尝试API（优化版）
-      imageUrl = await this.fetchWallpaperSequential(timestampedEndpoints);
-    }
+    console.log('🔄 使用顺序请求模式，优先使用第一个可用的API');
+    
+    // 只使用顺序模式：逐个尝试API，使用第一个成功的
+    const imageUrl = await this.fetchWallpaperSequential(timestampedEndpoints);
 
     if (imageUrl) {
       // 更新缓存
@@ -922,11 +925,11 @@ class BingWallpaperManager {
     return imageUrl;
   }
 
-  // 串行获取壁纸（优化版，减少延迟）
+  // 串行获取壁纸（优化版，优先使用第一个可用的API）
   async fetchWallpaperSequential(endpoints) {
     for (let i = 0; i < endpoints.length; i++) {
       const endpoint = endpoints[i];
-      console.log(`⚡ 快速尝试API端点 ${i + 1}/${endpoints.length}: ${endpoint.substring(0, 50)}...`);
+      console.log(`🔍 尝试API端点 ${i + 1}/${endpoints.length}: ${endpoint.substring(0, 50)}...`);
       
       try {
         let imageUrl;
@@ -936,7 +939,7 @@ class BingWallpaperManager {
           try {
             imageUrl = await window.apiManager.requestImageFast(endpoint);
           } catch (corsError) {
-            console.warn('⚠️ 快速方法失败，尝试备用方法:', corsError.message);
+            console.warn('⚠️ 直接方法失败，尝试备用方法:', corsError.message);
             imageUrl = await this.tryDirectImageLoad(endpoint);
           }
         } else if (apiType === 'json') {
@@ -960,18 +963,18 @@ class BingWallpaperManager {
         }
 
         if (imageUrl) {
-          console.log('⚡ 快速获取成功:', imageUrl.substring(0, 50) + '...');
-          return imageUrl;
+          console.log(`✅ API端点 ${i + 1} 成功，使用此结果:`, imageUrl.substring(0, 50) + '...');
+          return imageUrl; // 立即返回第一个成功的结果
         }
         
       } catch (error) {
-        console.warn(`❌ 快速API端点失败: ${error.message}`);
-        // 不等待，立即尝试下一个
+        console.warn(`❌ API端点 ${i + 1} 失败: ${error.message}，继续尝试下一个`);
+        // 继续尝试下一个API
         continue;
       }
     }
 
-    throw new Error('所有快速API端点都失败了');
+    throw new Error('所有API端点都失败了');
   }
 
   // 直接图片加载方法（优化版，减少超时）
