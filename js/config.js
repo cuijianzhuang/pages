@@ -37,22 +37,23 @@ const CONFIG = {
         ENABLED: true,
         ENDPOINT: 'https://bing.img.run/rand.php',
         FALLBACK_ENDPOINTS: [
-            // 'https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN',
-            // 'https://bing.biturl.top/?resolution=1920&format=image&index=random&mkt=zh-CN',
-            // 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
+            'https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN',
+            'https://bing.biturl.top/?resolution=1920&format=image&index=random&mkt=zh-CN',
+            'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
         ],
         UPDATE_INTERVAL: 86400000, // 24小时
         ENDPOINT_TYPES: {
             'bing.img.run': 'direct_image',
             'bing.biturl.top': 'direct_image',
+            'www.bing.com': 'json'
         },
         // 性能优化配置
         PERFORMANCE: {
-            FAST_TIMEOUT: 8000,        // 快速超时（8秒）
+            FAST_TIMEOUT: 12000,       // 增加快速超时（12秒）
             MAX_RETRIES: 2,            // 减少重试次数
             RETRY_DELAY: 500,          // 减少重试延迟（0.5秒）
-            PARALLEL_REQUESTS: false,  // 禁用并发请求，使用顺序请求
-            PRELOAD_ENABLED: true,     // 启用预加载
+            PARALLEL_REQUESTS: true,  // 禁用并发请求，使用顺序请求
+            PRELOAD_ENABLED: false,     // 启用预加载
             CACHE_AGGRESSIVE: true     // 积极缓存策略
         }
     }

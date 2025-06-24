@@ -55,10 +55,10 @@ class ApiManager {
           // 超时后尝试备用方法而不是直接失败
           this.requestImageWithProxy(url, options, timeout)
             .then(resolve)
-            .catch(() => {
-              // 如果备用方法也失败，直接返回原URL让浏览器处理
-              console.log(`🎯 备用方法失败，直接使用原URL: ${url}`);
-              resolve(url);
+            .catch((error) => {
+              // 如果备用方法也失败，抛出错误让上层尝试其他端点
+              console.log(`❌ 备用方法超时失败: ${error.message}`);
+              reject(new Error(`图片加载超时失败: ${error.message}`));
             });
         }
       }, timeout);
@@ -82,10 +82,10 @@ class ApiManager {
           // 如果Image加载失败，尝试使用代理服务
           this.requestImageWithProxy(url, options, timeout)
             .then(resolve)
-            .catch(() => {
-              // 如果代理方法也失败，直接返回原URL
-              console.log(`🎯 代理方法失败，直接使用原URL: ${url}`);
-              resolve(url);
+            .catch((error) => {
+              // 如果代理方法也失败，抛出错误让上层尝试其他端点
+              console.log(`❌ 代理方法也失败: ${error.message}`);
+              reject(new Error(`图片加载失败: ${error.message}`));
             });
         }
       };
@@ -123,8 +123,8 @@ class ApiManager {
         const timeoutId = setTimeout(() => {
           if (!isCompleted) {
             isCompleted = true;
-            console.log(`🎯 bing.img.run超时，但直接使用URL: ${url}`);
-            resolve(url); // 即使超时也返回URL
+            console.log(`❌ bing.img.run加载超时`);
+            reject(new Error('bing.img.run图片加载超时'));
           }
         }, extendedTimeout);
         
@@ -141,8 +141,8 @@ class ApiManager {
           if (!isCompleted) {
             isCompleted = true;
             clearTimeout(timeoutId);
-            console.log(`⚠️ bing.img.run加载失败，但仍使用URL: ${url}`);
-            resolve(url); // 即使失败也返回URL，让CSS处理
+            console.log(`❌ bing.img.run加载失败`);
+            reject(new Error('bing.img.run图片加载失败'));
           }
         };
         

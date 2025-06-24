@@ -939,14 +939,21 @@ class BingWallpaperManager {
         if (apiType === 'direct_image') {
           try {
             imageUrl = await window.apiManager.requestImageFast(endpoint);
+            console.log(`✅ 端点 ${i + 1} 图片加载成功`);
           } catch (corsError) {
-            console.warn('⚠️ 直接方法失败，尝试备用方法:', corsError.message);
-            imageUrl = await this.tryDirectImageLoad(endpoint);
+            console.warn(`⚠️ 端点 ${i + 1} 快速方法失败，尝试备用方法:`, corsError.message);
+            try {
+              imageUrl = await this.tryDirectImageLoad(endpoint);
+              console.log(`✅ 端点 ${i + 1} 备用方法成功`);
+            } catch (backupError) {
+              console.warn(`❌ 端点 ${i + 1} 备用方法也失败:`, backupError.message);
+              throw backupError; // 重新抛出错误，让系统尝试下一个端点
+            }
           }
         } else if (apiType === 'json') {
           // 对JSON API也使用快速模式
           const controller = new AbortController();
-          setTimeout(() => controller.abort(), 8000); // 8秒超时
+          setTimeout(() => controller.abort(), 12000); // 12秒超时
           
           const response = await fetch(endpoint, { 
             signal: controller.signal,
@@ -955,8 +962,16 @@ class BingWallpaperManager {
           const data = await response.json();
           
           if (data.images && data.images[0]) {
-            imageUrl = 'https://www.bing.com' + data.images[0].url;
+            // Bing官方API格式
+            imageUrl = data.images[0].url;
+            if (!imageUrl.startsWith('http')) {
+              imageUrl = 'https://www.bing.com' + imageUrl;
+            }
+            // 移除URL中可能存在的参数，添加高质量参数
+            const baseUrl = imageUrl.split('&')[0];
+            imageUrl = baseUrl + '&w=1920&h=1080&c=7';
           } else if (data.url) {
+            // 其他格式
             imageUrl = data.url;
           }
         } else {
@@ -984,9 +999,10 @@ class BingWallpaperManager {
       console.log('⚡ 快速直接Image加载...');
       
       const img = new Image();
+      const timeout = CONFIG.BING_WALLPAPER.PERFORMANCE?.FAST_TIMEOUT || 12000;
       const timeoutId = setTimeout(() => {
-        reject(new Error('快速图片加载超时'));
-      }, 8000); // 减少到8秒
+        reject(new Error(`快速图片加载超时 (${timeout}ms)`));
+      }, timeout);
       
       img.onload = () => {
         clearTimeout(timeoutId);
