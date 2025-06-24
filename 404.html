@@ -1,43 +1,331 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>CJZ's Server</title>
-    <style type="text/css">
-    #h {
-        position: absolute;
-/*        bottom:10%;*/
-        left: 50%;
-        transform: translateX(-50%);
-    }
+    <title>页面未找到 - CJZ's Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 背景动画粒子 */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 主容器 */
+        .container {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            position: relative;
+            max-width: 600px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 404 数字 */
+        .error-code {
+            font-size: 8rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 标题和描述 */
+        .error-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* 按钮样式 */
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover .btn-primary {
+            background: linear-gradient(45deg, #ee5a52, #ff6b6b);
+        }
+
+        /* 联系信息 */
+        .contact-info {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .email-link {
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .email-link:hover {
+            color: #45b7d1;
+            text-decoration: underline;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 2rem;
+            }
+            
+            .error-message {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                margin: 20px;
+                padding: 30px 15px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* 小图标 */
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* 加载动画 */
+        .loading-dots {
+            display: inline-block;
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
     </style>
 </head>
 <body>
-    404找不到服务 !
-    <br>
-    mailto : <a href='mailto:admin@cuijianzhuang.com'> admin@cuijianzhuang.com </a>
-    <hr>
-    <div id="h"></div>
+    <!-- 背景粒子 -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="error-code">404</div>
+        
+        <h1 class="error-title">页面走丢了</h1>
+        
+        <p class="error-message">
+            抱歉，您访问的页面可能已被移动、删除或从未存在过。<br>
+            让我们帮您找到正确的方向！
+        </p>
+
+        <div class="buttons">
+            <a href="/" class="btn btn-primary">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                返回首页
+            </a>
+            <button class="btn btn-secondary" onclick="history.back()">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                返回上页
+            </button>
+        </div>
+
+        <div class="contact-info">
+            <p>如果您认为这是一个错误，请联系管理员：</p>
+            <a href="mailto:admin@cuijianzhuang.com" class="email-link">
+                admin@cuijianzhuang.com
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 创建背景粒子动画
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // 随机大小和位置
+                const size = Math.random() * 6 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // 页面加载完成后创建粒子
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // 添加键盘导航
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    window.location.href = '/';
+                } else if (e.key === 'Escape') {
+                    history.back();
+                }
+            });
+        });
+
+        // 添加鼠标跟随效果
+        document.addEventListener('mousemove', function(e) {
+            const container = document.querySelector('.container');
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            
+            container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // 鼠标离开时重置
+        document.addEventListener('mouseleave', function() {
+            const container = document.querySelector('.container');
+            container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
 </body>
 </html>
- .<script>
-eval(z='p="<"+"pre>"/* ,.oq#+     ,._, */;for(y in n="zw24l6k\
-4e3t4jnt4qj24xh2 x/* =<,m#F^    A W###q. */42kty24wrt413n243n\
-9h243pdxt41csb yz/* #K       q##H######Am */43iyb6k43pk7243nm\
-r24".split(4)){/* dP      cpq#q##########b, */for(a in t=pars\
-eInt(n[y],36)+/*         p##@###YG=[#######y */(e=x=r=[]))for\
-(r=!r,i=0;t[a/*         d#qg `*PWo##q#######D */]>i;i+=.05)wi\
-th(Math)x-= /*        aem1k.com Q###KWR#### W[ */.05,0<cos(o=\
-new Date/1e3/*      .Q#########Md#.###OP  A@ , */-x/PI)&&(e[~\
-~(32*sin(o)*/* ,    (W#####Xx######.P^     T % */sin(.5+y/7))\
-+60] =-~ r);/* #y    `^TqW####P###BP           */for(x=0;122>\
-x;)p+="   *#"/* b.        OQ####x#K           */[e[x++]+e[x++\
-]]||(S=("eval"/* l         `X#####D  ,       */+"(z=\'"+z.spl\
-it(B = "\\\\")./*           G####B" #       */join(B+B).split\
-(Q="\'").join(B+Q/*          VQBP`        */)+Q+")//m1k")[x/2\
-+61*y-1]).fontcolor/*         TP         */(/\\w/.test(S)&&"#\
-03B");document.getElementById("h").innerHTML=p+=B+"\\n"}setTimeout(z)')//
-</script>

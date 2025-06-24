@@ -1,21 +1,471 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<title>Error</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务器错误 - CJZ's Server</title>
 <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
     body {
-        width: 35em;
-        margin: 0 auto;
-        font-family: Tahoma, Verdana, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 50%, #ff4757 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 背景动画波纹 */
+        .ripples {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .ripple {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: ripple 4s infinite ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                width: 500px;
+                height: 500px;
+                opacity: 0;
+            }
+        }
+
+        /* 故障效果 */
+        .glitch-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 2px,
+                rgba(255, 255, 255, 0.03) 4px
+            );
+            animation: glitchMove 0.5s infinite;
+            z-index: 2;
+        }
+
+        @keyframes glitchMove {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(2px); }
+            75% { transform: translateX(-2px); }
+        }
+
+        /* 主容器 */
+        .container {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            position: relative;
+            max-width: 650px;
+            padding: 50px 30px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 50x 数字 - 带故障效果 */
+        .error-code {
+            font-size: 8rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #ffcccb, #ffffff, #ffcccb);
+            background-size: 400% 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite, glitch 2s infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-2px) scaleY(1.1); }
+            40% { transform: translateX(2px) scaleY(0.9); }
+            60% { transform: translateX(-1px) scaleY(1.05); }
+            80% { transform: translateX(1px) scaleY(0.95); }
+        }
+
+        /* 警告图标 */
+        .warning-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+        }
+
+        .warning-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #ff4757;
+        }
+
+        /* 标题和描述 */
+        .error-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .error-message {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .error-details {
+            font-size: 1rem;
+            margin-bottom: 35px;
+            opacity: 0.8;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* 按钮样式 */
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ffffff, #f1f2f6);
+            color: #2f3542;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #f1f2f6, #ffffff);
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 状态指示器 */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff4757;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* 联系信息 */
+        .contact-info {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 25px;
+            margin-top: 25px;
+        }
+
+        .email-link {
+            color: #ffeaa7;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .email-link:hover {
+            color: #fdcb6e;
+            text-decoration: underline;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 2.2rem;
+            }
+            
+            .error-message {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                margin: 20px;
+                padding: 40px 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .warning-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .warning-icon svg {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* 小图标 */
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
     }
 </style>
 </head>
 <body>
-<h1>An error occurred.</h1>
-<p>Sorry, the page you are looking for is currently unavailable.<br/>
-Please try again later.</p>
-<p>If you are the system administrator of this resource then you should check
-the error log for details.</p>
-<p><em>Faithfully yours, nginx.!!!!!!!!!!!!</em></p>
+    <!-- 背景特效 -->
+    <div class="ripples" id="ripples"></div>
+    <div class="glitch-bg"></div>
+
+    <div class="container">
+        <!-- 警告图标 -->
+        <div class="warning-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2L1 21h22L12 2zm0 3.5L19.5 19h-15L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/>
+            </svg>
+        </div>
+
+        <div class="error-code">50x</div>
+        
+        <h1 class="error-title">服务器开小差了</h1>
+        
+        <p class="error-message">
+            抱歉，服务器遇到了内部错误，无法完成您的请求。
+        </p>
+
+        <div class="error-details">
+            <strong>可能的原因：</strong><br>
+            • 服务器配置问题<br>
+            • 临时性系统故障<br>
+            • 服务器维护中
+        </div>
+
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>系统管理员已收到通知</span>
+        </div>
+
+        <div class="buttons">
+            <a href="/" class="btn btn-primary">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                返回首页
+            </a>
+            <button class="btn btn-secondary" onclick="location.reload()">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+                重新加载
+            </button>
+        </div>
+
+        <div class="contact-info">
+            <p>如果问题持续存在，请联系系统管理员：</p>
+            <a href="mailto:admin@cuijianzhuang.com" class="email-link">
+                admin@cuijianzhuang.com
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 创建背景波纹动画
+        function createRipples() {
+            const ripplesContainer = document.getElementById('ripples');
+            
+            function addRipple() {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                
+                // 随机位置
+                ripple.style.left = Math.random() * 100 + '%';
+                ripple.style.top = Math.random() * 100 + '%';
+                ripple.style.marginLeft = '-250px';
+                ripple.style.marginTop = '-250px';
+                
+                ripplesContainer.appendChild(ripple);
+                
+                // 4秒后移除
+                setTimeout(() => {
+                    if (ripple.parentNode) {
+                        ripple.parentNode.removeChild(ripple);
+                    }
+                }, 4000);
+            }
+            
+            // 初始波纹
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addRipple, i * 800);
+            }
+            
+            // 持续创建新波纹
+            setInterval(addRipple, 2000);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            createRipples();
+            
+            // 添加键盘导航
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    window.location.href = '/';
+                } else if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+                    e.preventDefault();
+                    location.reload();
+                }
+            });
+        });
+
+        // 添加鼠标跟随效果（更强烈的效果，适合错误页面）
+        document.addEventListener('mousemove', function(e) {
+            const container = document.querySelector('.container');
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 15;  // 更强烈的效果
+            const rotateY = (centerX - x) / 15;
+            
+            container.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // 鼠标离开时重置
+        document.addEventListener('mouseleave', function() {
+            const container = document.querySelector('.container');
+            container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+
+        // 添加随机故障效果
+        function addGlitchEffect() {
+            const errorCode = document.querySelector('.error-code');
+            const originalTransform = errorCode.style.transform;
+            
+            errorCode.style.transform = `${originalTransform} scaleX(${0.95 + Math.random() * 0.1})`;
+            
+            setTimeout(() => {
+                errorCode.style.transform = originalTransform;
+            }, 100);
+        }
+
+        // 随机触发故障效果
+        setInterval(() => {
+            if (Math.random() < 0.3) {  // 30% 概率
+                addGlitchEffect();
+            }
+        }, 3000);
+    </script>
 </body>
 </html>
