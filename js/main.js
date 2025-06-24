@@ -681,6 +681,7 @@ class BingWallpaperManager {
         reject(new Error('图片加载超时'));
       }, 10000);
 
+      // 不设置crossOrigin，避免CORS检查
       img.src = imageUrl;
     });
   }

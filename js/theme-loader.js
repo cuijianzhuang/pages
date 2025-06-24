@@ -56,6 +56,46 @@
   }
 
   /**
+   * 安全地应用主题到body元素
+   * @param {string} themeClass - 主题类名
+   */
+  function safeApplyThemeToBody(themeClass) {
+    if (!document.body) {
+      // body元素还不存在，等待DOM ready
+      console.log('⏳ body元素尚未准备好，等待DOM加载...');
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          applyThemeToBody(themeClass);
+        });
+      } else {
+        // DOM已经加载，但body可能还没有，使用setTimeout
+        setTimeout(() => {
+          applyThemeToBody(themeClass);
+        }, 0);
+      }
+      return;
+    }
+    
+    applyThemeToBody(themeClass);
+  }
+
+  /**
+   * 应用主题到body元素
+   * @param {string} themeClass - 主题类名
+   */
+  function applyThemeToBody(themeClass) {
+    if (document.body) {
+      // 清除现有主题类并应用新主题
+      document.body.classList.remove('light-theme', 'dark-theme');
+      document.body.classList.add(themeClass);
+      console.log('🎨 主题已应用到body:', themeClass);
+    } else {
+      console.warn('⚠️ body元素仍不可用，无法应用主题');
+    }
+  }
+
+  /**
    * 初始化主题
    */
   function initTheme() {
@@ -87,9 +127,8 @@
         }
       }
       
-      // 清除现有主题类并应用新主题
-      document.body.classList.remove('light-theme', 'dark-theme');
-      document.body.classList.add(themeClass);
+      // 安全地应用主题到body
+      safeApplyThemeToBody(themeClass);
       
       // 应用主题变量
       const themeType = themeClass.replace('-theme', '');
@@ -105,7 +144,7 @@
     } catch (error) {
       console.error('主题初始化失败:', error);
       // 降级到默认主题
-      document.body.classList.add('dark-theme');
+      safeApplyThemeToBody('dark-theme');
     }
   }
 

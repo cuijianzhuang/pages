@@ -28,49 +28,145 @@ class ApiManager {
   }
 
   /**
-   * 并发请求多个API端点（竞速模式）
-   * @param {Array} urls - API端点数组
-   * @param {Object} options - 请求选项
-   * @returns {Promise} 最快响应的结果
-   */
-  async raceRequests(urls, options = {}) {
-    console.log('🏁 开始并发竞速请求，端点数量:', urls.length);
-    
-    const promises = urls.map(async (url, index) => {
-      try {
-        console.log(`🚀 启动竞速请求 ${index + 1}: ${url}`);
-        const result = await this.requestImageFast(url, options);
-        console.log(`✅ 竞速请求 ${index + 1} 获胜!`);
-        return { url, result, index };
-      } catch (error) {
-        console.warn(`❌ 竞速请求 ${index + 1} 失败:`, error.message);
-        throw { url, error, index };
-      }
-    });
-
-    try {
-      // 使用Promise.any获取最快的成功响应
-      const winner = await Promise.any(promises);
-      console.log(`🏆 竞速获胜者: ${winner.url}`);
-      return winner.result;
-    } catch (aggregateError) {
-      console.error('💥 所有竞速请求都失败了');
-      throw new Error('所有并发请求都失败了');
-    }
-  }
-
-  /**
-   * 快速图片请求方法（减少超时和重试）
+   * 快速图片请求方法（优化超时处理）
    * @param {string} url - 图片URL
    * @param {Object} options - 请求选项
    * @returns {Promise<string>} 图片URL或Blob URL
    */
   async requestImageFast(url, options = {}) {
+    // 增加超时时间，给网络更多时间
     const timeout = this.fastMode ? 
-      (CONFIG.BING_WALLPAPER.PERFORMANCE?.FAST_TIMEOUT || 8000) : 
-      15000;
+      (CONFIG.BING_WALLPAPER.PERFORMANCE?.FAST_TIMEOUT || 12000) : 
+      25000; // 增加超时时间
     
-    console.log(`⚡ 快速图片请求: ${url} (超时: ${timeout}ms)`);
+    // console.log(`⚡ 快速图片请求: ${url} (超时: ${timeout}ms)`);
+    
+    // 首先尝试使用Image元素直接加载（避免CORS问题）
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      let isCompleted = false; // 添加完成标志
+      
+      const timeoutId = setTimeout(() => {
+        if (!isCompleted) {
+          isCompleted = true;
+          img.src = ''; // 停止加载
+          console.log(`⏰ 图片加载超时，尝试备用方法...`);
+          
+          // 超时后尝试备用方法而不是直接失败
+          this.requestImageWithProxy(url, options, timeout)
+            .then(resolve)
+            .catch(() => {
+              // 如果备用方法也失败，直接返回原URL让浏览器处理
+              console.log(`🎯 备用方法失败，直接使用原URL: ${url}`);
+              resolve(url);
+            });
+        }
+      }, timeout);
+      
+      // 不设置crossOrigin，避免CORS检查
+      img.onload = () => {
+        if (!isCompleted) {
+          isCompleted = true;
+          clearTimeout(timeoutId);
+          console.log(`⚡ 快速图片加载成功: ${img.naturalWidth}x${img.naturalHeight}`);
+          resolve(url); // 直接返回原URL，因为图片已经可以使用
+        }
+      };
+      
+      img.onerror = () => {
+        if (!isCompleted) {
+          isCompleted = true;
+          clearTimeout(timeoutId);
+          console.log(`⚠️ Image元素加载失败，尝试代理方法`);
+          
+          // 如果Image加载失败，尝试使用代理服务
+          this.requestImageWithProxy(url, options, timeout)
+            .then(resolve)
+            .catch(() => {
+              // 如果代理方法也失败，直接返回原URL
+              console.log(`🎯 代理方法失败，直接使用原URL: ${url}`);
+              resolve(url);
+            });
+        }
+      };
+      
+      // 添加延迟设置src，给浏览器更多准备时间
+      setTimeout(() => {
+        if (!isCompleted) {
+          img.src = url;
+        }
+      }, 10);
+    });
+  }
+
+  /**
+   * 使用代理服务请求图片
+   * @param {string} url - 图片URL
+   * @param {Object} options - 请求选项
+   * @param {number} timeout - 超时时间
+   * @returns {Promise<string>} 图片URL或Blob URL
+   */
+  async requestImageWithProxy(url, options = {}, timeout = 15000) {
+    console.log(`🔄 使用代理方法请求图片: ${url}`);
+    
+    // 对于bing.img.run，尝试更宽松的加载策略
+    if (url.includes('bing.img.run')) {
+      console.log(`🎯 检测到bing.img.run，使用优化策略`);
+      
+      return new Promise((resolve) => {
+        // 给bing.img.run更多时间，并且不会失败
+        const img = new Image();
+        let isCompleted = false;
+        
+        // 延长超时时间到30秒
+        const extendedTimeout = Math.max(timeout, 30000);
+        const timeoutId = setTimeout(() => {
+          if (!isCompleted) {
+            isCompleted = true;
+            console.log(`🎯 bing.img.run超时，但直接使用URL: ${url}`);
+            resolve(url); // 即使超时也返回URL
+          }
+        }, extendedTimeout);
+        
+        img.onload = () => {
+          if (!isCompleted) {
+            isCompleted = true;
+            clearTimeout(timeoutId);
+            console.log(`✅ bing.img.run加载成功: ${img.naturalWidth}x${img.naturalHeight}`);
+            resolve(url);
+          }
+        };
+        
+        img.onerror = () => {
+          if (!isCompleted) {
+            isCompleted = true;
+            clearTimeout(timeoutId);
+            console.log(`⚠️ bing.img.run加载失败，但仍使用URL: ${url}`);
+            resolve(url); // 即使失败也返回URL，让CSS处理
+          }
+        };
+        
+        setTimeout(() => {
+          if (!isCompleted) {
+            img.src = url;
+          }
+        }, 100); // 给更多准备时间
+      });
+    }
+    
+    // 对于其他URL，尝试使用备用方法
+    return this.requestImageFallback(url, options, timeout);
+  }
+
+  /**
+   * 图片请求的备用方法
+   * @param {string} url - 图片URL
+   * @param {Object} options - 请求选项
+   * @param {number} timeout - 超时时间
+   * @returns {Promise<string>} 图片URL或Blob URL
+   */
+  async requestImageFallback(url, options = {}, timeout = 15000) {
+    console.log(`🔄 使用备用方法请求图片: ${url}`);
     
     // 创建AbortController来处理超时
     const controller = new AbortController();
@@ -80,13 +176,12 @@ class ApiManager {
       const response = await fetch(url, {
         method: 'GET',
         mode: 'cors',
-        cache: 'default', // 允许缓存以提高速度
+        cache: 'default',
         credentials: 'omit',
         signal: controller.signal,
         headers: {
           'Accept': 'image/*,*/*',
-          'Cache-Control': 'public, max-age=3600', // 1小时缓存
-          ...options.headers
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         },
         ...options
       });
@@ -109,7 +204,7 @@ class ApiManager {
         }
         
         imageUrl = URL.createObjectURL(blob);
-        console.log(`💾 快速Blob创建: ${blob.size} bytes`);
+        console.log(`💾 备用方法Blob创建: ${blob.size} bytes`);
 
         // 定时释放Blob URL
         setTimeout(() => URL.revokeObjectURL(imageUrl), 3600000);
@@ -138,7 +233,7 @@ class ApiManager {
     } catch (error) {
       clearTimeout(timeoutId);
       if (error.name === 'AbortError') {
-        throw new Error(`请求超时 (${timeout}ms)`);
+        throw new Error(`备用方法请求超时 (${timeout}ms)`);
       }
       throw error;
     }

@@ -152,9 +152,26 @@
      */
     applyTheme: function(theme) {
       try {
-        // 清除现有主题类并应用新主题
-        document.body.classList.remove('light-theme', 'dark-theme');
-        document.body.classList.add(theme);
+        // 安全地检查并操作body元素
+        if (document.body) {
+          // 清除现有主题类并应用新主题
+          document.body.classList.remove('light-theme', 'dark-theme');
+          document.body.classList.add(theme);
+        } else {
+          console.log('⏳ body元素尚未准备好，延迟应用主题...');
+          // body元素还不存在，等待DOM ready
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+              this.applyTheme(theme);
+            });
+          } else {
+            // DOM已经加载，但body可能还没有，使用setTimeout
+            setTimeout(() => {
+              this.applyTheme(theme);
+            }, 0);
+          }
+          return false;
+        }
         
         // 应用到音乐播放器（如果存在）
         const aplayer = document.querySelector('.aplayer');
@@ -206,7 +223,7 @@
       console.log('localStorage:', localStorage.getItem('cjz-theme'));
       console.log('sessionStorage:', sessionStorage.getItem('cjz-theme'));
       console.log('Cookie:', document.cookie);
-      console.log('当前body class:', document.body.className);
+      console.log('当前body class:', document.body ? document.body.className : 'body元素不存在');
       console.log('========================');
     }
   };
@@ -223,6 +240,9 @@
     
     // 定期检查并恢复主题
     setInterval(() => {
+      // 安全地检查body元素
+      if (!document.body) return;
+      
       const currentTheme = document.body.className.match(/(light|dark)-theme/)?.[0];
       const storedTheme = localStorage.getItem('cjz-theme');
       
