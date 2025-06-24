@@ -39,13 +39,18 @@ const CONFIG = {
         FALLBACK_ENDPOINTS: [
             'https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN',
             'https://bing.biturl.top/?resolution=1920&format=image&index=random&mkt=zh-CN',
-            'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
+            'https://bingw.jasonzeng.dev/?resolution=1920x1080&index=0',
+            'https://bingw.jasonzeng.dev/?resolution=1920x1080&index=random',
+            // 移除必应官方API，因为CORS限制无法在浏览器中直接访问
+            // 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
         ],
         UPDATE_INTERVAL: 86400000, // 24小时
         ENDPOINT_TYPES: {
             'bing.img.run': 'direct_image',
             'bing.biturl.top': 'direct_image',
-            'www.bing.com': 'json'
+            'bingw.jasonzeng.dev': 'direct_image',
+            'source.unsplash.com': 'direct_image',
+            // 'www.bing.com': 'json', // 已移除，无法跨域访问
         },
         // 性能优化配置
         PERFORMANCE: {

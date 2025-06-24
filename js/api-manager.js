@@ -210,10 +210,37 @@ class ApiManager {
         setTimeout(() => URL.revokeObjectURL(imageUrl), 3600000);
 
       } else if (contentType && contentType.includes('application/json')) {
-        // JSON响应格式
+        // JSON响应格式（必应官方API）
         const data = await response.json();
-        if (data.images && data.images[0]) {
-          imageUrl = 'https://www.bing.com' + data.images[0].url;
+        console.log('📄 备用方法收到JSON响应:', data);
+        
+        if (data.images && data.images.length > 0) {
+          const imageInfo = data.images[0];
+          let rawUrl = imageInfo.url || imageInfo.urlbase;
+          
+          if (!rawUrl) {
+            throw new Error('JSON响应中未找到图片URL');
+          }
+          
+          // 确保是完整的HTTP URL
+          if (rawUrl.startsWith('/')) {
+            imageUrl = 'https://www.bing.com' + rawUrl;
+          } else if (!rawUrl.startsWith('http')) {
+            imageUrl = 'https://www.bing.com/' + rawUrl;
+          } else {
+            imageUrl = rawUrl;
+          }
+          
+          // 添加高质量参数
+          if (imageUrl.includes('bing.com')) {
+            const urlObj = new URL(imageUrl);
+            urlObj.searchParams.set('w', '1920');
+            urlObj.searchParams.set('h', '1080');
+            urlObj.searchParams.set('c', '7');
+            imageUrl = urlObj.toString();
+          }
+          
+          console.log('✅ JSON图片URL处理完成:', imageUrl);
         } else if (data.url) {
           imageUrl = data.url;
         } else {
@@ -357,10 +384,37 @@ class ApiManager {
           }, 3600000);
 
         } else if (contentType && contentType.includes('application/json')) {
-          // JSON响应格式（如官方API）
+          // JSON响应格式（必应官方API）
           const data = await response.json();
-          if (data.images && data.images[0]) {
-            imageUrl = 'https://www.bing.com' + data.images[0].url;
+          console.log('📄 图片API收到JSON响应:', data);
+          
+          if (data.images && data.images.length > 0) {
+            const imageInfo = data.images[0];
+            let rawUrl = imageInfo.url || imageInfo.urlbase;
+            
+            if (!rawUrl) {
+              throw new Error('JSON响应中未找到图片URL');
+            }
+            
+            // 确保是完整的HTTP URL
+            if (rawUrl.startsWith('/')) {
+              imageUrl = 'https://www.bing.com' + rawUrl;
+            } else if (!rawUrl.startsWith('http')) {
+              imageUrl = 'https://www.bing.com/' + rawUrl;
+            } else {
+              imageUrl = rawUrl;
+            }
+            
+            // 添加高质量参数
+            if (imageUrl.includes('bing.com')) {
+              const urlObj = new URL(imageUrl);
+              urlObj.searchParams.set('w', '1920');
+              urlObj.searchParams.set('h', '1080');
+              urlObj.searchParams.set('c', '7');
+              imageUrl = urlObj.toString();
+            }
+            
+            console.log('✅ JSON图片URL处理完成:', imageUrl);
           } else if (data.url) {
             imageUrl = data.url;
           } else {

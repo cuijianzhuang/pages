@@ -951,28 +951,66 @@ class BingWallpaperManager {
             }
           }
         } else if (apiType === 'json') {
-          // 对JSON API也使用快速模式
+          // 对JSON API使用专门的处理逻辑
+          console.log(`🔍 处理JSON API: ${endpoint}`);
+          
           const controller = new AbortController();
-          setTimeout(() => controller.abort(), 12000); // 12秒超时
+          setTimeout(() => controller.abort(), 15000); // JSON API需要更多时间
           
           const response = await fetch(endpoint, { 
             signal: controller.signal,
-            cache: 'default'
-          });
-          const data = await response.json();
-          
-          if (data.images && data.images[0]) {
-            // Bing官方API格式
-            imageUrl = data.images[0].url;
-            if (!imageUrl.startsWith('http')) {
-              imageUrl = 'https://www.bing.com' + imageUrl;
+            cache: 'default',
+            headers: {
+              'Accept': 'application/json',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
             }
-            // 移除URL中可能存在的参数，添加高质量参数
-            const baseUrl = imageUrl.split('&')[0];
-            imageUrl = baseUrl + '&w=1920&h=1080&c=7';
+          });
+          
+          if (!response.ok) {
+            throw new Error(`JSON API请求失败: ${response.status} ${response.statusText}`);
+          }
+          
+          const data = await response.json();
+          console.log('📄 JSON API响应:', data);
+          
+          // 处理必应官方API格式
+          if (data.images && data.images.length > 0) {
+            const imageInfo = data.images[0];
+            console.log('🖼️ 找到图片信息:', imageInfo);
+            
+            // 获取图片URL，可能是相对路径
+            let rawUrl = imageInfo.url || imageInfo.urlbase;
+            if (!rawUrl) {
+              throw new Error('JSON响应中未找到图片URL');
+            }
+            
+            // 确保是完整的HTTP URL
+            if (rawUrl.startsWith('/')) {
+              imageUrl = 'https://www.bing.com' + rawUrl;
+            } else if (!rawUrl.startsWith('http')) {
+              imageUrl = 'https://www.bing.com/' + rawUrl;
+            } else {
+              imageUrl = rawUrl;
+            }
+            
+            // 添加高质量参数（如果URL支持）
+            if (imageUrl.includes('bing.com')) {
+              // 移除现有的尺寸参数，添加高质量参数
+              const urlObj = new URL(imageUrl);
+              urlObj.searchParams.set('w', '1920');
+              urlObj.searchParams.set('h', '1080');
+              urlObj.searchParams.set('c', '7'); // 高质量压缩
+              imageUrl = urlObj.toString();
+            }
+            
+            console.log('✅ JSON API 处理完成，图片URL:', imageUrl);
           } else if (data.url) {
-            // 其他格式
+            // 其他JSON格式
             imageUrl = data.url;
+            console.log('📋 使用备用URL格式:', imageUrl);
+          } else {
+            console.error('❌ 无法解析JSON响应:', data);
+            throw new Error('JSON响应格式不支持');
           }
         } else {
           imageUrl = await window.apiManager.requestImageFast(endpoint);
