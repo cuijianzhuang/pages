@@ -753,14 +753,16 @@ body {
 
 .settings-panel {
   position: fixed;
-  top: 60%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(25px) saturate(1.5);
+  -webkit-backdrop-filter: blur(25px) saturate(1.5);
   border-radius: 12px;
-  padding: 20px;
-  min-width: 300px;
+  padding: 18px;
+  min-width: 280px;
+  max-width: 320px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   display: none;
   z-index: 1000;
@@ -775,11 +777,11 @@ body {
 @keyframes settingsPanelShow {
   from {
     opacity: 0;
-    transform: translate(-50%, -40%);
+    transform: translate(-50%, -45%) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
@@ -807,14 +809,15 @@ body {
   align-items: center;
   margin: 15px 0;
   color: var(--text-color);
+  padding: 2px 0;
 }
 
 /* Toggle Switch Styles */
 .switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 24px;
+  width: 52px;
+  height: 28px;
 }
 
 .switch input {
@@ -831,20 +834,20 @@ body {
   right: 0;
   bottom: 0;
   background-color: rgba(193, 168, 106, 0.05);
-  transition: .4s;
+  transition: all 0.3s ease;
   border: 1px solid rgba(193, 168, 106, 0.15);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
+  height: 20px;
+  width: 20px;
+  left: 3px;
   bottom: 3px;
   background-color: rgba(193, 168, 106, 0.3);
-  transition: .4s;
-  box-shadow: 0 0 8px rgba(193, 168, 106, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 input:checked + .slider {
@@ -853,23 +856,91 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(26px);
+  transform: translateX(24px);
   background-color: rgba(193, 168, 106, 0.9);
-  box-shadow: 0 0 12px rgba(193, 168, 106, 0.4);
+  box-shadow: 0 2px 6px rgba(193, 168, 106, 0.3);
 }
 
 .slider.round {
-  border-radius: 24px;
+  border-radius: 28px;
 }
 
 .slider.round:before {
   border-radius: 50%;
 }
 
+/* Light theme adjustments for settings panel */
+.light-theme .settings-panel {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(25px) saturate(1.5);
+  -webkit-backdrop-filter: blur(25px) saturate(1.5);
+  border: 1px solid rgba(139, 115, 85, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.04),
+    0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.light-theme .settings-header {
+  color: #2c2c2c;
+  border-bottom: 1px solid rgba(139, 115, 85, 0.1);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.light-theme .setting-item {
+  color: #3c3c3c;
+  font-weight: 500;
+}
+
+.light-theme .slider {
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+}
+
+.light-theme .slider:before {
+  background-color: #8b7355;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme input:checked + .slider {
+  background-color: #8b7355;
+  border-color: #8b7355;
+}
+
+.light-theme input:checked + .slider:before {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(139, 115, 85, 0.3);
+}
+
+.light-theme .close-settings {
+  color: #666666;
+  transition: color 0.2s ease;
+}
+
+.light-theme .close-settings:hover {
+  color: #8b7355;
+}
+
+/* Add hover effects for switches */
+.light-theme .switch:hover .slider {
+  background-color: #e8e8e8;
+}
+
+.light-theme .switch:hover input:checked + .slider {
+  background-color: #7a6347;
+}
+
 /* Dark theme adjustments */
 .dark-theme .settings-panel {
-  background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(193, 168, 106, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(25px) saturate(1.5);
+  -webkit-backdrop-filter: blur(25px) saturate(1.5);
+  border: 1px solid rgba(193, 168, 106, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .dark-theme .slider {

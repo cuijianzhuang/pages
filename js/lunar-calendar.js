@@ -110,7 +110,7 @@ class LunarCalendar {
         let temp = 0;
         
         // 计算农历年份
-        while (lunarYear < 2100 && offset > (temp = this.lunarYearDays(lunarYear))) {
+        while (lunarYear < 2100 && offset >= (temp = this.lunarYearDays(lunarYear))) {
             offset -= temp;
             lunarYear++;
         }
@@ -120,26 +120,31 @@ class LunarCalendar {
         let isLeap = false;
         
         // 计算农历月份
-        while (lunarMonth < 13 && offset > (temp = this.monthDays(lunarYear, lunarMonth))) {
-            offset -= temp;
-            
+        while (lunarMonth <= 12) {
+            // 处理闰月
             if (leap === lunarMonth && !isLeap) {
-                // 闰月
-                isLeap = true;
-                lunarMonth--;
-                
-                if (offset > (temp = this.leapDays(lunarYear))) {
-                    offset -= temp;
-                    isLeap = false;
-                    lunarMonth++;
-                } else {
+                temp = this.leapDays(lunarYear);
+                if (offset < temp) {
+                    isLeap = true;
                     break;
+                } else {
+                    offset -= temp;
                 }
             }
+            
+            temp = this.monthDays(lunarYear, lunarMonth);
+            if (offset < temp) {
+                break;
+            }
+            offset -= temp;
             lunarMonth++;
         }
         
         const lunarDay = offset + 1;
+        
+        // 确保索引在有效范围内
+        const monthIndex = Math.max(0, Math.min(lunarMonth - 1, this.lunarMonths.length - 1));
+        const dayIndex = Math.max(0, Math.min(lunarDay - 1, this.lunarDays.length - 1));
         
         return {
             year: lunarYear,
@@ -148,8 +153,8 @@ class LunarCalendar {
             isLeap: isLeap,
             yearGanZhi: this.getYearGanZhi(lunarYear),
             animal: this.Animals[(lunarYear - 4) % 12],
-            monthName: this.lunarMonths[lunarMonth - 1],
-            dayName: this.lunarDays[lunarDay - 1]
+            monthName: this.lunarMonths[monthIndex],
+            dayName: this.lunarDays[dayIndex]
         };
     }
 
