@@ -102,8 +102,59 @@
       <p class="footer fade-in-text delay-8">
         Copyright © 2024-<span id="currentYear"></span>
         <span class="footer-divider">·</span>
-        <a href="about.html" class="about-link">About</a>
+        <a href="#" class="about-link" onclick="openAboutModal()">About</a>
       </p>
+    </div>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>关于我</h2>
+          <span class="close" onclick="closeAboutModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+          <div class="profile-section">
+            <div class="avatar">
+              <img src="./images/avatar.jpg" alt="头像" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=CJZ'">
+            </div>
+            <h3 class="name">崔健壮</h3>
+            <p class="subtitle">Full Stack Developer</p>
+          </div>
+
+          <div class="info-section">
+            <div class="info-card fade-in-text delay-3">
+              <i class="fa fa-code"></i>
+              <h4>技术栈</h4>
+              <p>Java / Python / JavaScript </p>
+            </div>
+            
+            <div class="info-card fade-in-text delay-4">
+              <i class="fa fa-heart"></i>
+              <h4>兴趣爱好</h4>
+              <p>编程 / 音乐 / 影视 / 摄影 / 旅行</p>
+            </div>
+            
+            <div class="info-card fade-in-text delay-5">
+              <i class="fa fa-quote-left"></i>
+              <h4>座右铭</h4>
+              <p class="description">Carpe diem, Quam minimum credula postero.</p>
+            </div>
+          </div>
+
+          <div class="contact-section fade-in-text delay-6">
+            <a href="https://github.com/cuijianzhuang" target="_blank" class="contact-link">
+              <i class="fa fa-github"></i>
+            </a>
+            <a href="mailto:contact@cuijianzhuang.com" class="contact-link">
+              <i class="fa fa-envelope"></i>
+            </a>
+            <a href="https://blog.cuijianzhuang.com" target="_blank" class="contact-link">
+              <i class="fa fa-book"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Settings Panel -->
@@ -182,10 +233,47 @@
         // 初始化日期时间显示
         window.dateTimeDisplay = new DateTimeDisplay();
 
-        // 其他功能由独立模块处理
-        // Settings类将在其自己的文件中自动初始化
-      });
-    </script>
+              // 其他功能由独立模块处理
+      // Settings类将在其自己的文件中自动初始化
+    });
+
+    // About Modal 功能
+    function openAboutModal() {
+      const modal = document.getElementById('aboutModal');
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      
+      // 重新触发淡入动画
+      setTimeout(() => {
+        const fadeElements = modal.querySelectorAll('.fade-in-text');
+        fadeElements.forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight; // 触发回流
+          el.style.animation = null;
+        });
+      }, 100);
+    }
+
+    function closeAboutModal() {
+      document.getElementById('aboutModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // 点击模态框背景关闭
+    window.onclick = function(event) {
+      const modal = document.getElementById('aboutModal');
+      if (event.target === modal) {
+        closeAboutModal();
+      }
+    }
+
+    // ESC键关闭模态框
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeAboutModal();
+      }
+    });
+  </script>
 
     <script>
         function initSakanaWidget() {
