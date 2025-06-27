@@ -18,7 +18,6 @@ class Settings {
         this.mouseTrailToggle = document.getElementById('mouse-trail-toggle');
         this.particlesToggle = document.getElementById('particles-toggle');
         this.bingWallpaperToggle = document.getElementById('bing-wallpaper-toggle');
-        this.birthdayEffectsToggle = document.getElementById('birthday-effects-toggle');
         
         // 检查DOM元素是否存在
         if (!this.settingsToggle) {
@@ -50,10 +49,7 @@ class Settings {
             this.initSakanaToggle();
         }
 
-        // Initialize birthday effects controls
-        if (this.birthdayEffectsToggle) {
-            this.initBirthdayEffectsToggle();
-        }
+
 
         console.log('设置面板初始化完成');
     }
@@ -137,17 +133,7 @@ class Settings {
             }
         }
 
-        // Birthday effects
-        const birthdayEffectsEnabled = this.getCookie('birthdayEffects') !== null
-            ? this.getCookie('birthdayEffects') === 'true'
-            : true; // 默认启用
-        if (this.birthdayEffectsToggle) {
-            this.birthdayEffectsToggle.checked = birthdayEffectsEnabled;
-            // 更新CONFIG配置
-            if (typeof CONFIG !== 'undefined' && CONFIG.BIRTHDAY) {
-                CONFIG.BIRTHDAY.ENABLED = birthdayEffectsEnabled;
-            }
-        }
+
 
         // 初始化时应用设置
         if (!mouseTrailEnabled && window.starEffect) {
@@ -496,45 +482,7 @@ class Settings {
         }
     }
 
-    initBirthdayEffectsToggle() {
-        const birthdayEnabled = this.getCookie('birthdayEffects') !== null
-            ? this.getCookie('birthdayEffects') === 'true'
-            : true; // 默认启用
-        
-        this.birthdayEffectsToggle.checked = birthdayEnabled;
-        
-        // 清除可能的旧事件
-        const newBirthdayToggle = this.birthdayEffectsToggle.cloneNode(true);
-        this.birthdayEffectsToggle.parentNode.replaceChild(newBirthdayToggle, this.birthdayEffectsToggle);
-        this.birthdayEffectsToggle = newBirthdayToggle;
 
-        // 添加事件监听
-        this.birthdayEffectsToggle.addEventListener('change', (e) => {
-            const enabled = e.target.checked;
-            this.setCookie('birthdayEffects', enabled.toString());
-            
-            // 更新CONFIG配置
-            if (typeof CONFIG !== 'undefined' && CONFIG.BIRTHDAY) {
-                CONFIG.BIRTHDAY.ENABLED = enabled;
-            }
-            
-            // 更新生日彩蛋实例的配置
-            if (window.birthdayEasterEgg) {
-                window.birthdayEasterEgg.config.ENABLED = enabled;
-                if (!enabled) {
-                    // 如果禁用，清理当前效果
-                    window.birthdayEasterEgg.cleanup();
-                    console.log('🎂 生日彩蛋已禁用并清理');
-                } else {
-                    // 如果启用，重新检查是否是生日
-                    window.birthdayEasterEgg.checkBirthday();
-                    console.log('🎂 生日彩蛋已启用');
-                }
-            }
-            
-            console.log('生日彩蛋开关:', enabled);
-        });
-    }
 
 
 }

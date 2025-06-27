@@ -1347,43 +1347,6 @@ class BirthdayEasterEgg {
 
         const style = document.createElement('style');
         style.id = 'birthday-theme-styles';
-        style.textContent = `
-            .birthday-theme {
-                animation: birthdayGlow 3s ease-in-out infinite alternate;
-            }
-
-            .birthday-theme .title {
-                animation: birthdayTitleGlow 2s ease-in-out infinite alternate !important;
-            }
-
-            .birthday-theme .datetime-display {
-                box-shadow: 0 0 30px rgba(255, 107, 107, 0.5),
-                           0 0 60px rgba(78, 205, 196, 0.3) !important;
-                animation: birthdayPulse 2s ease-in-out infinite;
-            }
-
-            @keyframes birthdayGlow {
-                0% { filter: hue-rotate(0deg) brightness(1); }
-                100% { filter: hue-rotate(20deg) brightness(1.1); }
-            }
-
-            @keyframes birthdayTitleGlow {
-                0% { 
-                    text-shadow: 0 0 20px #ff6b6b, 0 0 40px #4ecdc4;
-                    transform: scale(1);
-                }
-                100% { 
-                    text-shadow: 0 0 30px #4ecdc4, 0 0 60px #ff6b6b;
-                    transform: scale(1.02);
-                }
-            }
-
-            @keyframes birthdayPulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.02); }
-            }
-        `;
-        document.head.appendChild(style);
     }
 
     // 播放生日音乐（支持本地文件和MIDI）
