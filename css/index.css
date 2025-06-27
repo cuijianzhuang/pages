@@ -959,10 +959,12 @@ input:checked + .slider:before {
 
 .dark-theme input:checked + .slider:before {
   background-color: rgba(193, 168, 106, 0.9);
-  box-shadow: 0 0 12px rgba(193, 168, 106, 0.4);
-}
+      box-shadow: 0 0 12px rgba(193, 168, 106, 0.4);
+  }
 
-/* 引用区域样式统一 */
+
+  
+  /* 引用区域样式统一 */
 .quote-section {
   margin: 25px 0;
   padding: 15px;

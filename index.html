@@ -191,10 +191,17 @@
           <label class="switch">
             <input type="checkbox" id="bing-wallpaper-toggle" checked>
             <span class="slider round"></span>
-          </label>
+                      </label>
+          </div>
+          <div class="setting-item">
+            <span>生日彩蛋</span>
+            <label class="switch">
+              <input type="checkbox" id="birthday-effects-toggle" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
         </div>
       </div>
-    </div>
 
     <!-- https://github.com/metowolf/MetingJS -->
     <!-- require APlayer -->
@@ -208,6 +215,7 @@
     <!-- 引入 lunar-javascript 专业农历库 -->
     <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.3/lunar.js"></script>
     <script src="./js/lunar-calendar.js"></script>
+    <script src="./js/birthday-effects.js"></script>
     <script src="./js/particles.js" defer></script>
     <script src="./js/main.js" defer></script>
     <script src="./js/stars.js" defer></script>
@@ -218,7 +226,7 @@
                id="961896580"
                fixed="true"
                mini="true"
-               autoplay="true"
+               autoplay="false"
                order="random"
                volume="0.2"
                mutex="true"

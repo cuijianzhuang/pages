@@ -1,7 +1,7 @@
 const CONFIG = {
     // 高德地图API配置
     AMAP: {
-        KEY: '150e6476078b776d3536721bf74f0276',
+        KEY: '',
         ENDPOINTS: {
             IP_LOCATION: 'https://restapi.amap.com/v3/ip',
             GEOCODE: 'https://restapi.amap.com/v3/geocode/geo'
@@ -10,7 +10,7 @@ const CONFIG = {
     
     // 和风天气API配置
     QWEATHER: {
-        KEY: 'a4b90c17754a42e89c6347dc57a940ec',
+        KEY: '',
         ENDPOINTS: {
             WEATHER: 'https://devapi.qweather.com/v7/weather/now',
             SUN: 'https://devapi.qweather.com/v7/astronomy/sun'
@@ -88,6 +88,54 @@ CONFIG.EFFECTS = {
         MIN_SPEED: -3,      // 最小速度
         MAX_SPEED: 3,       // 最大速度
         LIFE_DECREASE: 0.02 // 生命值递减速度
+    }
+};
+
+// 生日彩蛋配置
+CONFIG.BIRTHDAY = {
+    ENABLED: true,
+    // 公历生日日期配置（月-日格式，支持多个生日）
+    SOLAR_DATES: [
+        '07-16'  // 示例公历生日
+    ],
+    // 农历生日日期配置（月-日格式，支持多个生日）
+    LUNAR_DATES: [
+        '06-04'  // 示例农历生日（农历五月十五）
+    ],
+    // 自动检测间隔（毫秒）
+    CHECK_INTERVAL: 3600000, // 1小时检查一次
+    // CHECK_INTERVAL: 1000, // 1s检查一次
+    // 彩蛋效果配置
+    EFFECTS: {
+        FIREWORKS: true,        // 烟花效果
+        BIRTHDAY_MESSAGE: true, // 生日祝福消息
+        CONFETTI: true,         // 彩纸飘落
+        SPECIAL_THEME: true,    // 特殊主题
+        BIRTHDAY_MUSIC: true    // 生日音乐（本地文件或MIDI版本）
+    },
+    
+    // 本地音频文件配置（可选）
+    // 取消注释并设置文件路径来使用本地音频文件
+    BIRTHDAY_AUDIO_FILE: './audio/sound-effect-longer-happy-birthday-music-box.mp3',  // 本地音频文件路径
+    BIRTHDAY_VOLUME: 0.6,  // 音量 (0.0 - 1.0)
+    
+    // 支持的音频格式：MP3, WAV, OGG, M4A, FLAC
+    // 文件应放在项目目录下，例如：./audio/birthday.mp3
+    // 祝福消息列表
+    MESSAGES: [
+        '🎉 生日快乐！愿你每天都充满快乐！',
+        '🎂 今天是特别的日子，祝你生日快乐！',
+        '🌟 又长大了一岁，祝愿你前程似锦！',
+        '🎁 生日快乐！愿你的每个愿望都能实现！',
+        '🎈 在这个特殊的日子里，送上最真挚的祝福！',
+        '🌙 农历生日快乐！传统的祝福送给特别的你！',
+        '🏮 按照老历法，今天是你的大日子，生日快乐！'
+    ],
+    // 效果持续时间
+    DURATION: {
+        FIREWORKS: 10000,      // 烟花持续10秒
+        MESSAGE: 8000,         // 消息显示8秒
+        CONFETTI: 6000         // 彩纸持续6秒
     }
 };
 
