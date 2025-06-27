@@ -1216,6 +1216,9 @@ setInterval(getBingWallpaper, CONFIG.BING_WALLPAPER.UPDATE_INTERVAL);
 
 // 统一的页面初始化
 document.addEventListener('DOMContentLoaded', function() {
+  // 立即初始化API管理器
+  window.apiManager = new ApiManager();
+  
   // 立即初始化壁纸，防止卡片闪烁
   getBingWallpaper();
   

@@ -205,6 +205,8 @@
     <!--本地js引入-->
     <script src="./js/config.js"></script>
     <script src="./js/api-manager.js"></script>
+    <!-- 引入 lunar-javascript 专业农历库 -->
+    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.3/lunar.js"></script>
     <script src="./js/lunar-calendar.js"></script>
     <script src="./js/particles.js" defer></script>
     <script src="./js/main.js" defer></script>
@@ -226,12 +228,17 @@
     <!-- 简化的初始化脚本 -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        // 基础效果初始化
-        new SnowEffect();
-        window.starEffect = new StarEffect();
-        
-        // 初始化日期时间显示
-        window.dateTimeDisplay = new DateTimeDisplay();
+        try {
+          // 基础效果初始化
+          new SnowEffect();
+          window.starEffect = new StarEffect();
+          
+          // 初始化日期时间显示（使用本地时间）
+          window.dateTimeDisplay = new DateTimeDisplay();
+          
+        } catch (error) {
+          console.error('❌ 主页初始化失败:', error);
+        }
 
               // 其他功能由独立模块处理
       // Settings类将在其自己的文件中自动初始化
