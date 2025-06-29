@@ -165,13 +165,36 @@ class BookmarksManager {
         
         // 更新标签状态
         this.tabs.forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.category === category);
+            if (tab.dataset.category === category) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
         });
         
         // 更新内容区域
         this.categories.forEach(categoryEl => {
-            categoryEl.classList.toggle('active', categoryEl.dataset.category === category);
+            if (categoryEl.dataset.category === category) {
+                categoryEl.classList.add('active');
+                // 添加一个小延迟以确保过渡效果正常显示
+                setTimeout(() => {
+                    categoryEl.style.display = 'block';
+                }, 50);
+            } else {
+                categoryEl.classList.remove('active');
+                // 添加过渡效果后隐藏
+                setTimeout(() => {
+                    if (!categoryEl.classList.contains('active')) {
+                        categoryEl.style.display = 'none';
+                    }
+                }, 300);
+            }
         });
+
+        // 如果在搜索状态，清除搜索
+        if (this.searchActive) {
+            this.clearSearch();
+        }
     }
     
     loadBookmarks() {

@@ -159,7 +159,7 @@ body.light-theme .bookmarks-edge-trigger:hover {
   background: var(--link-hover-bg);
   color: var(--link-hover-text);
   opacity: 1;
-  border-left-color: var(--link-hover-text);
+  border-left-color: #ffffff;
   transform: translateX(5px);
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
 }
@@ -182,11 +182,15 @@ body.light-theme .bookmarks-edge-trigger:hover {
 
 .bookmark-category {
   display: none;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
 }
 
 .bookmark-category.active {
   display: block;
-  animation: slideInRight 0.3s ease;
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* 书签列表 */
@@ -477,24 +481,20 @@ body.light-theme .bookmarks-close:hover {
 }
 
 body.light-theme .bookmark-tab {
-  background: rgba(139, 115, 85, 0.08);
-  color: #4a4a4a;
-  border-left: 3px solid transparent;
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 body.light-theme .bookmark-tab:hover {
-  background: rgba(139, 115, 85, 0.15);
-  color: #2c2c2c;
-  transform: translateX(5px);
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.9);
 }
 
 body.light-theme .bookmark-tab.active {
-  background: linear-gradient(135deg, 
-    rgba(139, 115, 85, 0.2) 0%, 
-    rgba(139, 115, 85, 0.15) 100%);
+  background: rgba(139, 115, 85, 0.15);
   color: #8b7355;
   border-left-color: #8b7355;
-  font-weight: 600;
+  box-shadow: 0 3px 15px rgba(139, 115, 85, 0.1);
 }
 
 body.light-theme .bookmark-item {
