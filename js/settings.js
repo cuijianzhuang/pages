@@ -1,10 +1,14 @@
 class Settings {
     constructor() {
-        // Wait for DOM to be ready
+        // Wait for DOM to be ready with multiple checks
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.init());
+        } else if (document.readyState === 'interactive') {
+            // DOM is still loading, wait a bit more
+            setTimeout(() => this.init(), 100);
         } else {
-            this.init();
+            // DOM is complete, but add a small delay to ensure all elements are rendered
+            setTimeout(() => this.init(), 50);
         }
     }
 
@@ -350,16 +354,40 @@ class Settings {
             console.log('⚙️ Settings: 主题加载器已完成，跳过重复初始化');
         }
         
+        // 添加重试机制，最多重试5次
+        this.setupThemeToggleWithRetry(0);
+    }
+
+    setupThemeToggleWithRetry(retryCount) {
+        const maxRetries = 5;
+        const retryDelay = 200; // 200ms延迟
+        
         const themeToggle = document.querySelector('.theme-toggle');
         if (!themeToggle) {
-            console.warn('未找到主题切换按钮');
-            return;
+            if (retryCount < maxRetries) {
+                console.log(`⚙️ Settings: 未找到主题切换按钮，第${retryCount + 1}次重试...`);
+                setTimeout(() => {
+                    this.setupThemeToggleWithRetry(retryCount + 1);
+                }, retryDelay);
+                return;
+            } else {
+                console.error('❌ Settings: 多次重试后仍未找到主题切换按钮，跳过主题切换功能初始化');
+                return;
+            }
         }
 
         const themeIcon = themeToggle.querySelector('i');
         if (!themeIcon) {
-            console.warn('未找到主题切换图标');
-            return;
+            if (retryCount < maxRetries) {
+                console.log(`⚙️ Settings: 未找到主题切换图标，第${retryCount + 1}次重试...`);
+                setTimeout(() => {
+                    this.setupThemeToggleWithRetry(retryCount + 1);
+                }, retryDelay);
+                return;
+            } else {
+                console.error('❌ Settings: 多次重试后仍未找到主题切换图标，跳过主题切换功能初始化');
+                return;
+            }
         }
 
         // 设置初始图标状态
@@ -376,7 +404,7 @@ class Settings {
         // 添加点击事件
         updatedThemeToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            console.log('主题切换按钮被点击');
+            console.log('✅ 主题切换按钮被点击');
 
             // 添加旋转动画
             this.addRotationAnimation();
@@ -394,7 +422,7 @@ class Settings {
             }, 600);
         });
 
-        console.log('主题切换功能初始化完成');
+        console.log('✅ 主题切换功能初始化完成');
     }
 
     setTheme(theme) {
@@ -432,6 +460,9 @@ class Settings {
             }
         }
 
+        // 手动应用主题CSS变量（确保颜色立即更新）
+        this.applyThemeVariables(theme);
+
         // 更新主题图标
         this.updateThemeIcon();
 
@@ -439,6 +470,41 @@ class Settings {
         this.updateWallpaperOverlay(theme);
 
         console.log(`✅ Settings: 主题已切换为: ${theme}`);
+    }
+
+    // 手动应用主题变量的方法
+    applyThemeVariables(theme) {
+        const THEME_VARS = {
+            'light-theme': {
+                '--bg-color': '#f5f5f5',
+                '--text-color': '#333333',
+                '--link-bg': '#e8e8e8',
+                '--link-hover-bg': '#8b7355',
+                '--link-hover-text': '#ffffff',
+                '--shadow-color': 'rgba(139, 115, 85, 0.3)',
+                '--app-bg': 'rgba(245, 245, 245, 0.75)',
+                '--overlay-color': 'rgba(255, 255, 255, 0)'
+            },
+            'dark-theme': {
+                '--bg-color': '#121212',
+                '--text-color': '#c1a86a',
+                '--link-bg': '#0d0d0d',
+                '--link-hover-bg': '#c1a86a',
+                '--link-hover-text': '#0c0c0c',
+                '--shadow-color': 'rgba(193, 168, 106, 0.3)',
+                '--app-bg': 'rgba(18, 18, 18, 0.75)',
+                '--overlay-color': 'rgba(0, 0, 0, 0.5)'
+            }
+        };
+
+        const vars = THEME_VARS[theme];
+        if (vars) {
+            const root = document.documentElement;
+            Object.entries(vars).forEach(([prop, value]) => {
+                root.style.setProperty(prop, value);
+            });
+            console.log('🎨 CSS变量已应用:', theme);
+        }
     }
 
     updateThemeIcon() {
