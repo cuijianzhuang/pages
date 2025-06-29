@@ -55,6 +55,8 @@ class Settings {
 
 
 
+
+
         console.log('设置面板初始化完成');
     }
 
@@ -136,6 +138,8 @@ class Settings {
                 this.setCookie('bingWallpaper', 'true');
             }
         }
+
+
 
 
 
@@ -346,6 +350,8 @@ class Settings {
             widgetLeft.style.display = (typeof sakanaConfig !== 'undefined' && sakanaConfig.enabled) ? 'block' : 'none';
         }
     }
+
+
 
     // 主题切换功能
     initThemeToggle() {

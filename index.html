@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="./css/player.css">
     <link rel="stylesheet" href="./css/stars.css">
     <link rel="stylesheet" href="./css/snow.css">
+    <link rel="stylesheet" href="./css/bookmarks.css">
     <!-- Add Sakana Widget CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.7.0/lib/sakana.min.css">
   </head>
@@ -79,7 +80,88 @@
         <a href="https://server.cuijianzhuang.com/" title="UptimeFlare" class="link" target="_blank">服务</a>
 
       </div>
-      <div class="menu-icons fade-in-text delay-6">
+      <!-- 右边缘触发区域 -->
+      <div class="bookmarks-edge-trigger"></div>
+
+      <!-- 右侧抽屉式书签栏 -->
+      <div class="bookmarks-sidebar">
+        <div class="bookmarks-header">
+          <h3>快捷书签</h3>
+          <button class="bookmarks-close" title="关闭">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        
+        <!-- 搜索框 -->
+        <div class="bookmarks-search">
+          <div class="search-input-wrapper">
+            <i class="fa fa-search"></i>
+            <input type="text" id="bookmarks-search-input" placeholder="搜索书签..." />
+            <span class="search-shortcut">Ctrl + F</span>
+          </div>
+          <div class="search-results" style="display: none;">
+            <div class="results-header">
+              <span class="results-count"></span>
+              <button class="clear-search"><i class="fa fa-times"></i></button>
+            </div>
+            <div class="results-list"></div>
+          </div>
+        </div>
+
+        <div class="bookmarks-tabs">
+          <div class="bookmark-tab active" data-category="work">
+            <i class="fa fa-briefcase"></i>
+            <span>工作</span>
+          </div>
+          <div class="bookmark-tab" data-category="entertainment">
+            <i class="fa fa-gamepad"></i>
+            <span>娱乐</span>
+          </div>
+          <div class="bookmark-tab" data-category="study">
+            <i class="fa fa-book"></i>
+            <span>学习</span>
+          </div>
+          <div class="bookmark-tab" data-category="tools">
+            <i class="fa fa-wrench"></i>
+            <span>工具</span>
+          </div>
+        </div>
+        
+        <div class="bookmarks-content">
+          <!-- 工作分类 -->
+          <div class="bookmark-category active" data-category="work">
+            <div class="bookmark-list" id="work-bookmarks">
+              <!-- 由配置文件生成 -->
+            </div>
+          </div>
+          
+          <!-- 娱乐分类 -->
+          <div class="bookmark-category" data-category="entertainment">
+            <div class="bookmark-list" id="entertainment-bookmarks">
+              <!-- 由配置文件生成 -->
+            </div>
+          </div>
+          
+          <!-- 学习分类 -->
+          <div class="bookmark-category" data-category="study">
+            <div class="bookmark-list" id="study-bookmarks">
+              <!-- 由配置文件生成 -->
+            </div>
+          </div>
+          
+          <!-- 工具分类 -->
+          <div class="bookmark-category" data-category="tools">
+            <div class="bookmark-list" id="tools-bookmarks">
+              <!-- 由配置文件生成 -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 遮罩层 -->
+      <div class="bookmarks-overlay"></div>
+
+      <div class="menu-icons fade-in-text delay-7">
         <div class="settings-toggle">
           <i aria-hidden="true" class="fa fa-2x fa-cog"></i>
         </div>
@@ -94,13 +176,13 @@
         </a>
       </div>
       
-      <div class="quote-section fade-in-text delay-7">
+      <div class="quote-section fade-in-text delay-8">
         <span class="heart-icon">❤️</span> 
         <span class="quote-text">有趣的人终将相遇</span> 
         <span class="heart-icon">❤️</span>
       </div>
       
-      <p class="footer fade-in-text delay-8">
+      <p class="footer fade-in-text delay-9">
         Copyright © 2024-<span id="currentYear"></span>
         <span class="footer-divider">·</span>
         <a href="javascript:void(0);" class="about-link" onclick="openAboutModal()">About</a>
@@ -158,6 +240,8 @@
       </div>
     </div>
 
+
+
     <!-- Settings Panel -->
     <div class="settings-panel">
       <div class="settings-header">
@@ -192,8 +276,9 @@
           <label class="switch">
             <input type="checkbox" id="bing-wallpaper-toggle" checked>
             <span class="slider round"></span>
-                      </label>
-          </div>
+          </label>
+        </div>
+
 
         </div>
       </div>
@@ -215,6 +300,8 @@
     <script src="./js/main.js" defer></script>
     <script src="./js/stars.js" defer></script>
     <script src="./js/snow.js" defer></script>
+    <script src="./js/bookmarks-config.js"></script>
+    <script src="./js/bookmarks.js" defer></script>
     <script src="./js/settings.js" defer></script>
     <meting-js server="netease"
                type="playlist"
