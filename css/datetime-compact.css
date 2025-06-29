@@ -55,98 +55,64 @@ body:not([style*="background-image"]) .datetime-display {
     0 0 30px var(--shadow-color);
 }
 
-/* 时间样式 - 主题金色 */
+/* 统一字体设置 - 所有时间日期元素使用相同字体 */
+.current-time,
+.current-date,
+.lunar-date,
+#current-time-text,
+#current-date-text,
+#current-weekday,
+#lunar-date-text,
+.weekday {
+  font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  color: var(--text-color);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* 时间样式 */
 .current-time {
   display: flex;
   align-items: center;
 }
 
 #current-time-text {
-  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 1.4em;
-  font-weight: 700;
-  color: var(--text-color);
-  letter-spacing: 0.1em;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.8),
-    0 0 12px var(--shadow-color);
+  font-weight: 600;
   filter: contrast(1.2) brightness(1.1);
 }
 
-/* 日期样式 - 柔和的金色调 */
+/* 日期样式 */
 .current-date {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 #current-date-text {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: 1.1em;
+  font-size: 1.0em;
   font-weight: 600;
-  color: var(--text-color);
-  opacity: 0.9;
-  letter-spacing: 0.02em;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .weekday {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 0.9em;
-  color: var(--link-hover-text);
-  padding: 4px 10px;
-  background: var(--link-hover-bg);
-  border-radius: 14px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  box-shadow: 0 2px 8px var(--shadow-color);
-  transition: all 0.3s ease;
+  font-size: 1.0em;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: rgba(193, 168, 106, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(193, 168, 106, 0.3);
 }
 
-/* 夜间模式（默认深色主题）星期标签优化 - 与其他文字颜色一致 */
-body:not(.light-theme) .weekday {
-  background: rgba(0, 0, 0, 0.3);
-  color: var(--text-color);
-  border: 1px solid var(--text-color);
-  opacity: 0.9;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.8),
-    0 0 8px var(--shadow-color);
-  box-shadow: 
-    0 2px 8px var(--shadow-color),
-    inset 0 1px 0 rgba(193, 168, 106, 0.2);
-}
-
-/* 农历样式 - 亮金色突出 */
+/* 农历样式 */
 .lunar-date {
-  opacity: 1;
+  display: flex;
+  align-items: center;
 }
 
 #lunar-date-text {
-  font-family: 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  font-size: 1em;
-  color: var(--text-color);
+  font-size: 1.0em;
   font-weight: 600;
-  opacity: 0.95;
-  letter-spacing: 0.05em;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.8),
-    0 0 12px var(--shadow-color);
-  filter: contrast(1.3) saturate(1.2);
-}
-
-/* 分隔符 - 主题色 */
-.current-time::after,
-.current-date::after {
-  content: '•';
-  margin: 0 6px;
-  color: var(--text-color);
-  opacity: 0.8;
-  font-size: 1.4em;
-  font-weight: bold;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* 日间主题适配 */
@@ -213,55 +179,36 @@ body.light-theme .datetime-display:hover {
     border-radius: 24px;
   }
   
-  #current-time-text {
-    font-size: 1.2em;
-  }
-  
-  #current-date-text {
-    font-size: 1em;
-  }
-  
-  .weekday {
-    font-size: 0.85em;
-    padding: 3px 8px;
-  }
-  
+  #current-time-text,
+  #current-date-text,
+  #current-weekday,
   #lunar-date-text {
-    font-size: 0.9em;
+    font-size: 1.2em;
   }
 }
 
 @media (max-width: 480px) {
   .datetime-display {
-    flex-direction: column;
-    gap: 6px;
-    padding: 12px 16px;
-    border-radius: 20px;
+    gap: 8px;
+    padding: 8px 12px;
   }
   
-  .current-time::after,
-  .current-date::after {
-    display: none;
+  #current-time-text,
+  #current-date-text,
+  #current-weekday,
+  #lunar-date-text {
+    font-size: 1em;
+  }
+  
+  /* 在超小屏幕上改为垂直布局，保持字体一致性 */
+  .datetime-display {
+    flex-direction: column;
+    align-items: center;
   }
   
   .current-date {
-    gap: 6px;
-  }
-  
-  #current-time-text {
-    font-size: 1.1em;
-  }
-  
-  #current-date-text {
-    font-size: 0.95em;
-  }
-  
-  .weekday {
-    font-size: 0.8em;
-  }
-  
-  #lunar-date-text {
-    font-size: 0.85em;
+    flex-direction: row;
+    justify-content: center;
   }
 }
 

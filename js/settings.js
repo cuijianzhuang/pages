@@ -378,7 +378,7 @@ class Settings {
                 return;
             } else {
                 console.error('❌ Settings: 多次重试后仍未找到主题切换按钮，跳过主题切换功能初始化');
-                return;
+            return;
             }
         }
 
@@ -392,7 +392,7 @@ class Settings {
                 return;
             } else {
                 console.error('❌ Settings: 多次重试后仍未找到主题切换图标，跳过主题切换功能初始化');
-                return;
+            return;
             }
         }
 

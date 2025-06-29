@@ -1252,14 +1252,7 @@ body:not([style*="background-image"]) .datetime-display {
   position: relative;
 }
 
-/*#current-time-text {*/
-/*  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;*/
-/*  font-size: 1em;*/
-/*  font-weight: 500;*/
-/*  color: var(--text-color);*/
-/*  letter-spacing: 0.01em;*/
-/*  opacity: 0.95;*/
-/*}*/
+/* 时间字体已在datetime-compact.css中统一设置 */
 
 /* 日期和星期样式 - 极简布局 */
 .current-date {
@@ -1269,12 +1262,7 @@ body:not([style*="background-image"]) .datetime-display {
   position: relative;
 }
 
-/*#current-date-text {*/
-/*  font-size: 0.9em;*/
-/*  font-weight: 400;*/
-/*  color: var(--text-color);*/
-/*  opacity: 0.85;*/
-/*}*/
+/* 日期字体已在datetime-compact.css中统一设置 */
 
 .weekday {
   font-size: 0.8em;
@@ -1292,13 +1280,7 @@ body:not([style*="background-image"]) .datetime-display {
   position: relative;
 }
 
-/*#lunar-date-text {*/
-/*  font-size: 0.75em;*/
-/*  color: var(--text-color);*/
-/*  opacity: 0.7;*/
-/*  font-weight: 300;*/
-/*  font-style: italic;*/
-/*}*/
+/* 农历字体已在datetime-compact.css中统一设置 */
 
 /* 精美的分隔符 */
 .datetime-display .current-time::after,
@@ -1455,35 +1437,19 @@ body:not([style*="background-image"]) .datetime-display {
   border: 1px solid rgba(193, 168, 106, 0.08) !important;
 }
 
-/*#current-time-text {*/
-/*  font-size: 0.95em !important;*/
-/*  font-weight: 500 !important;*/
-/*  opacity: 0.9 !important;*/
-/*  letter-spacing: 0.02em !important;*/
-/*}*/
+/* 时间字体已在datetime-compact.css中统一设置 */
 
-/*#current-date-text {*/
-/*  font-size: 0.85em !important;*/
-/*  font-weight: 400 !important;*/
-/*  opacity: 0.8 !important;*/
-/*}*/
+/* 日期字体已在datetime-compact.css中统一设置 */
 
+/* 星期字体已在datetime-compact.css中统一设置 */
 .weekday {
-  font-size: 0.75em !important;
-  opacity: 0.7 !important;
   padding: 1px 4px !important;
   background: rgba(193, 168, 106, 0.1) !important;
   border-radius: 6px !important;
-  font-weight: 400 !important;
   border: none !important;
 }
 
-#lunar-date-text {
-  font-size: 0.7em !important;
-  font-weight: 300 !important;
-  font-style: italic !important;
-  opacity: 0.65 !important;
-}
+/* 农历字体已在datetime-compact.css中统一设置 */
 
 .datetime-display .current-time::after,
 .datetime-display .current-date::after {
@@ -1536,13 +1502,10 @@ body.light-theme .weekday {
   /*}*/
   
   .weekday {
-    font-size: 0.7em !important;
     padding: 0 3px !important;
   }
   
-  /*#lunar-date-text {*/
-  /*  font-size: 0.65em !important;*/
-  /*}*/
+  /* 农历字体已在datetime-compact.css中统一设置 */
 }
 
 @media (max-width: 480px) {
