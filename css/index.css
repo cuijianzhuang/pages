@@ -406,101 +406,6 @@ body[style*="background-image"] .menu .link:hover::after {
   }
 }
 
-/* 修改现有样式 */
-.datetime-weather {
-  position: fixed;
-  top: 20px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0 30px;
-  z-index: 1000;
-  color: var(--text-color);
-  transition: inherit;
-}
-
-#datetime {
-  text-align: left;
-  font-size: 1.6em;
-  line-height: 1.5;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-start;
-  transition: inherit;
-}
-
-#date {
-  font-size: 1.1em;
-  animation: goldenGlow 2s ease-in-out infinite;
-  font-weight: 500;
-  opacity: 0.9;
-  transition: inherit;
-}
-
-#time {
-  font-size: 2em;
-  font-weight: bold;
-  animation: timeGlow 2s ease-in-out infinite;
-  animation-delay: 0.3s;
-  letter-spacing: 0.05em;
-  align-self: center;
-  margin-left: -1em;
-  background: linear-gradient(to bottom, #e2c992 0%, #c1a86a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 15px rgba(193, 168, 106, 0.3);
-  transition: inherit;
-}
-
-#weather {
-  text-align: right;
-  font-size: 1.6em;
-  opacity: 0.9;
-  animation: goldenGlow 2s ease-in-out infinite;
-  animation-delay: 0.5s;
-  font-weight: 500;
-  transition: inherit;
-}
-
-#weather-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-  transition: inherit;
-}
-
-#weather-info i {
-  font-size: 20px;
-  transition: inherit;
-}
-
-.weather-location {
-  color: var(--text-color-secondary);
-  font-size: 16px;
-  transition: inherit;
-}
-
-.weather-temp {
-  font-weight: 600;
-  font-size: 18px;
-  transition: inherit;
-}
-
-.weather-text {
-  color: var(--text-color);
-  font-size: 16px;
-  transition: inherit;
-}
-
-.weather-extra {
-  color: var(--text-color-secondary);
-  font-size: 14px;
-  transition: inherit;
-}
 
 /* 添加时间特殊动画效果 */
 @keyframes timeGlow {
@@ -522,100 +427,7 @@ body[style*="background-image"] .menu .link:hover::after {
   }
 }
 
-/* 响应式设计优化 */
-@media (max-width: 768px) {
-  .datetime-weather {
-    padding: 0 15px;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
 
-  #datetime {
-    font-size: 1.3em;
-    gap: 0.3rem;
-    text-align: center;
-    align-items: center;
-  }
-  
-  #date {
-    font-size: 1em;
-  }
-  
-  #time {
-    font-size: 1.8em;
-    margin-left: 0;
-  }
-  
-  #weather {
-    font-size: 1.3em;
-    text-align: center;
-  }
-
-  #weather-info {
-    font-size: 14px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  #weather-info i {
-    font-size: 18px;
-  }
-  
-  .weather-temp {
-    font-size: 16px;
-  }
-  
-  .weather-extra {
-    font-size: 12px;
-    width: 100%;
-    text-align: center;
-    margin-top: 5px;
-  }
-}
-
-/* 超小屏幕适配优化 */
-@media (max-width: 480px) {
-  .datetime-weather {
-    padding: 0 10px;
-    top: 10px;
-    gap: 10px;
-  }
-
-  #datetime {
-    font-size: 1.1em;
-    gap: 0.2rem;
-  }
-  
-  #date {
-    font-size: 0.9em;
-  }
-  
-  #time {
-    font-size: 1.6em;
-  }
-  
-  #weather {
-    font-size: 1.1em;
-  }
-
-  #weather-info {
-    font-size: 13px;
-    gap: 8px;
-  }
-  
-  #weather-info i {
-    font-size: 16px;
-  }
-  
-  .weather-temp {
-    font-size: 15px;
-  }
-  
-  .weather-extra {
-    font-size: 11px;
-  }
-}
 
 /* 添加一言样式 */
 .hitokoto {
@@ -624,19 +436,7 @@ body[style*="background-image"] .menu .link:hover::after {
   padding: 0 20px;
 }
 
-#hitokoto-text {
-  font-size: 1.2em;
-  line-height: 1.6;
-  animation: goldenGlow 2s ease-in-out infinite;
-  animation-delay: 1s;
-}
 
-#hitokoto-from {
-  margin-top: 10px;
-  font-size: 0.9em;
-  opacity: 0.8;
-  font-style: italic;
-}
 
 /* 移除所有导航链接的下划线 */
 .menu a,
@@ -1452,14 +1252,14 @@ body:not([style*="background-image"]) .datetime-display {
   position: relative;
 }
 
-#current-time-text {
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;
-  font-size: 1em;
-  font-weight: 500;
-  color: var(--text-color);
-  letter-spacing: 0.01em;
-  opacity: 0.95;
-}
+/*#current-time-text {*/
+/*  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;*/
+/*  font-size: 1em;*/
+/*  font-weight: 500;*/
+/*  color: var(--text-color);*/
+/*  letter-spacing: 0.01em;*/
+/*  opacity: 0.95;*/
+/*}*/
 
 /* 日期和星期样式 - 极简布局 */
 .current-date {
@@ -1469,12 +1269,12 @@ body:not([style*="background-image"]) .datetime-display {
   position: relative;
 }
 
-#current-date-text {
-  font-size: 0.9em;
-  font-weight: 400;
-  color: var(--text-color);
-  opacity: 0.85;
-}
+/*#current-date-text {*/
+/*  font-size: 0.9em;*/
+/*  font-weight: 400;*/
+/*  color: var(--text-color);*/
+/*  opacity: 0.85;*/
+/*}*/
 
 .weekday {
   font-size: 0.8em;
@@ -1492,13 +1292,13 @@ body:not([style*="background-image"]) .datetime-display {
   position: relative;
 }
 
-#lunar-date-text {
-  font-size: 0.75em;
-  color: var(--text-color);
-  opacity: 0.7;
-  font-weight: 300;
-  font-style: italic;
-}
+/*#lunar-date-text {*/
+/*  font-size: 0.75em;*/
+/*  color: var(--text-color);*/
+/*  opacity: 0.7;*/
+/*  font-weight: 300;*/
+/*  font-style: italic;*/
+/*}*/
 
 /* 精美的分隔符 */
 .datetime-display .current-time::after,
@@ -1548,20 +1348,20 @@ body.light-theme .weekday {
     display: none;
   }
   
-  #current-time-text {
-    font-size: 0.95em;
-  }
+  /*#current-time-text {*/
+  /*  font-size: 0.95em;*/
+  /*}*/
   
-  #current-date-text {
-    font-size: 0.85em;
-  }
+  /*#current-date-text {*/
+  /*  font-size: 0.85em;*/
+  /*}*/
   
   .weekday {
     font-size: 0.75em;
     padding: 1px 4px;
   }
   
-  #lunar-date-text {
+、  #lunar-date-text {
     font-size: 0.7em;
   }
 }
@@ -1578,13 +1378,13 @@ body.light-theme .weekday {
     font-size: 0.75em;
   }
   
-  #current-time-text {
-    font-size: 0.9em;
-  }
+  /*#current-time-text {*/
+  /*  font-size: 0.9em;*/
+  /*}*/
   
-  #current-date-text {
-    font-size: 0.8em;
-  }
+  /*#current-date-text {*/
+  /*  font-size: 0.8em;*/
+  /*}*/
   
   .current-date {
     gap: 4px;
@@ -1594,9 +1394,9 @@ body.light-theme .weekday {
     font-size: 0.7em;
   }
   
-  #lunar-date-text {
-    font-size: 0.65em;
-  }
+  /*#lunar-date-text {*/
+  /*  font-size: 0.65em;*/
+  /*}*/
 }
 
 /* 移除过多的装饰效果 */
@@ -1619,9 +1419,9 @@ body[style*="background-image"] #lunar-date-text {
 }
 
 /* 移除时间脉冲动画 */
-#current-time-text {
-  animation: none;
-}
+/*#current-time-text {*/
+/*  animation: none;*/
+/*}*/
 
 /* 强制覆盖 - 紧凑美观的日期时间样式 */
 .datetime-container {
@@ -1655,18 +1455,18 @@ body:not([style*="background-image"]) .datetime-display {
   border: 1px solid rgba(193, 168, 106, 0.08) !important;
 }
 
-#current-time-text {
-  font-size: 0.95em !important;
-  font-weight: 500 !important;
-  opacity: 0.9 !important;
-  letter-spacing: 0.02em !important;
-}
+/*#current-time-text {*/
+/*  font-size: 0.95em !important;*/
+/*  font-weight: 500 !important;*/
+/*  opacity: 0.9 !important;*/
+/*  letter-spacing: 0.02em !important;*/
+/*}*/
 
-#current-date-text {
-  font-size: 0.85em !important;
-  font-weight: 400 !important;
-  opacity: 0.8 !important;
-}
+/*#current-date-text {*/
+/*  font-size: 0.85em !important;*/
+/*  font-weight: 400 !important;*/
+/*  opacity: 0.8 !important;*/
+/*}*/
 
 .weekday {
   font-size: 0.75em !important;
@@ -1727,22 +1527,22 @@ body.light-theme .weekday {
     display: none !important;
   }
   
-  #current-time-text {
-    font-size: 0.9em !important;
-  }
+  /*#current-time-text {*/
+  /*  font-size: 0.9em !important;*/
+  /*}*/
   
-  #current-date-text {
-    font-size: 0.8em !important;
-  }
+  /*#current-date-text {*/
+  /*  font-size: 0.8em !important;*/
+  /*}*/
   
   .weekday {
     font-size: 0.7em !important;
     padding: 0 3px !important;
   }
   
-  #lunar-date-text {
-    font-size: 0.65em !important;
-  }
+  /*#lunar-date-text {*/
+  /*  font-size: 0.65em !important;*/
+  /*}*/
 }
 
 @media (max-width: 480px) {
