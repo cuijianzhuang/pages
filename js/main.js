@@ -1231,3 +1231,28 @@ document.addEventListener('DOMContentLoaded', function() {
   setInterval(getBingWallpaper, CONFIG.BING_WALLPAPER.UPDATE_INTERVAL);
 });
 
+// 自动日夜主题切换
+function autoSwitchThemeByTime() {
+  if (!window.ThemeStorage) return;
+  if (sessionStorage.getItem('theme-auto-disabled') === '1') {
+    // 用户手动切换过主题，自动切换暂停
+    return;
+  }
+  const hour = new Date().getHours();
+  const isDay = hour >= 6 && hour < 18;
+  const expectedTheme = isDay ? 'light-theme' : 'dark-theme';
+  const currentTheme = localStorage.getItem('cjz-theme');
+  if (currentTheme !== expectedTheme) {
+    window.ThemeStorage.saveTheme(expectedTheme);
+    window.ThemeStorage.applyTheme(expectedTheme);
+    // 触发主题切换事件，保证Settings等组件同步
+    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: expectedTheme } }));
+    console.log('🌗 自动切换主题:', expectedTheme);
+  }
+}
+
+// 页面加载时立即检测一次
+autoSwitchThemeByTime();
+// 定时检测（每小时一次，可根据CONFIG.THEME_UPDATE_INTERVAL调整）
+setInterval(autoSwitchThemeByTime, CONFIG.THEME_UPDATE_INTERVAL);
+

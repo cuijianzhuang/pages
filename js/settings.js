@@ -465,6 +465,8 @@ class Settings {
                 console.warn('保存主题失败:', error);
             }
         }
+        // 新增：标记用户手动切换过主题
+        sessionStorage.setItem('theme-auto-disabled', '1');
 
         // 手动应用主题CSS变量（确保颜色立即更新）
         this.applyThemeVariables(theme);
